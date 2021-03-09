@@ -1,0 +1,51 @@
+package com.beyondidentity.authenticator.sdk
+
+import android.content.Context
+import android.net.Uri
+import android.util.AttributeSet
+import android.widget.LinearLayout
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.constraintlayout.widget.ConstraintLayout
+
+class AuthView : LinearLayout {
+    private lateinit var loginButton: ConstraintLayout
+    private lateinit var signupButton: ConstraintLayout
+
+    constructor(context: Context) : super(context) {
+        initView()
+    }
+
+    constructor(
+        context: Context,
+        attrs: AttributeSet?
+    ) : super(context, attrs) {
+        initView()
+    }
+
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr) {
+        initView()
+    }
+
+    private fun initView() {
+        inflate(context, R.layout.auth_view, this)
+
+        loginButton = findViewById(R.id.auth_view_sign_in)
+        signupButton = findViewById(R.id.auth_view_sign_up)
+    }
+
+    fun initAuthView(loginUrl: String, redirectUrl: String, signupButtonListener: OnClickListener) {
+        loginButton.setOnClickListener {
+            val url = "$loginUrl?redirect=$redirectUrl"
+            val builder = CustomTabsIntent.Builder()
+
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(context, Uri.parse(url))
+        }
+
+        signupButton.setOnClickListener(signupButtonListener)
+    }
+}

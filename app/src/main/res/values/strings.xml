@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Acme Pay</string>
+    <string name="app_scheme">my-app</string>
+    <string name="app_host">home</string>
+</resources>
