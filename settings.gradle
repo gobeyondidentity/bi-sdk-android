@@ -1,0 +1,3 @@
+include ':authenticator-sdk-android'
+include ':app'
+rootProject.name = "Authenticator-SDK-Android"
