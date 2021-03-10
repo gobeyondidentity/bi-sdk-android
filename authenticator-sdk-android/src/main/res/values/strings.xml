@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="authenticator_log_in_with_passwordless">Log in with Passwordless</string>
+</resources>
