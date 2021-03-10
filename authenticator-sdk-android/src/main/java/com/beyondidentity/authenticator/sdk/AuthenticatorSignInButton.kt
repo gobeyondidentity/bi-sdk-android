@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 
 class AuthenticatorSignInButton : AppCompatButton {
     constructor(context: Context) : super(context)
@@ -16,12 +17,27 @@ class AuthenticatorSignInButton : AppCompatButton {
     )
 
     init {
-        text = context.getString(R.string.authenticator_log_in_with_passwordless)
+        text = context.getString(R.string.authenticator_sign_in_with_beyond_identity)
+        setTextColor(context.getColor(android.R.color.white))
+        background = ContextCompat.getDrawable(context, R.drawable.authenticator_sign_in_background)
+        isAllCaps = false
+        setCompoundDrawablesWithIntrinsicBounds(
+            ContextCompat.getDrawable(context, R.drawable.ic_beyond_identity_icon),
+            null,
+            null,
+            null
+        )
+        compoundDrawablePadding = 16
     }
 
-    fun setPasswordlessLogInListener(redirectUrl: String) {
+    fun setPasswordlessLogInListener(loginUrl: String, redirectUrl: String) {
         setOnClickListener {
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://acme-cloud.byndid.com/start?redirect=$redirectUrl")))
+            context.startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("$loginUrl?redirect=$redirectUrl")
+                )
+            )
         }
     }
 }

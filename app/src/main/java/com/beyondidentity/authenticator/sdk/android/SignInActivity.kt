@@ -10,7 +10,9 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val logInButton = findViewById<AuthenticatorSignInButton>(R.id.my_login_button)
 
-        // NOTE: 
-        logInButton.setPasswordlessLogInListener("my-app://home")
+        logInButton.setPasswordlessLogInListener(
+            loginUrl = "$ACME_CLOUD_URL/start",
+            redirectUrl = "my-app://home",
+        )
     }
 }

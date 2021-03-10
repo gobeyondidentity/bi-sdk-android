@@ -1,5 +1,6 @@
 package com.beyondidentity.authenticator.sdk.android
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +10,15 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val uri = intent.data!!
-        Log.d("Home", "We got our sessions ${uri.getQueryParameter("session")}")
+        
     }
+
+    private fun getSession(intent: Intent) =
+        intent.data?.getQueryParameter("session")?.let {
+            Log.d("Home", "We got our sessions $it")
+            it
+        } ?: {
+            Log.d("Home", "Error signing in")
+            null
+        }
 }
