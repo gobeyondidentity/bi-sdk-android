@@ -12,7 +12,7 @@ class SignInActivity : AppCompatActivity() {
 
         logInButton.setPasswordlessLogInListener(
             loginUrl = "$ACME_CLOUD_URL/start",
-            redirectUrl = "my-app://home",
+            redirectUrl = "${getString(R.string.app_scheme)}://${getString(R.string.app_host)}",
         )
     }
 }

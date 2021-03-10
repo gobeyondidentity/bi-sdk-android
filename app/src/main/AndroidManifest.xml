@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.beyondidentity.authenticator.sdk.android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,12 +22,13 @@
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "my-app://home” -->
                 <data
-                    android:host="home"
-                    android:scheme="my-app" />
+                    android:host="@string/app_host"
+                    android:scheme="@string/app_scheme" />
             </intent-filter>
         </activity>
     </application>
