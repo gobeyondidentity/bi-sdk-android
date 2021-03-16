@@ -1,3 +1,4 @@
+include ':embedded'
 include ':authenticator'
 include ':app'
 rootProject.name = "Authenticator-SDK-Android"
