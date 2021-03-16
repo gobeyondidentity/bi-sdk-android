@@ -37,7 +37,18 @@ class AuthView : LinearLayout {
         signupButton = findViewById(R.id.auth_view_sign_up)
     }
 
-    fun initAuthView(loginUrl: String, redirectUrl: String, signupButtonListener: OnClickListener) {
+    /**
+     * Initialize the [AuthView]
+     *
+     * @param loginUrl The http endpoint your API backend provides to start the OAUTH2 flow
+     * @param redirectUrl Where should the server redirect after successful authentication with the access code
+     * @param signupButtonListener OnClickListener for the Sign Up Button
+     */
+    fun initAuthView(
+        loginUrl: String,
+        redirectUrl: String,
+        signupButtonListener: OnClickListener
+    ) {
         loginButton.setOnClickListener {
             val url = "$loginUrl?redirect=$redirectUrl"
             val builder = CustomTabsIntent.Builder()
