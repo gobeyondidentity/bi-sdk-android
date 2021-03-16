@@ -1,8 +1,10 @@
 package com.beyondidentity.authenticator.sdk
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class AuthView : LinearLayout {
@@ -35,13 +37,15 @@ class AuthView : LinearLayout {
         signupButton = findViewById(R.id.auth_view_sign_up)
     }
 
-    //    fun setPasswordlessLogInListener(loginUrl: String, redirectUrl: String) {
-    //        setOnClickListener {
-    //            val url = "$loginUrl?redirect=$redirectUrl"
-    //            val builder = CustomTabsIntent.Builder()
-    //
-    //            val customTabsIntent = builder.build()
-    //            customTabsIntent.launchUrl(context, Uri.parse(url))
-    //        }
-    //    }
+    fun initAuthView(loginUrl: String, redirectUrl: String, signupButtonListener: OnClickListener) {
+        loginButton.setOnClickListener {
+            val url = "$loginUrl?redirect=$redirectUrl"
+            val builder = CustomTabsIntent.Builder()
+
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(context, Uri.parse(url))
+        }
+
+        signupButton.setOnClickListener(signupButtonListener)
+    }
 }
