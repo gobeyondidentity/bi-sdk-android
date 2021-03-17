@@ -4,6 +4,8 @@ plugins {
     id 'maven-publish'
 }
 
+group = "com.beyondidentity.android.sdk"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -50,17 +52,17 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.beyondidentity.android.sdk'
                 artifactId = 'authenticator'
-                version = '0.0.0-alpha02'
+                version = '0.0.0-alpha04'
             }
             // Creates a Maven publication called “debug”.
-            debug(MavenPublication) {
-                // Applies the component for the debug build variant.
-                from components.debug
-
-                groupId = 'com.beyondidentity.android.sdk'
-                artifactId = 'authenticator'
-                version = '0.0.0-alpha02'
-            }
+//            debug(MavenPublication) {
+//                // Applies the component for the debug build variant.
+//                from components.debug
+//
+//                groupId = 'com.beyondidentity.android.sdk'
+//                artifactId = 'authenticator'
+//                version = '0.0.0-alpha02'
+//            }
         }
     }
 }
