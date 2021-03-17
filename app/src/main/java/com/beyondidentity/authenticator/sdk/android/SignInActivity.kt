@@ -2,7 +2,6 @@ package com.beyondidentity.authenticator.sdk.android
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import com.beyondidentity.authenticator.sdk.AuthView
 
@@ -10,7 +9,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val logInButton = findViewById<AuthView>(R.id.my_login_button)
+        val logInButton = findViewById<AuthView>(R.id.auth_view)
 
         logInButton.initAuthView(
             loginUrl = "$ACME_CLOUD_URL/start",
