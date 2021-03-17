@@ -1,3 +1,5 @@
+![Beyond-Identity-768x268](https://user-images.githubusercontent.com/6456218/111526630-5c826d00-8735-11eb-84ae-809af105b626.jpeg)
+
 # Beyond Identity Android SDKs
 
 ## SDKs
@@ -14,6 +16,7 @@ product.
 ### Requirements
 The Authenticator supports Android API 28 and above
 ### Authenticator
+[![](https://jitpack.io/v/byndid/bi-sdk-android.svg)](https://jitpack.io/#byndid/bi-sdk-android)
 
 The Authenticator SDK is avaiable on [Jitpack](https://jitpack.io)
 
@@ -23,7 +26,7 @@ repositories {
 }
 ...
 dependencies {
-    implementation "com.beyondidentity.android.sdk:authenticator:0.0.1"
+    implementation "com.beyondidentity.android.sdk:authenticator:x.x.x"
 }
 ```
  
