@@ -101,3 +101,17 @@ apiService.getUsers(accessToken)
 Since most of the heavy lifting is delegated to the Beyond Identity Authenticator client when integrating the Authenticator SDK you need to follow the steps on your development phone or emulator (you'll need google play to download the app) to create an account with our demo app Acme Pay https://acme-app.byndid.com/
 It should only take a minute.
 
+Now that you have the Beyond Identity app setup with a profile for Acme app, go ahead and run the app.
+
+Once you click sign in, the Oauth2 process is initated on the Acme backend
+```kotlin
+// endpoint to kickoff oauth2 | where to redirect once auth is done
+$ACME_CLOUD_URL/start?redirect=my-app://oauth2redirect
+```
+
+The Acme app backend will complete the Oauth2 flow and once it gets the access token it will launch the redirect uri with access token
+```kotlin
+my-app://oauth2redirect?access_token=[your_access_token]
+```
+Which will be intercepted by `MyOauth2RedirectReceiver` and saved for further usage. At that point, you're able to use it to make 
+API requests to the Acme backend.
