@@ -1,10 +1,11 @@
 package com.beyondidentity.authenticator.sdk.android
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.beyondidentity.authenticator.sdk.android.utils.DEFAULT_SHARED_PREFS_KEY
+import com.beyondidentity.authenticator.sdk.android.utils.RetrofitBuilder
+import com.beyondidentity.authenticator.sdk.android.utils.SHARED_PREF_SESSION_KEY
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.launch
 
@@ -14,23 +15,15 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         val balanceTextView = findViewById<MaterialTextView>(R.id.balance)
 
-        val session = getSession(intent)
-
-        session?.let { s ->
-            lifecycleScope.launch {
-                val balanceResponse = RetrofitBuilder.apiService.getBalance(session = s)
-                balanceTextView.text = "Hi ${balanceResponse.userName}\nYour balance is ${balanceResponse.balance}"
-            }
-        }
-    }
-
-    private fun getSession(intent: Intent): String? {
-        return intent.data?.getQueryParameter("session")?.let {
-            Log.d("Home", "We got our sessions $it")
-            it
-        } ?: run {
-            Log.d("Home", "Error getting the session")
-            null
+        getSharedPreferences(DEFAULT_SHARED_PREFS_KEY, MODE_PRIVATE)
+            .getString(SHARED_PREF_SESSION_KEY, null)?.let { session ->
+                lifecycleScope.launch {
+                    val balanceResponse = RetrofitBuilder.apiService.getBalance(session = session)
+                    balanceTextView.text =
+                        "Hi ${balanceResponse.userName}\nYour balance is ${balanceResponse.balance}"
+                }
+            } ?: run {
+            balanceTextView.text = "No session, nothing to show"
         }
     }
 }

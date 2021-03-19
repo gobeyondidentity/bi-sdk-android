@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.beyondidentity.authenticator.sdk.AuthView
+import com.beyondidentity.authenticator.sdk.android.utils.ACME_CLOUD_URL
 
 class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

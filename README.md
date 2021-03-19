@@ -4,34 +4,35 @@
 
 ## SDKs
 ### Authenticator
-The authenticator SDK will be used in conjunction with the existing authenticator native clients  
-Android, iOS, macOS, Windows, where most of the heavy lifting will be left up to them
+The authenticator SDK is meant to be used in conjunction with the existing Beyond Identity native apps  
+(Android, iOS, macOS, Windows), where most of the heavy lifting will be left up to them.
 
 ### Embedded
 WIP: This will be a holistic SDK solution for CIAM clients, offering the entire experience embedded in their
 product.
 
-
 ## Setup
 ### Requirements
 The Authenticator supports Android API 28 and above
 ### Authenticator
-[![](https://jitpack.io/v/byndid/bi-sdk-android.svg)](https://jitpack.io/#byndid/bi-sdk-android)
 
-The Authenticator SDK is avaiable on [Jitpack](https://jitpack.io)
+The Authenticator SDK is avaiable on [![](https://jitpack.io/v/byndid/bi-sdk-android.svg)](https://jitpack.io/#byndid/bi-sdk-android)
 
 ```groovy
+// root build.gradle
 repositories {
     maven { url 'https://jitpack.io' }
 }
-...
+// ...
+// module build.gradle
 dependencies {
-    implementation "com.beyondidentity.android.sdk:authenticator:x.x.x"
+    implementation "com.github.byndid.bi-sdk-android:authenticator:x.x.x"
 }
 ```
  
 ### Usage
 
+#### Step 1.
 Add `AuthView` to your sign in screen and configure it.
 
 ```kotlin
@@ -53,7 +54,7 @@ authView.initAuthView(
     loginUrl = "https://example.com/signin",
     // Register <intent-filter> for this url in order to intercept it once the authentication is successful
     // and extract the access token which will be used to make API requests
-    redirectUrl = "https://example.com/redirect",
+    redirectUrl = "https://example.com/oauth2redirect",
     // Custom action to handle sign ups for your product
     signupButtonListener = {
         Toast.makeText(
@@ -63,6 +64,35 @@ authView.initAuthView(
         ).show()
     }
 )
+```
+
+#### Step 2
+Register `<intent-filter>` for the redirect url.
+
+```kotlin
+<activity android:name=".MyOauth2RedirectReceiver">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <!-- WARNING! Use verified app links (https://yourdomain) vs deep links, as deep -->
+        <!-- links can be intercepted by other apps -->
+        <data
+            android:scheme="https"
+            android:host="example.com"
+            android:path="oauth2redirect"/>
+    </intent-filter>
+</activity>
+```
+
+##### Step 3
+Once the authentication is successfull, you can get the access token from the `Intent` `Uri`
+```kotlin
+val accessToken = intent.data?.getQueryParameter("access_token") // replace access_token param key with the key your backend sets
+
+// You can start using the access token to make requests to your backend
+apiService.getUsers(accessToken)
 ```
 
 ## Sample App Walkthrough
