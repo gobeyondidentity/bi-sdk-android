@@ -9,6 +9,10 @@ object Versions {
     // Android Test
     const val ANDROIDX_EXT_JUNIT = "1.1.2"
     const val ANDROIDX_ESPRESSO_CORE = "3.3.0"
+
+    // Classpath
+    const val ANDROID_GRADLE_TOOLS = "4.1.2"
+    const val KTLINT = "10.0.0"
 }
 
 object Libs {
@@ -26,4 +30,11 @@ object AndroidTestLibs {
     const val ANDROIDX_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_EXT_JUNIT}"
     const val ANDROIDX_ESPRESSO_CORE =
         "androidx.test.espresso:espresso-core:${Versions.ANDROIDX_ESPRESSO_CORE}"
+}
+
+object Classpaths {
+    const val ANDROID_GRADLE_TOOLS_PLUGIN =
+        "com.android.tools.build:gradle:${Versions.ANDROID_GRADLE_TOOLS}"
+    const val KOTLIN_GRADLE_PLUGIN = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}"
+    const val KTLINT_PLUGIN = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.KTLINT}"
 }
