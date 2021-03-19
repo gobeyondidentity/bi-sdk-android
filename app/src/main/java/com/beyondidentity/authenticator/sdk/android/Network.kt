@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
 data class BalanceResponse(
     @SerializedName("user_name")
     val userName: String,

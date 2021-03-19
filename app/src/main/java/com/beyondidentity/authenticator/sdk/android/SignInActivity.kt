@@ -1,8 +1,8 @@
 package com.beyondidentity.authenticator.sdk.android
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.beyondidentity.authenticator.sdk.AuthView
 
 class SignInActivity : AppCompatActivity() {
