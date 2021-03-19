@@ -1,4 +1,4 @@
-package com.beyondidentity.authenticator.sdk.android
+package com.beyondidentity.authenticator.sdk.android.utils
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Retrofit

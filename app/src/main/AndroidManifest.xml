@@ -11,21 +11,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticatorSDKAndroid">
-
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".HomeActivity">
+        <activity android:name=".HomeActivity" />
+
+        <activity android:name=".MyOauth2RedirectReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- WARNING! Use verified app links (https://yourdomain) vs deep links, as deep -->
+                <!-- links can be intercepted by other apps -->
                 <data
                     android:host="@string/app_host"
                     android:scheme="@string/app_scheme" />
