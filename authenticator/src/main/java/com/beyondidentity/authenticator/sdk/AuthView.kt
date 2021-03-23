@@ -40,23 +40,21 @@ class AuthView : LinearLayout {
     /**
      * Initialize the [AuthView]
      *
-     * @param loginUrl The http endpoint your API backend provides to start the OAUTH2 flow
-     * @param redirectUrl Where should the server redirect after successful authentication with the access code
-     * @param signupButtonListener OnClickListener for the Sign Up Button
+     * @param loginUri The https authorization endpoint your API backend provides.
+     * @param signupButtonListener OnClickListener for the Sign Up Button.
      */
     fun initAuthView(
-        loginUrl: String,
-        redirectUrl: String,
+        loginUri: Uri,
         signupButtonListener: OnClickListener
     ) {
-        loginButton.setOnClickListener {
-            val url = "$loginUrl?redirect=$redirectUrl"
-            val builder = CustomTabsIntent.Builder()
-
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(context, Uri.parse(url))
-        }
-
+        loginButton.setOnClickListener { launchCustomTab(context, loginUri) }
         signupButton.setOnClickListener(signupButtonListener)
+    }
+
+    private fun launchCustomTab(context: Context, uri: Uri) {
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .build()
+
+        customTabsIntent.launchUrl(context, uri)
     }
 }
