@@ -15,8 +15,8 @@ ktlintCheckConfig()
 
 configureMavenPublish(
     groupIdForLib = "com.beyondidentity.android.sdk",
-    artifactIdForLib = "authenticator",
-    versionForLib = "0.0.0-alpha06"
+    artifactIdForLib = "embedded",
+    versionForLib = "0.0.0-alpha07"
 )
 
 dependencies {
