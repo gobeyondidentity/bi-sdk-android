@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".embedded.EmbeddedAllFunctionalityActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        tools:context=".embedded.EmbeddedAllFunctionalityActivity">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_credentials_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Credentials"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_credentials_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_credentials_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_delete_credentials_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Credentials"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_credentials_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_pkce_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get PKCE Params"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_delete_credentials_button" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_pkce_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_pkce_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_createuser_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create User"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_pkce_text" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/embedded_signin_createuser_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="user@beyondidentity.com"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_createuser_button" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_createuser_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_createuser_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_recoveruser_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recover User"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_createuser_text" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/embedded_signin_recoveruser_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="user@beyondidentity.com"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_recoveruser_button" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_recoveruser_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_recoveruser_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_authconf_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Authenticate with confidential"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_recoveruser_text" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_authconf_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authconf_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_authconf_token_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get token with authz code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authconf_text" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_authconf_token_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authconf_token_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_signin_authpublic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Authenticate with public"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authconf_token_text" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_signin_authpublic_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authpublic_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_exportprofile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authpublic_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_exportprofile_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Export"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_signin_authpublic_text" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/embedded_exportprofile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_exportprofile_button" />
+
+        <ImageView
+            android:id="@+id/embedded_exportprofile_qrcode"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_exportprofile_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/embedded_importprofile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Import profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_exportprofile_qrcode" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/embedded_importprofile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="import profile code"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/embedded_importprofile_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

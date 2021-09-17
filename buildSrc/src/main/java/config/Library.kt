@@ -5,8 +5,21 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
+import utils.getProp
 
 private typealias AndroidBaseExtension = BaseExtension
+
+private val buildConfigKeys = listOf(
+    "BUILD_CONFIG_BI_DEMO_API_TOKEN",
+    "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID",
+    "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_SECRET",
+    "BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID",
+    "BUILD_CONFIG_PUBLIC_API_URL",
+    "BUILD_CONFIG_AUTH_URL",
+    "BUILD_CONFIG_DEVICE_GATEWAY_URL",
+    "BUILD_CONFIG_MIGRATED_URL",
+    "BUILD_CONFIG_CHANNEL"
+)
 
 fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtension>().run {
 
@@ -19,6 +32,10 @@ fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtensi
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigKeys.forEach { key ->
+            buildConfigField("String", key, "\"${getProp(key)}\"")
+        }
     }
 
     defaultConfig {
@@ -40,9 +57,8 @@ fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtensi
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
 
-//    tasks.withType<KotlinCompile> {
-//        kotlinOptions {
-//            jvmTarget = "1.8"
-//        }
-//    }
+    lintOptions {
+        isCheckReleaseBuilds = false
+        isAbortOnError = false
+    }
 }

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/layout-land/mtrl_picker_header_dialog.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/layout-land/mtrl_picker_header_dialog.xml"
+    },
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/layout-land/material_clock_period_toggle_land.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/layout-land/material_clock_period_toggle_land.xml"
+    },
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/layout-land/material_timepicker.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/layout-land/material_timepicker.xml"
+    }
+]

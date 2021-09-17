@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/color-night-v8/material_timepicker_modebutton_tint.xml"
+    },
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/color-night-v8/material_timepicker_button_stroke.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/color-night-v8/material_timepicker_button_stroke.xml"
+    },
+    {
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/color-night-v8/material_timepicker_clockface.xml",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/color-night-v8/material_timepicker_clockface.xml"
+    }
+]

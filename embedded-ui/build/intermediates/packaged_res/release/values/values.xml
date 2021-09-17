@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="danger_main">#D32222</color>
+    <color name="neutral_10">#FFFFFF</color>
+    <color name="neutral_100">#000000</color>
+    <color name="neutral_20">#F7F7F7</color>
+    <color name="neutral_30">#EEEEEE</color>
+    <color name="neutral_40">#DDDDDD</color>
+    <color name="neutral_50">#BBBBBB</color>
+    <color name="neutral_60">#767676</color>
+    <color name="neutral_70">#595959</color>
+    <color name="neutral_80">#444444</color>
+    <color name="neutral_90">#333333</color>
+    <color name="primary_main">#4673D3</color>
+    <color name="standard_link">#346EEE</color>
+    <dimen name="camera_view_size">200dp</dimen>
+    <dimen name="heading_m">20sp</dimen>
+    <dimen name="heading_s">18sp</dimen>
+    <dimen name="spacing_jumbo">64dp</dimen>
+    <dimen name="spacing_l">16dp</dimen>
+    <dimen name="spacing_m">8dp</dimen>
+    <dimen name="spacing_m_and_half">12dp</dimen>
+    <dimen name="spacing_s">4dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="spacing_xs">2dp</dimen>
+    <dimen name="spacing_xxl">32dp</dimen>
+    <dimen name="spacing_xxxl">48dp</dimen>
+    <dimen name="text_l">16sp</dimen>
+    <dimen name="text_m">14sp</dimen>
+    <dimen name="text_s">12sp</dimen>
+    <dimen name="text_xs">10sp</dimen>
+    <style name="BiTextBase">
+        <item name="android:fontFamily">@font/overpass</item>
+        <item name="android:textColor">@color/neutral_60</item>
+        <item name="fontWeight">400</item>
+    </style>
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/dialog_background</item>
+    </style>
+    <style name="HeadingM" parent="BiTextBase">
+        <item name="android:textSize">@dimen/heading_m</item>
+    </style>
+    <style name="HeadingS" parent="BiTextBase">
+        <item name="android:textSize">@dimen/heading_s</item>
+    </style>
+    <style name="HeadingS.Bold">
+        <item name="fontWeight">700</item>
+    </style>
+    <style name="PrimaryButton" parent="TextM">
+        <item name="android:background">@drawable/primary_button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:textColor">@color/neutral_10</item>
+    </style>
+    <style name="PrimaryButtonDanger" parent="PrimaryButton">
+        <item name="android:background">@drawable/primary_danger_button_background</item>
+    </style>
+    <style name="PrimaryInput" parent="TextM">
+        <item name="android:background">@drawable/input_text_background</item>
+        <item name="hintTextColor">@color/neutral_70</item>
+    </style>
+    <style name="TextM" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_m</item>
+    </style>
+    <style name="TextM.Bold" parent="TextM">
+        <item name="fontWeight">700</item>
+    </style>
+    <style name="TextS" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_s</item>
+    </style>
+    <declare-styleable name="PinEntryEditText">
+        <attr format="enum" name="pinAnimationType">
+            <enum name="popIn" value="0"/>
+            <enum name="fromBottom" value="1"/>
+            <enum name="none" value="-1"/>
+        </attr>
+        <attr format="string" name="pinCharacterMask"/>
+        <attr format="string" name="pinRepeatedHint"/>
+        <attr format="dimension" name="pinLineStroke"/>
+        <attr format="dimension" name="pinLineStrokeSelected"/>
+        <attr format="dimension" name="pinCharacterSpacing"/>
+        <attr format="dimension" name="pinTextBottomPadding"/>
+        <attr format="color" name="pinLineColors"/>
+        <attr format="reference" name="pinBackgroundDrawable"/>
+        <attr format="boolean" name="pinBackgroundIsSquare"/>
+    </declare-styleable>
+</resources>

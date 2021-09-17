@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_xs">2dp</dimen>
+    <dimen name="spacing_s">4dp</dimen>
+    <dimen name="spacing_m">8dp</dimen>
+    <dimen name="spacing_m_and_half">12dp</dimen>
+    <dimen name="spacing_l">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="spacing_xxl">32dp</dimen>
+    <dimen name="spacing_xxxl">48dp</dimen>
+    <dimen name="spacing_jumbo">64dp</dimen>
+
+    <dimen name="camera_view_size">200dp</dimen>
+</resources>

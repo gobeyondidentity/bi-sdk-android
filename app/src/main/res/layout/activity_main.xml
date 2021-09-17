@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".SignInActivity">
+    tools:context=".authenticator.AuthenticatorSignInActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guide"

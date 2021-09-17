@@ -6,14 +6,25 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.register
+import utils.getProp
 
 fun Project.configureMavenPublish(
     groupIdForLib: String,
-    artifactIdForLib: String,
-    versionForLib: String
+    artifactIdForLib: String
 ) {
     afterEvaluate {
         configure<PublishingExtension> {
+            repositories {
+                maven {
+                    name = "cloudsmith"
+                    url = uri(getProp("BUILD_CONFIG_CLOUDSMITH_PUBLISH_URL"))
+                    credentials {
+                        username = getProp("BUILD_CONFIG_CLOUDSMITH_USER").toString()
+                        password = getProp("BUILD_CONFIG_CLOUDSMITH_API_KEY").toString()
+                    }
+                }
+            }
+
             publications {
                 // Creates a Maven publication called "release".
                 register("release", MavenPublication::class) {
@@ -24,7 +35,7 @@ fun Project.configureMavenPublish(
                     // for some day when we move away from jitpack
                     groupId = groupIdForLib
                     artifactId = artifactIdForLib
-                    version = versionForLib
+                    version = getProp("BUILD_CONFIG_BI_SDK_VERSION").toString()
                 }
             }
         }

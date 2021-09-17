@@ -5,13 +5,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticatorSDKAndroid">
-        <activity android:name=".SignInActivity">
+
+        <activity android:name=".SdkSelectorActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,9 +21,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".HomeActivity" />
-
-        <activity android:name=".MyOauth2RedirectReceiver">
+        <!--        Embedded SDK        -->
+        <activity android:name=".embedded.EmbeddedLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -31,9 +32,47 @@
                 <!-- WARNING! Use verified app links (https://yourdomain) vs deep links, as deep -->
                 <!-- links can be intercepted by other apps -->
                 <data
-                    android:host="@string/app_host"
-                    android:scheme="@string/app_scheme" />
+                    android:host="host"
+                    android:path="/register-ui"
+                    android:scheme="${embedded_app_scheme}" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".embedded.EmbeddedAllFunctionalityActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- WARNING! Use verified app links (https://yourdomain) vs deep links, as deep -->
+                <!-- links can be intercepted by other apps -->
+                <data
+                    android:host="host"
+                    android:path="/register-api"
+                    android:scheme="${embedded_app_scheme}" />
+            </intent-filter>
+        </activity>
+
+        <!--        Authenticator SDK        -->
+        <activity android:name=".authenticator.AuthenticatorSignInActivity" />
+
+        <activity android:name=".authenticator.AuthenticatorHomeActivity" />
+
+        <activity android:name=".authenticator.AuthenticatorOauth2RedirectReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- WARNING! Use verified app links (https://yourdomain) vs deep links, as deep -->
+                <!-- links can be intercepted by other apps -->
+                <data
+                    android:host="@string/authenticator_app_host"
+                    android:scheme="@string/authenticator_app_scheme" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

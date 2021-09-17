@@ -1,0 +1,117 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.beyondidentity.android.sdk",
+    "module": "embedded-ui",
+    "version": "0.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.5",
+      "buildId": "73bqozxqwvgtfie52gyogbl36i"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "embedded-ui-0.1.0.aar",
+          "url": "embedded-ui-0.1.0.aar",
+          "size": 354807,
+          "sha512": "58d3630de0967fe23f885a80c261f794350256c3adee985a0c270dac92114a5e639e3e20db23887dac5e22c598072b6cb5b715d7d94189172c8f7872e9a1f257",
+          "sha256": "dd6ac99f0ce93217bfadf6df1151deb429628892ee9b0f2185c2fc8946ee9972",
+          "sha1": "b9c947fcc672976117a62b939103ca78519021cd",
+          "md5": "273e3f7867f892430fb04263aff721ec"
+        }
+      ]
+    },
+    {
+      "name": "releaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-parcelize-runtime",
+          "version": {
+            "requires": "1.4.31"
+          }
+        },
+        {
+          "group": "com.beyondidentity.android.sdk",
+          "module": "embedded",
+          "version": {
+            "requires": "0.1.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.4.31"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-serialization-json",
+          "version": {
+            "requires": "1.0.1"
+          }
+        },
+        {
+          "group": "androidx.preference",
+          "module": "preference-ktx",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "androidx.appcompat",
+          "module": "appcompat",
+          "version": {
+            "requires": "1.3.1"
+          }
+        },
+        {
+          "group": "com.google.android.material",
+          "module": "material",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.budiyev.android",
+          "module": "code-scanner",
+          "version": {
+            "requires": "2.1.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "embedded-ui-0.1.0.aar",
+          "url": "embedded-ui-0.1.0.aar",
+          "size": 354807,
+          "sha512": "58d3630de0967fe23f885a80c261f794350256c3adee985a0c270dac92114a5e639e3e20db23887dac5e22c598072b6cb5b715d7d94189172c8f7872e9a1f257",
+          "sha256": "dd6ac99f0ce93217bfadf6df1151deb429628892ee9b0f2185c2fc8946ee9972",
+          "sha1": "b9c947fcc672976117a62b939103ca78519021cd",
+          "md5": "273e3f7867f892430fb04263aff721ec"
+        }
+      ]
+    }
+  ]
+}

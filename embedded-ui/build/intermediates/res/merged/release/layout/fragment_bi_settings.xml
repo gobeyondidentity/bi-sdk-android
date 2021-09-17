@@ -1,0 +1,131 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background"
+    tools:context="com.beyondidentity.embedded.embeddedui.ui.BeyondIdentitySettingsFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/settings_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/passwordless_login"
+        android:textAppearance="@style/HeadingS.Bold"
+        android:textColor="@color/neutral_90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/settings_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:background="@color/neutral_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_title" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/settings_add_credential"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?android:selectableItemBackground"
+        android:padding="@dimen/spacing_l"
+        android:text="@string/settings_add_credential"
+        android:textAppearance="@style/TextM"
+        android:textColor="@color/neutral_60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_title_line" />
+
+    <View
+        android:id="@+id/settings_add_credential_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/neutral_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_add_credential" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/settings_view_credential"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?android:selectableItemBackground"
+        android:padding="@dimen/spacing_l"
+        android:text="@string/settings_view_device_credential"
+        android:textAppearance="@style/TextM"
+        android:textColor="@color/neutral_60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_add_credential_line" />
+
+    <View
+        android:id="@+id/settings_view_credential_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/neutral_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_view_credential" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/show_qr_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?android:selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_view_credential_line">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/settings_show_qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_qr_code"
+            android:textAppearance="@style/TextM"
+            android:textColor="@color/neutral_60" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/settings_show_qrcode_subtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_setup_credential_on_another_device"
+            android:textAppearance="@style/TextS"
+            android:textColor="@color/neutral_60"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:id="@+id/settings_show_qrcode_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/neutral_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/show_qr_container" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/no_cred_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="settings_add_credential, settings_add_credential_line" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/cred_present_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="settings_view_credential, settings_view_credential_line, show_qr_container, settings_show_qrcode_line" />
+</androidx.constraintlayout.widget.ConstraintLayout>

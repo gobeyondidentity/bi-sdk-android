@@ -1,0 +1,123 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background"
+    tools:context="com.beyondidentity.embedded.embeddedui.ui.BiEnterCodeFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/registration_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/enter_code"
+        android:textAppearance="@style/HeadingS.Bold"
+        android:textColor="@color/neutral_90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/registration_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:background="@color/neutral_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registration_title" />
+
+    <com.beyondidentity.embedded.embeddedui.ui.PinEntryEditText
+        android:id="@+id/enter_code_input"
+        style="@style/HeadingM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_xxxl"
+        android:layout_marginTop="@dimen/spacing_xxxl"
+        android:layout_marginEnd="@dimen/spacing_xxxl"
+        android:cursorVisible="false"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:maxLength="9"
+        android:textColor="@color/neutral_60"
+        android:textIsSelectable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registration_title_line"
+        app:pinAnimationType="none"
+        app:pinCharacterSpacing="@dimen/spacing_m"
+        app:pinLineColors="@color/neutral_60"
+        app:pinLineStroke="@dimen/spacing_xs"
+        app:pinLineStrokeSelected="@dimen/spacing_xs" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enter_code_error_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:gravity="center"
+        android:text="@string/could_not_recognize_please_try_again"
+        android:textAppearance="@style/TextM"
+        android:textColor="@color/danger_main"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enter_code_input" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enter_code_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_xl"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:layout_marginEnd="@dimen/spacing_xl"
+        android:gravity="center"
+        android:text="@string/locate_your_existing_cred"
+        android:textAppearance="@style/TextM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_code_error_description" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enter_code_scan_qr_instead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/scan_qr_code_instead"
+        android:textAppearance="@style/TextM"
+        android:textColor="@color/primary_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_code_desc" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enter_code_dont_have_access_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_xl"
+        android:layout_marginTop="@dimen/spacing_jumbo"
+        android:layout_marginEnd="@dimen/spacing_xl"
+        android:gravity="center"
+        android:text="@string/don_t_have_access_to_your_other_device"
+        android:textAppearance="@style/TextS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_code_scan_qr_instead" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enter_code_recover_credential"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_xl"
+        android:layout_marginTop="@dimen/spacing_s"
+        android:layout_marginEnd="@dimen/spacing_xl"
+        android:gravity="center"
+        android:text="@string/scan_qr_recover_credential"
+        android:textAppearance="@style/TextS"
+        android:textColor="@color/primary_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_code_dont_have_access_desc" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,16 +7,25 @@ plugins {
     id("kotlin-android")
     id("maven-publish")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.jetbrains.dokka")
 }
 
 configureAndroidLib()
+
+// TODO: Move into a function like `configureMavenPublish`
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
+    dokkaSourceSets {
+        named("main") {
+            moduleName.set("Authenticator SDK")
+        }
+    }
+}
 
 ktlintCheckConfig()
 
 configureMavenPublish(
     groupIdForLib = "com.beyondidentity.android.sdk",
-    artifactIdForLib = "authenticator",
-    versionForLib = "0.0.0-alpha07"
+    artifactIdForLib = "authenticator"
 )
 
 dependencies {
