@@ -31,8 +31,6 @@ fun Project.configureMavenPublish(
                     // Applies the component for the release build variant.
                     from(components["release"])
 
-                    // Jitpack sets these values based on the repo and the release tags
-                    // for some day when we move away from jitpack
                     groupId = groupIdForLib
                     artifactId = artifactIdForLib
                     version = getProp("BUILD_CONFIG_BI_SDK_VERSION").toString()

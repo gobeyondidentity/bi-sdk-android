@@ -12,12 +12,15 @@ import androidx.lifecycle.lifecycleScope
 import com.auth0.android.jwt.JWT
 import com.beyondidentity.authenticator.sdk.android.BuildConfig
 import com.beyondidentity.authenticator.sdk.android.R
+import com.beyondidentity.authenticator.sdk.android.utils.CreateUserRequest
+import com.beyondidentity.authenticator.sdk.android.utils.RecoverUserRequest
 import com.beyondidentity.authenticator.sdk.android.utils.RetrofitBuilder
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import java.util.UUID
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -57,29 +60,34 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
     private lateinit var importProfileButton: MaterialButton
     private lateinit var importProfileText: TextInputEditText
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.e("Caught $exception")
+        Toast.makeText(this, "$exception", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_embedded_all_functionality)
 
         setupViews()
 
-        EmbeddedSdk.register(
-            url = intent.data.toString(),
-        ).onEach {
-            it.onSuccess { p ->
-                Timber.d(p.toString())
-                Toast.makeText(this, "Credential created", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, EmbeddedAllFunctionalityActivity::class.java))
-                finish()
+        intent.data?.let { uri ->
+            Toast.makeText(this, "Registering Credential...", Toast.LENGTH_LONG).show()
+            EmbeddedSdk.registerCredential(
+                url = uri.toString(),
+            ).onEach {
+                it.onSuccess { p ->
+                    Timber.d(p.toString())
+                    Toast.makeText(this, "Credential created", Toast.LENGTH_SHORT).show()
+                }
+                it.onFailure { t ->
+                    Timber.e(t)
+                    Toast.makeText(this, "Failed to create credential", Toast.LENGTH_SHORT).show()
+                }
             }
-            it.onFailure { t ->
-                Timber.e(t)
-                Toast.makeText(this, "Failed to create credential", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, EmbeddedAllFunctionalityActivity::class.java))
-                finish()
-            }
+                .catch { credentialsText.text = it.message }
+                .launchIn(lifecycleScope)
         }
-            .launchIn(lifecycleScope)
     }
 
     private fun setupViews() {
@@ -112,7 +120,9 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                 .onEach { result ->
                     result.onSuccess { creds -> credentialsText.text = creds.toString() }
                     result.onFailure { t -> Timber.e(t) }
-                }.launchIn(lifecycleScope)
+                }
+                .catch { credentialsText.text = it.message }
+                .launchIn(lifecycleScope)
         }
 
         deleteCredentialsButton.setOnClickListener {
@@ -128,6 +138,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                             .show()
                     }
                 }
+                .catch { Timber.d("Credentials deletion failed ${it.message}") }
                 .launchIn(lifecycleScope)
         }
 
@@ -140,42 +151,42 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                         pkceText.text = pkce.toString()
                     }
                     result.onFailure { t -> Timber.e("error getting PKCE $t") }
-                }.launchIn(lifecycleScope)
+                }
+                .catch { pkceText.text = it.message }
+                .launchIn(lifecycleScope)
         }
 
         createUserButton.setOnClickListener {
-            EmbeddedSdk.createUser(
-                externalId = createUserInput.text.toString(),
-                email = createUserInput.text.toString(),
-                displayName = UUID.randomUUID().toString(),
-                userName = UUID.randomUUID().toString(),
-            ).onEach { result ->
-                result.onSuccess { user ->
-                    Timber.d("got result for createUser = $user")
-                    createUserText.text = user.toString()
-                }
-                result.onFailure { t -> Timber.e("error creating user $t") }
+            lifecycleScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+                val result = RetrofitBuilder.ACME_API_SERVICE.createUser(
+                    CreateUserRequest(
+                        bindingTokenDeliveryMethod = "email",
+                        externalId = createUserInput.text.toString(),
+                        email = createUserInput.text.toString(),
+                        displayName = UUID.randomUUID().toString(),
+                        userName = UUID.randomUUID().toString(),
+                    )
+                )
+
+                Timber.d("got result for createUser = $result")
+                createUserText.text = result.toString()
             }
-                .onCompletion { Timber.d("Completed") }
-                .launchIn(lifecycleScope)
         }
 
         recoverUserButton.setOnClickListener {
-            EmbeddedSdk.recoverUser(
-                externalId = recoverUserInput.text.toString(),
-            ).onEach { result ->
-                result.onSuccess { user ->
-                    Timber.d("got result for recoverUser = $user")
-                    recoverUserText.text = user.toString()
-                }
-                result.onFailure { t -> Timber.e("error creating user $t") }
+            lifecycleScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+                val u = RetrofitBuilder.ACME_API_SERVICE.recoverUser(
+                    RecoverUserRequest(
+                        bindingTokenDeliveryMethod = "email",
+                        externalId = recoverUserInput.text.toString(),
+                    )
+                )
+                recoverUserText.text = u.toString()
             }
-                .onCompletion { Timber.d("Completed") }
-                .launchIn(lifecycleScope)
         }
 
         authConfidentialButton.setOnClickListener {
-            EmbeddedSdk.authenticateConfidential(
+            EmbeddedSdk.authorize(
                 clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
                 redirectUri = "${BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME}://",
                 scope = "openid",
@@ -189,7 +200,8 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                     }
                     result.onFailure { t -> Timber.e("error confidential auth $t") }
                 }
-                .flowOn(Dispatchers.Main)
+                .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+                .catch { authConfidentialText.text = it.message }
                 .launchIn(lifecycleScope)
         }
 
@@ -200,7 +212,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         // to exchange the code for access and ID token.
         authConfidentialTokenButton.setOnClickListener {
             authzCode?.let { code ->
-                lifecycleScope.launch(Dispatchers.Main) {
+                lifecycleScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
                     val token = RetrofitBuilder.BI_API_SERVICE.getToken(
                         code = code,
                         redirectUri = "${BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME}://",
@@ -217,7 +229,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         }
 
         authPublicButton.setOnClickListener {
-            EmbeddedSdk.authenticatePublic(
+            EmbeddedSdk.authenticate(
                 clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID,
                 redirectUri = "${BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME}://",
             )
@@ -230,6 +242,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                     }
                     result.onFailure { t -> Timber.e("error confidential auth $t") }
                 }
+                .catch { authPublicText.text = it.message }
                 .launchIn(lifecycleScope)
         }
 
@@ -257,9 +270,10 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         }
 
         cancelExportButton.setOnClickListener {
-            EmbeddedSdk.cancel()
+            EmbeddedSdk.cancelExport()
                 .onCompletion { Timber.d("Cancel completed") }
                 .onEach { Timber.d(it.toString()) }
+                .catch { Timber.e(it) }
                 .launchIn(lifecycleScope)
         }
 
@@ -271,6 +285,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                     importProfileText.text?.clear()
                     Toast.makeText(this, "Profile imported", Toast.LENGTH_SHORT).show()
                 }
+                .catch { Timber.e(it) }
                 .launchIn(lifecycleScope)
         }
     }
@@ -287,7 +302,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        EmbeddedSdk.cancel { }
+        EmbeddedSdk.cancelExport { }
     }
 
     private fun parseIdToken(idToken: String): String {

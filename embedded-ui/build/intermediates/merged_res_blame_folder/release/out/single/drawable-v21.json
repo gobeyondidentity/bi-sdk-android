@@ -1,42 +1,42 @@
 [
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/notification_action_background.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/2b6213032730825d366e19b291b7ea52/core-1.5.0/res/drawable-v21/notification_action_background.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/abc_dialog_material_background.xml",
+        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/drawable-v21/abc_dialog_material_background.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/abc_btn_colored_material.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d7c30147173c8e02cd343aa60d0b9ce0/appcompat-1.3.1/res/drawable-v21/abc_btn_colored_material.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/drawable-v21/abc_btn_colored_material.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/preference_list_divider_material.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/9e40af0bff1d1796abb67848bd1ee7fe/preference-1.1.1/res/drawable-v21/preference_list_divider_material.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/mtrl_navigation_bar_item_background.xml",
+        "source": "/root/.gradle/caches/transforms-3/50a73299bfecb60ddda0372c00a894c9/transformed/material-1.4.0/res/drawable-v21/mtrl_navigation_bar_item_background.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/material_cursor_drawable.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/drawable-v21/material_cursor_drawable.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/abc_edit_text_material.xml",
+        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/drawable-v21/abc_edit_text_material.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/abc_action_bar_item_background_material.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d7c30147173c8e02cd343aa60d0b9ce0/appcompat-1.3.1/res/drawable-v21/abc_action_bar_item_background_material.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/notification_action_background.xml",
+        "source": "/root/.gradle/caches/transforms-3/c39da63b65cb166a14c0d9c1218c15cf/transformed/core-1.5.0/res/drawable-v21/notification_action_background.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/abc_list_divider_material.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d7c30147173c8e02cd343aa60d0b9ce0/appcompat-1.3.1/res/drawable-v21/abc_list_divider_material.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/material_cursor_drawable.xml",
+        "source": "/root/.gradle/caches/transforms-3/50a73299bfecb60ddda0372c00a894c9/transformed/material-1.4.0/res/drawable-v21/material_cursor_drawable.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/abc_edit_text_material.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d7c30147173c8e02cd343aa60d0b9ce0/appcompat-1.3.1/res/drawable-v21/abc_edit_text_material.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/abc_list_divider_material.xml",
+        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/drawable-v21/abc_list_divider_material.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/ic_arrow_down_24dp.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/9e40af0bff1d1796abb67848bd1ee7fe/preference-1.1.1/res/drawable-v21/ic_arrow_down_24dp.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/ic_arrow_down_24dp.xml",
+        "source": "/root/.gradle/caches/transforms-3/f2e04db816baca322072168b1e31316e/transformed/preference-1.1.1/res/drawable-v21/ic_arrow_down_24dp.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/abc_dialog_material_background.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d7c30147173c8e02cd343aa60d0b9ce0/appcompat-1.3.1/res/drawable-v21/abc_dialog_material_background.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/drawable-v21/abc_action_bar_item_background_material.xml"
     },
     {
-        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/drawable-v21/mtrl_navigation_bar_item_background.xml",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d50d72fff21b045a42942ef312930707/material-1.4.0/res/drawable-v21/mtrl_navigation_bar_item_background.xml"
+        "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/drawable-v21/preference_list_divider_material.xml",
+        "source": "/root/.gradle/caches/transforms-3/f2e04db816baca322072168b1e31316e/transformed/preference-1.1.1/res/drawable-v21/preference_list_divider_material.xml"
     }
 ]

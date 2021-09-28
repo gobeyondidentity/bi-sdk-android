@@ -9,10 +9,14 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.Group
 import com.beyondidentity.embedded.embeddedui.R
-import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityCredentialInfoFragment.CredentialInfoListener
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialDeleted
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialRegistered
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiObserver
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 
-class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), CredentialInfoListener {
+class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), BiObserver {
     private lateinit var noCredGroup: Group
     private lateinit var credPresentGroup: Group
 
@@ -30,6 +34,12 @@ class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), Creden
         super.onViewCreated(view, savedInstanceState)
         setupViews(view)
         checkCredOnDevice()
+        BiEventBus.registerObserver(this)
+    }
+
+    override fun onDestroyView() {
+        BiEventBus.unRegisterObserver(this)
+        super.onDestroyView()
     }
 
     private fun setupViews(view: View) {
@@ -41,13 +51,14 @@ class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), Creden
         showQrCode = view.findViewById(R.id.show_qr_container)
 
         addCred.setOnClickListener {
+            val addCredFragment = BeyondIdentityAddCredentialFragment.newInstance()
+            addCredFragment.show(parentFragmentManager, BeyondIdentityAddCredentialFragment.TAG)
         }
 
         showCred.setOnClickListener {
             val credInfoFragment =
                 BeyondIdentityCredentialInfoFragment
                     .newInstance()
-            credInfoFragment.credentialInfoListener = this
             credInfoFragment.show(parentFragmentManager, BeyondIdentityCredentialInfoFragment.TAG)
         }
 
@@ -55,9 +66,9 @@ class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), Creden
             EmbeddedSdk.getCredentials { result ->
                 result.onSuccess { credList ->
                     if (credList.isNotEmpty()) {
-                        BiShowQrCodeFragment
+                        BeyondIdentityShowQrCodeFragment
                             .newInstance(credList[0].handle)
-                            .show(parentFragmentManager, BiShowQrCodeFragment.TAG)
+                            .show(parentFragmentManager, BeyondIdentityShowQrCodeFragment.TAG)
                     }
                 }
                 result.onFailure {
@@ -82,8 +93,12 @@ class BeyondIdentitySettingsFragment : BiBaseBottomSheetDialogFragment(), Creden
         }
     }
 
-    override fun onCredDeleted() {
-        checkCredOnDevice()
+    override fun onEvent(event: BiEvent) {
+        when (event) {
+            is CredentialRegistered,
+            CredentialDeleted -> checkCredOnDevice()
+            else -> Unit
+        }
     }
 
     companion object {

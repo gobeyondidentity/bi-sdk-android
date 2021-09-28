@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continue_with_passwordless_login">Continue with passwordless login</string>
+    <string name="powered_by_beyond_identity">Powered by Beyond Identity</string>
+
+    <string name="passwordless_login">Passwordless login</string>
+    <string name="have_a_credential_elsewhere">Have a credential elsewhere?</string>
+    <string name="add_to_this_device">Add to this device.</string>
+    <string name="don_t_have_access_to_your_credential">Don\'t have access to your credential?</string>
+    <string name="recover_account">Recover account.</string>
+    <string name="questions_or_issues">Questions or issues?</string>
+    <string name="visit_support">Visit support.</string>
+    <string name="something_went_wrong">Something went wrong</string>
+
+    <string name="registration_setup">Set up</string>
+    <string name="registration_cred_not_found_on_device">Credential not found on this device.</string>
+    <string name="registration_check_credential_status">Set up a Passwordless credential on this device</string>
+    <string name="registration_deactivate_old_desc">Note: Setting up a new credential on this device will deactivate the current credential on this device and all other devices.</string>
+    <string name="registration_enter_email_to_generate_cred">Enter your email to generate a credential on this device for %1$s.</string>
+    <string name="registration_what_is_a_credential">What is a credential?</string>
+    <string name="registration_could_not_complete_sign_up">Could not complete sign up. Please ensure your email has been entered correctly.</string>
+    <string name="registration_sign_up_button">Set Up</string>
+    <string name="registration_setup_new_cred">Set up new credential</string>
+    <string name="registration_privacy_policy">By signing up, you agree to our privacy policy.</string>
+
+    <string name="what_is_a_credential">What is a credential?</string>
+    <string name="what_is_a_cred_details">A credential is a digital key that replaces your passwords to access your accounts. Credentials can be added to devices that you use to access your accounts.</string>
+    <string name="what_is_cred_got_it">Got it</string>
+
+    <string name="check_email_check_your_inbox_details">Check your inbox for instructions and your credential set-up link</string>
+    <string name="check_email_go_to_inbox">Go to inbox</string>
+    <string name="check_email_email_sent">Email sent!</string>
+
+    <string name="action_handler_setting_up_your_credential">Setting up your %1$s credential on this device</string>
+    <string name="action_handler_credential_setup_on_this_device">%1$s credential setup on this device!\nLogging you in&#8230;</string>
+    <string name="action_handler_could_not_setup_an_account">Could not setup credential on this device.</string>
+    <string name="action_handler_could_not_complete_authentication">Could not verify your identity.</string>
+    <string name="action_handler_migration_done_desc">Your credential for %1$s has ben set up on this device!\n\nNext time you can login using Beyond Identity</string>
+    <string name="action_handler_go_to_passwordless_login_settings">Go To Passwordless Login Settings</string>
+    <string name="action_handler_if_the_issue_persists_authentication"><![CDATA[<u>Please try again</u>. If the issue persists, recover your credential or contact support using the link below.]]></string>
+    <string name="action_handler_verifying_your_identity">Verifying your identity with your %1$s credential on this device and logging you in…</string>
+    <string name="action_handler_could_not_perform_operation_no_data">Could not perform action, insufficient data.</string>
+
+    <string name="recovery_could_not_complete_recovery">Could not complete recovery. Please ensure your email has been entered correctly.</string>
+    <string name="recovery_email_address">Email address</string>
+    <string name="recovery_title">Recover</string>
+    <string name="recovery_desc">To recover your account, set up a new credential.\nThis will deactivate all other existing credentials attached to this account.\n\nIf you want to log into %1$s using Passwordless Login powered by Beyond Identity on other devices, you will need to re-add your new credential to those devices.</string>
+    <string name="recovery_enter_your_email_to_recover_your_account">Enter your email to recover your account.</string>
+    <string name="recovery_credential">Recover Account</string>
+
+    <string name="code_locate_your_existing_cred">Locate your existing credential on your other device. There, select \'Set up other devices\' for the codes.</string>
+    <string name="code_don_t_have_access_to_your_other_device">Don’t have access to your other device?</string>
+    <string name="code_recover_account">Recover account</string>
+
+    <string name="scan_qr_code">Scan Qr Code</string>
+    <string name="scan_qr_enter_9_digit_code_instead">Enter 9-digit code instead.</string>
+    <string name="could_not_recognize_please_try_again">Could not recognize. Please try again.</string>
+
+    <string name="enter_code_title">Enter Code</string>
+    <string name="enter_code_scan_qr_code_instead">Scan QR code instead.</string>
+
+    <string name="scan_qr_camera_access_denied">Camera access denied</string>
+    <string name="scan_qr_code_not_recognized_please_try_again">Code not recognized. Please try again.</string>
+    <string name="scan_qr_please_enable_camera_access">Please enable camera access.</string>
+
+    <string name="settings_add_credential">Add Credential</string>
+    <string name="settings_view_device_credential">View device credential</string>
+    <string name="settings_show_qr_code">Display QR Code</string>
+    <string name="settings_setup_credential_on_another_device">Set up credential on another device</string>
+
+    <string name="cred_info_title">Credential Info</string>
+    <string name="cred_info_delete_credential_from_this_device">Delete Credential from this Device</string>
+    <string name="cred_info_device_info">Device info</string>
+    <string name="cred_info_model">Model</string>
+    <string name="cred_info_version_label">Version</string>
+    <string name="cred_info_version_text">Android %1$S</string>
+    <string name="cred_info_credential_for_device">Credential for %1$s</string>
+
+    <string name="delete_cred_are_you_sure">Delete credential from this device?</string>
+    <string name="delete_cred_desc">You’ll need to create a new credential on this device to use Passwordless Login again.</string>
+    <string name="delete_cred_delete">Delete</string>
+    <string name="delete_cred_cancel">Cancel</string>
+    <string name="delete_cred_success">Credential successfully deleted</string>
+
+    <string name="show_qr_code">Display QR code</string>
+    <string name="show_qr_desc">Scan this code to each device that you’d like to set up a credential for %1$s.</string>
+    <string name="show_qr_no_camera_use_code">No camera? Use code:</string>
+    <string name="show_qr_export_success">Credential exported successfully</string>
+    <string name="show_qr_error">Could not display QR code. Please try again.</string>
+
+    <string name="add_cred_title">Add credential</string>
+    <string name="add_cred_create_new_credential">Create new credential</string>
+    <string name="add_cred_description">A credential is a digital key that replaces your passwords to access your accounts. Credentials can be added to devices that you use to access your accounts.</string>
+
+    <string name="before_auth_cred_already_exists">A credential already exists on this device.\n\nDo you want to login with this credential?</string>
+    <string name="before_auth_continue_to_login">Yes, continue to login</string>
+    <string name="before_auth_replace_with_another_cred">No, replace with another credential</string>
+</resources>

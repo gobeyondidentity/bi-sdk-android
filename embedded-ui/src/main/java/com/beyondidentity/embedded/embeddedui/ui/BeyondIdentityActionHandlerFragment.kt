@@ -10,32 +10,43 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.os.bundleOf
+import androidx.preference.PreferenceManager
 import com.beyondidentity.embedded.embeddedui.R
 import com.beyondidentity.embedded.embeddedui.ui.ActionType.Authentication
 import com.beyondidentity.embedded.embeddedui.ui.ActionType.Migration
 import com.beyondidentity.embedded.embeddedui.ui.ActionType.Registration
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.ConfidentialClientData
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.PublicClientData
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.Authorization
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.BiEventError
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialRegistered
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
-import com.beyondidentity.embedded.sdk.EmbeddedSdk.AuthenticationData.ConfidentialClientData
-import com.beyondidentity.embedded.sdk.EmbeddedSdk.AuthenticationData.PublicClientData
-import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.TokenResponse
-import com.beyondidentity.embedded.sdk.utils.supportEmailIntent
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.beyondidentity.embedded.sdk.utils.supportIntent
+import com.google.android.material.card.MaterialCardView
 import kotlinx.parcelize.Parcelize
 
+const val MIGRATION_SOURCE = "bi-migration-source"
+const val MIGRATION_SOURCE_SETTINGS = "bi-migration-source-settings"
+
 class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
+    private lateinit var loadingCardContainer: MaterialCardView
+    private lateinit var migrationDoneContainer: MaterialCardView
+
     private lateinit var loadingText: AppCompatTextView
     private lateinit var loadingVisitSupport: AppCompatTextView
     private lateinit var errorDescription: AppCompatTextView
+    private lateinit var errorPersists: AppCompatTextView
+
+    private lateinit var migrationDoneText: AppCompatTextView
+    private lateinit var migrationDoneButton: AppCompatTextView
 
     private lateinit var supportGroup: Group
     private lateinit var loadingGroup: Group
     private lateinit var errorGroup: Group
 
     private var actionType: ActionType? = null
-
-    var onRegisterListener: OnRegisterListener? = null
-    var onAuthenticationListener: OnAuthenticationListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,22 +75,33 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        EmbeddedSdk.cancel {
+        EmbeddedSdk.cancelExport {
             super.onDismiss(dialog)
         }
     }
 
     private fun setupViews(view: View) {
+        loadingCardContainer = view.findViewById(R.id.loading_card_container)
+        migrationDoneContainer = view.findViewById(R.id.migration_done_container)
+
         loadingText = view.findViewById(R.id.loading_text)
         loadingVisitSupport = view.findViewById(R.id.loading_visit_support)
         errorDescription = view.findViewById(R.id.error_description)
+        errorPersists = view.findViewById(R.id.error_persists)
+
+        migrationDoneText = view.findViewById(R.id.migration_done_text)
+        migrationDoneText.text = getString(
+            R.string.action_handler_migration_done_desc,
+            EmbeddedUiConfig.config.appDisplayName
+        )
+        migrationDoneButton = view.findViewById(R.id.migration_done_button)
 
         supportGroup = view.findViewById(R.id.support_group)
         loadingGroup = view.findViewById(R.id.loading_group)
         errorGroup = view.findViewById(R.id.error_group)
 
         loadingVisitSupport.setOnClickListener {
-            val intent = supportEmailIntent(EmbeddedSdk.config.supportEmail)
+            val intent = supportIntent(EmbeddedUiConfig.config.supportUrlOrEmail)
             startActivity(intent)
         }
     }
@@ -88,14 +110,14 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         registerUri: String,
     ) {
         showRegistration()
-        EmbeddedSdk.register(registerUri) { result ->
+        EmbeddedSdk.registerCredential(registerUri) { result ->
             result.onSuccess { credential ->
                 authenticate(true)
-                onRegisterListener?.onCredentialRegistered(credential)
+                BiEventBus.post(CredentialRegistered(credential))
             }
             result.onFailure { throwable ->
                 showRegistrationError()
-                onRegisterListener?.onCredentialRegistrationError(throwable)
+                BiEventBus.post(BiEventError(throwable))
             }
         }
     }
@@ -108,7 +130,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         else
             showAuthentication()
 
-        when (val authenticateData = EmbeddedSdk.config.authenticationData) {
+        when (val authenticateData = EmbeddedUiConfig.config.authenticationData) {
             is PublicClientData -> {
                 authenticatePublicClient(
                     authenticateData.clientId,
@@ -131,18 +153,18 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         scope: String,
         pkce: String? = null,
     ) {
-        EmbeddedSdk.authenticateConfidential(
+        EmbeddedSdk.authorize(
             clientId = clientId,
             redirectUri = redirectUri,
             scope = scope,
             pkceS256CodeChallenge = pkce,
         ) { result ->
             result.onSuccess { authorizationCode ->
-                onAuthenticationListener?.onConfidentialClientAuthentication(authorizationCode)
+                BiEventBus.post(Authorization(authorizationCode))
                 clearFragments()
             }
             result.onFailure { throwable ->
-                onAuthenticationListener?.onAuthenticationError(throwable)
+                BiEventBus.post(BiEventError((throwable)))
                 showAuthenticationError()
             }
         }
@@ -152,16 +174,16 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         clientId: String,
         redirectUri: String,
     ) {
-        EmbeddedSdk.authenticatePublic(
+        EmbeddedSdk.authenticate(
             clientId = clientId,
             redirectUri = redirectUri,
         ) { result ->
             result.onSuccess { tokenResponse ->
-                onAuthenticationListener?.onPublicClientAuthentication(tokenResponse)
+                BiEventBus.post(BiEvent.Authentication(tokenResponse))
                 clearFragments()
             }
             result.onFailure { throwable ->
-                onAuthenticationListener?.onAuthenticationError(throwable)
+                BiEventBus.post(BiEventError((throwable)))
                 showAuthenticationError()
             }
         }
@@ -172,8 +194,26 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
     ) {
         showRegistration()
         EmbeddedSdk.import(code) { result ->
-            result.onSuccess {
-                authenticate(true)
+            result.onSuccess { credList ->
+                val prefs = PreferenceManager
+                    .getDefaultSharedPreferences(context)
+                val migrationSource = prefs
+                    .getString(MIGRATION_SOURCE, "")
+
+                if (migrationSource == MIGRATION_SOURCE_SETTINGS) {
+                    loadingCardContainer.gone()
+                    migrationDoneContainer.visible()
+                    migrationDoneButton.setOnClickListener {
+                        BiEventBus.post(CredentialRegistered(credList.first()))
+                        clearFragments()
+                    }
+                } else {
+                    authenticate(true)
+                }
+
+                prefs.edit()
+                    .remove(MIGRATION_SOURCE)
+                    .apply()
             }
             result.onFailure {
                 showMigrationError()
@@ -188,8 +228,8 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         errorGroup.gone()
 
         loadingText.text = getString(
-            R.string.setting_up_your_credential_on_this_device,
-            EmbeddedSdk.config.appDisplayName
+            R.string.action_handler_setting_up_your_credential,
+            EmbeddedUiConfig.config.appDisplayName
         )
     }
 
@@ -199,14 +239,14 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         errorGroup.gone()
 
         loadingText.text =
-            getString(R.string.verifying_your_identity, EmbeddedSdk.config.appDisplayName)
+            getString(R.string.action_handler_verifying_your_identity, EmbeddedUiConfig.config.appDisplayName)
     }
 
     private fun showAuthenticationAfterRegistration() {
         loadingText.text =
             context?.getString(
-                R.string.credential_setup_on_this_device,
-                EmbeddedSdk.config.appDisplayName
+                R.string.action_handler_credential_setup_on_this_device,
+                EmbeddedUiConfig.config.appDisplayName
             )
     }
 
@@ -217,7 +257,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         errorGroup.visible()
 
         errorDescription.text = Html.fromHtml(
-            getString(R.string.could_not_setup_an_account),
+            getString(R.string.action_handler_could_not_setup_an_account),
             Html.FROM_HTML_MODE_LEGACY
         )
         errorDescription.setOnClickListener {
@@ -240,7 +280,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         errorGroup.visible()
 
         errorDescription.text = Html.fromHtml(
-            getString(R.string.could_not_setup_an_account),
+            getString(R.string.action_handler_could_not_setup_an_account),
             Html.FROM_HTML_MODE_LEGACY
         )
         errorDescription.setOnClickListener {
@@ -255,10 +295,27 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         errorGroup.visible()
 
         errorDescription.text = Html.fromHtml(
-            getString(R.string.could_not_complete_authentication),
+            getString(R.string.action_handler_could_not_complete_authentication),
             Html.FROM_HTML_MODE_LEGACY
         )
+        errorPersists.text = Html.fromHtml(
+            getString(R.string.action_handler_if_the_issue_persists_authentication),
+            Html.FROM_HTML_MODE_LEGACY
+        )
+
         errorDescription.setOnClickListener {
+            runAction(actionType) { at ->
+                when (at) {
+                    Authentication -> {
+                        showAuthentication()
+                        authenticate(false)
+                    }
+                    else -> showNoDataError()
+                }
+            }
+        }
+
+        errorPersists.setOnClickListener {
             runAction(actionType) { at ->
                 when (at) {
                     Authentication -> {
@@ -277,26 +334,28 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         supportGroup.visible()
         errorGroup.visible()
 
-        errorDescription.text = getString(R.string.could_not_perform_operation_no_data)
+        errorDescription.text = getString(R.string.action_handler_could_not_perform_operation_no_data)
     }
 
     private fun clearFragments() {
         when (actionType) {
             is Migration -> {
-                parentFragmentManager.fragments.forEach { fragment ->
-                    if (fragment.tag == BiEnterCodeFragment.TAG ||
-                        fragment.tag == BiScanQrCodeFragment.TAG ||
-                        fragment.tag == BeyondIdentityRegistrationFragment.TAG
-                    ) {
-                        (fragment as BottomSheetDialogFragment).dismiss()
-                    }
-                }
+                parentFragmentManager.clearFragments(
+                    setOf(
+                        BeyondIdentityEnterCodeFragment.TAG,
+                        BeyondIdentityScanQrCodeFragment.TAG,
+                        BeyondIdentityRegistrationFragment.TAG,
+                        BeyondIdentityAddCredentialFragment.TAG,
+                        BeyondIdentityBeforeAuthFragment.TAG,
+                    )
+                )
                 dismiss()
             }
             is Registration -> {
                 dismiss()
             }
             Authentication -> {
+                parentFragmentManager.clearFragments(setOf(BeyondIdentityBeforeAuthFragment.TAG))
                 dismiss()
             }
         }
@@ -340,15 +399,4 @@ sealed class ActionType {
 
     @Parcelize
     data class Migration(val code: String) : ActionType(), Parcelable
-}
-
-interface OnRegisterListener {
-    fun onCredentialRegistered(credential: Credential)
-    fun onCredentialRegistrationError(throwable: Throwable)
-}
-
-interface OnAuthenticationListener {
-    fun onPublicClientAuthentication(token: TokenResponse)
-    fun onConfidentialClientAuthentication(authorizationCode: String)
-    fun onAuthenticationError(throwable: Throwable)
 }

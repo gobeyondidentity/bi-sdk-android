@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bi_button_background"
     android:foreground="?android:selectableItemBackground"
-    android:paddingTop="@dimen/spacing_l"
-    android:paddingBottom="@dimen/spacing_l">
+    android:paddingTop="@dimen/spacing_m"
+    android:paddingBottom="@dimen/spacing_m">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +24,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_m"
-        android:text="@string/continue_with_beyond_identity"
+        android:text="@string/continue_with_passwordless_login"
         android:textAppearance="@style/TextM"
         android:textColor="@color/neutral_100"
+        app:layout_constraintBottom_toTopOf="@id/text_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/icon" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_footer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_m"
+        android:text="@string/powered_by_beyond_identity"
+        android:textAppearance="@style/TextS"
+        android:layout_marginTop="-4dp"
+        app:layout_constraintBottom_toBottomOf="@id/icon"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toBottomOf="@id/text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

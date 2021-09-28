@@ -7,11 +7,10 @@
     tools:context="com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityActionHandlerFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/registration_title"
+        android:id="@+id/action_handler_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
-        android:text="@string/embedded_ui_register_signup"
         android:textAppearance="@style/HeadingS.Bold"
         android:textColor="@color/neutral_90"
         android:visibility="invisible"
@@ -20,17 +19,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/registration_title_line"
+        android:id="@+id/action_handler_title_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/spacing_l"
         android:background="@color/neutral_30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title" />
+        app:layout_constraintTop_toBottomOf="@id/action_handler_title" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/loading_card_container"
+        style="@style/BeyondIdentityCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_l"
@@ -38,7 +38,7 @@
         android:layout_marginEnd="@dimen/spacing_l"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title_line">
+        app:layout_constraintTop_toBottomOf="@id/action_handler_title_line">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loading_card_container_working"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_l"
-                android:text="@string/setting_up_your_credential_on_this_device"
+                android:text="@string/action_handler_setting_up_your_credential"
                 android:textAppearance="@style/TextM"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +70,7 @@
                 android:id="@+id/loading_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:constraint_referenced_ids="progress_linear, loading_text" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -77,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/could_not_setup_an_account"
+                android:text="@string/action_handler_could_not_setup_an_account"
                 android:textAppearance="@style/TextM"
                 android:textColor="@color/danger_main"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,9 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_m"
-                android:text="@string/if_the_issue_persists_please_contact_support"
+                android:gravity="center"
+                android:text="@string/action_handler_if_the_issue_persists_authentication"
                 android:textAppearance="@style/TextM"
-                android:textColor="@color/danger_main"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/error_description" />
@@ -100,11 +101,54 @@
                 android:id="@+id/error_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="error_persists, error_description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/migration_done_container"
+        style="@style/BeyondIdentityCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_l"
+        android:layout_marginTop="@dimen/spacing_xxxl"
+        android:layout_marginEnd="@dimen/spacing_l"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_handler_title_line">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_xl">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/migration_done_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/action_handler_migration_done_desc"
+                android:textAppearance="@style/TextM"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/migration_done_button"
+                style="@style/PrimaryButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:padding="@dimen/spacing_m_and_half"
+                android:text="@string/action_handler_go_to_passwordless_login_settings"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/migration_done_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/loading_questions_text"

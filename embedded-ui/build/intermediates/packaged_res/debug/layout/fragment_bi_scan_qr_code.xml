@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_background"
-    tools:context="com.beyondidentity.embedded.embeddedui.ui.BiScanQrCodeFragment">
+    tools:context="com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityScanQrCodeFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/registration_title"
+        android:id="@+id/scan_qr_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
@@ -19,14 +19,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/registration_title_line"
+        android:id="@+id/scan_qr_title_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/spacing_l"
         android:background="@color/neutral_30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title" />
+        app:layout_constraintTop_toBottomOf="@id/scan_qr_title" />
 
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/scan_qr_camera"
@@ -46,7 +46,7 @@
         app:frameThickness="@dimen/spacing_xl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registration_title_line"
+        app:layout_constraintTop_toBottomOf="@+id/scan_qr_title"
         app:maskColor="#77000000" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,13 +54,13 @@
         android:layout_width="@dimen/camera_view_size"
         android:layout_height="@dimen/camera_view_size"
         android:layout_marginTop="@dimen/spacing_xl"
-        android:background="@color/neutral_20"
+        android:background="@color/neutral_30"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registration_title_line">
+        app:layout_constraintTop_toBottomOf="@+id/scan_qr_title">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/scan_qr_no_permissions_icon"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_m"
             android:duplicateParentState="true"
-            android:text="@string/camera_access_denied"
+            android:text="@string/scan_qr_camera_access_denied"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
-        android:text="@string/code_not_recognized_please_try_again"
+        android:text="@string/scan_qr_code_not_recognized_please_try_again"
         android:textAppearance="@style/TextM"
         android:textColor="@color/danger_main"
         android:visibility="gone"
@@ -109,7 +109,7 @@
         android:layout_marginTop="@dimen/spacing_l"
         android:layout_marginEnd="@dimen/spacing_xl"
         android:gravity="center"
-        android:text="@string/locate_your_existing_cred"
+        android:text="@string/code_locate_your_existing_cred"
         android:textAppearance="@style/TextM"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +133,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_m"
-        android:text="@string/enter_9_digit_code_instead"
+        android:text="@string/scan_qr_enter_9_digit_code_instead"
         android:textAppearance="@style/TextM"
         android:textColor="@color/primary_main"
         app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +148,7 @@
         android:layout_marginTop="@dimen/spacing_jumbo"
         android:layout_marginEnd="@dimen/spacing_xl"
         android:gravity="center"
-        android:text="@string/don_t_have_access_to_your_other_device"
+        android:text="@string/code_don_t_have_access_to_your_other_device"
         android:textAppearance="@style/TextS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +162,7 @@
         android:layout_marginTop="@dimen/spacing_s"
         android:layout_marginEnd="@dimen/spacing_xl"
         android:gravity="center"
-        android:text="@string/scan_qr_recover_credential"
+        android:text="@string/code_recover_account"
         android:textAppearance="@style/TextS"
         android:textColor="@color/primary_main"
         app:layout_constraintEnd_toEndOf="parent"

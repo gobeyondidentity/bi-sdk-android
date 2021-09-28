@@ -1,20 +1,26 @@
 package com.beyondidentity.authenticator.sdk.android.embedded
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import com.beyondidentity.authenticator.sdk.android.R
 import com.beyondidentity.embedded.embeddedui.ui.ActionType.Registration
 import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityActionHandlerFragment
-import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityButton
+import com.beyondidentity.embedded.embeddedui.ui.views.BeyondIdentityButton
 import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentitySettingsFragment
-import com.beyondidentity.embedded.embeddedui.ui.OnAuthenticationListener
-import com.beyondidentity.embedded.embeddedui.ui.OnRegisterListener
-import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.TokenResponse
-import timber.log.Timber
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.Authentication
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.Authorization
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.BiEventError
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialDeleted
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialRecovery
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialRegistered
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialSetup
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiObserver
 
-class EmbeddedLoginActivity : AppCompatActivity(), OnRegisterListener, OnAuthenticationListener {
+class EmbeddedLoginActivity : AppCompatActivity(), BiObserver {
     private lateinit var signInButton: BeyondIdentityButton
     private lateinit var settingsButton: AppCompatTextView
 
@@ -28,38 +34,66 @@ class EmbeddedLoginActivity : AppCompatActivity(), OnRegisterListener, OnAuthent
             val loadingBi = BeyondIdentityActionHandlerFragment
                 .newInstance(actionType = Registration(registerUri = registerUri.toString()))
 
-            loadingBi.onRegisterListener = this
-            loadingBi.onAuthenticationListener = this
-
             loadingBi.show(supportFragmentManager, BeyondIdentityActionHandlerFragment.TAG)
         }
 
-        signInButton.setViewData(supportFragmentManager, this)
+        signInButton.setViewData(supportFragmentManager)
 
         settingsButton.setOnClickListener {
-            BeyondIdentitySettingsFragment
+            val settingsFragment = BeyondIdentitySettingsFragment
                 .newInstance()
-                .show(supportFragmentManager, BeyondIdentitySettingsFragment.TAG)
+
+            settingsFragment.show(supportFragmentManager, BeyondIdentitySettingsFragment.TAG)
         }
+        BiEventBus.registerObserver(this)
     }
 
-    override fun onCredentialRegistered(credential: Credential) {
-        Timber.d("credential registered = $credential")
+    override fun onDestroy() {
+        super.onDestroy()
+        BiEventBus.unRegisterObserver(this)
     }
 
-    override fun onCredentialRegistrationError(throwable: Throwable) {
-        Timber.e("credential registration error $throwable")
-    }
-
-    override fun onPublicClientAuthentication(token: TokenResponse) {
-        Timber.d("public client auth = $token")
-    }
-
-    override fun onConfidentialClientAuthentication(authorizationCode: String) {
-        Timber.d("confidential client authz = $authorizationCode")
-    }
-
-    override fun onAuthenticationError(throwable: Throwable) {
-        Timber.e("authentication failed $throwable")
+    override fun onEvent(event: BiEvent) {
+        when (event) {
+            CredentialSetup -> {
+                Toast.makeText(this, "CredentialSetup cred", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            CredentialRecovery -> {
+                Toast.makeText(this, "CredentialRecovery", Toast.LENGTH_SHORT).show()
+            }
+            is Authentication -> {
+                Toast.makeText(
+                    this,
+                    "Token received ${event.tokenResponse}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            is Authorization -> {
+                Toast.makeText(
+                    this,
+                    "Authorization ${event.authorizationCode}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            is BiEventError -> {
+                Toast.makeText(
+                    this,
+                    "Error ${event.throwable}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            is CredentialRegistered -> {
+                Toast.makeText(
+                    this,
+                    "Credential registered ${event.credential}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            CredentialDeleted -> {
+                Toast.makeText(this, "Credential deleted", Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
+        }
     }
 }

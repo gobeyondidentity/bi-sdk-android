@@ -7,7 +7,6 @@ buildscript {
         google()
         mavenCentral()
         maven("https://plugins.gradle.org/m2/")
-        jcenter()
     }
     dependencies {
         classpath(Classpaths.ANDROID_GRADLE_TOOLS_PLUGIN)

@@ -7,11 +7,11 @@
     tools:context="com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityRegistrationFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/registration_title"
+        android:id="@+id/recovery_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
-        android:text="@string/recover"
+        android:text="@string/recovery_title"
         android:textAppearance="@style/HeadingS.Bold"
         android:textColor="@color/neutral_90"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,14 +19,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/registration_title_line"
+        android:id="@+id/recovery_title_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/spacing_l"
         android:background="@color/neutral_30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title" />
+        app:layout_constraintTop_toBottomOf="@id/recovery_title" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/danger_icon"
@@ -35,7 +35,7 @@
         android:layout_marginTop="@dimen/spacing_xxxl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registration_title_line"
+        app:layout_constraintTop_toBottomOf="@+id/recovery_title_line"
         app:srcCompat="@drawable/ic_danger" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -61,7 +61,7 @@
         android:layout_marginTop="@dimen/spacing_xl"
         android:layout_marginEnd="@dimen/spacing_xl"
         android:gravity="center"
-        android:text="@string/enter_your_email_to_recover_your_account"
+        android:text="@string/recovery_enter_your_email_to_recover_your_account"
         android:textAppearance="@style/TextM"
         android:textColor="@color/neutral_60"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,14 +76,14 @@
         android:layout_marginStart="@dimen/spacing_xl"
         android:layout_marginTop="@dimen/spacing_l"
         android:layout_marginEnd="@dimen/spacing_xl"
-        android:hint="@string/registration_email_address"
+        android:hint="@string/recovery_email_address"
         android:inputType="textEmailAddress"
-        android:text="igor@bi.com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_mail_hint" />
+        app:layout_constraintTop_toBottomOf="@id/enter_mail_hint"
+        tools:text="user@beyondidenity.com" />
 
-    <com.beyondidentity.embedded.embeddedui.ui.BiLoadingButton
+    <com.beyondidentity.embedded.embeddedui.ui.views.BeyondIdentityLoadingButton
         android:id="@+id/recover_email_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         android:layout_marginTop="@dimen/spacing_m"
         android:layout_marginEnd="@dimen/spacing_xl"
         android:gravity="center"
-        android:text="@string/could_not_complete_recovey"
+        android:text="@string/recovery_could_not_complete_recovery"
         android:textAppearance="@style/TextM"
         android:textColor="@color/danger_main"
         android:visibility="gone"

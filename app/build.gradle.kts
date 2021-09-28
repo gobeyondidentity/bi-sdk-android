@@ -7,17 +7,17 @@ plugins {
 }
 
 android {
-    compileSdkVersion(AndroidConfig.COMPILE_SDK_VERSION)
-    buildToolsVersion(AndroidConfig.BUILD_TOOLS_VERSION)
+    compileSdk = AndroidConfig.COMPILE_SDK_VERSION
+    buildToolsVersion = AndroidConfig.BUILD_TOOLS_VERSION
 
     defaultConfig {
-        applicationId("com.beyondidentity.authenticator.sdk.android")
-        minSdkVersion(AndroidConfig.MIN_SDK_VERSION)
-        targetSdkVersion(AndroidConfig.TARGET_SDK_VERSION)
+        applicationId = "com.beyondidentity.authenticator.sdk.android"
+        minSdk = AndroidConfig.MIN_SDK_VERSION
+        targetSdk = AndroidConfig.TARGET_SDK_VERSION
         versionCode = 1
         versionName = "1.0.0" // device-info doesn't like it when it's not semantic version major.minor.patch
 
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders["embedded_app_scheme"] = getProp("BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME")
 
@@ -28,7 +28,8 @@ android {
                 "BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID",
                 "BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME",
                 "BUILD_CONFIG_BEYOND_IDENTITY_DEMO_TENANT",
-                "BUILD_CONFIG_AUTH_URL"
+                "BUILD_CONFIG_AUTH_URL",
+                "BUILD_CONFIG_ACME_URL"
         ).forEach { key ->
             buildConfigField("String", key, "\"${getProp(key)}\"")
         }
@@ -45,14 +46,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_1_8)
-        targetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility(JavaVersion.VERSION_11)
+        targetCompatibility(JavaVersion.VERSION_11)
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
-    lintOptions {
+    lint {
         isCheckReleaseBuilds = false
         isAbortOnError = false
     }

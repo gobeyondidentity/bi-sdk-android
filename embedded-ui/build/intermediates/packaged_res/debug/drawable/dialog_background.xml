@@ -3,5 +3,5 @@
     <corners
         android:topLeftRadius="@dimen/spacing_m_and_half"
         android:topRightRadius="@dimen/spacing_m_and_half" />
-    <solid android:color="@color/neutral_10" />
+    <solid android:color="@color/bi_sheet_background" />
 </shape>

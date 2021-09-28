@@ -1,6 +1,5 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
-        android:text="@string/embedded_ui_register_signup"
+        android:text="@string/passwordless_login"
         android:textAppearance="@style/HeadingS.Bold"
         android:textColor="@color/neutral_90"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,8 +28,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/registration_title" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/registration_credential_status_container"
+        style="@style/BeyondIdentityCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_l"
@@ -38,9 +38,7 @@
         android:layout_marginEnd="@dimen/spacing_l"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title_line"
-        card_view:cardCornerRadius="@dimen/spacing_m"
-        card_view:cardElevation="@dimen/spacing_m">
+        app:layout_constraintTop_toBottomOf="@id/registration_title_line">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -60,53 +58,41 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/enter_email_to_generate_cred_details"
+                android:id="@+id/registration_deactivate_old_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
+                android:layout_marginTop="@dimen/spacing_xl"
                 android:gravity="center"
+                android:text="@string/registration_deactivate_old_desc"
                 android:textAppearance="@style/TextM"
-                android:textColor="@color/neutral_60"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/check_cred_status"
-                tools:text="@string/registration_enter_email_to_generate_cred" />
+                app:layout_constraintTop_toBottomOf="@id/check_cred_status" />
+
+            <com.beyondidentity.embedded.embeddedui.ui.views.BeyondIdentityLoadingButton
+                android:id="@+id/registration_sign_up_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:background="@drawable/primary_button_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/registration_deactivate_old_desc" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/what_is_cred"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_marginTop="@dimen/spacing_xl"
                 android:gravity="center"
                 android:text="@string/registration_what_is_a_credential"
                 android:textAppearance="@style/TextM"
                 android:textColor="@color/standard_link"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/enter_email_to_generate_cred_details" />
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registration_email_input"
-                style="@style/PrimaryInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_l"
-                android:hint="@string/registration_email_address"
-                android:inputType="textEmailAddress"
-                android:text="igor@bi.com"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/what_is_cred" />
-
-            <com.beyondidentity.embedded.embeddedui.ui.BiLoadingButton
-                android:id="@+id/registration_sign_up_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
-                android:background="@drawable/primary_button_background"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/registration_email_input" />
+                app:layout_constraintTop_toBottomOf="@id/registration_sign_up_button"
+                app:layout_goneMarginTop="@dimen/spacing_xl" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/could_not_complete_signup"
@@ -114,16 +100,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_m"
                 android:gravity="center"
-                android:text="@string/could_not_complete_sign_up"
+                android:text="@string/registration_could_not_complete_sign_up"
                 android:textAppearance="@style/TextM"
                 android:textColor="@color/danger_main"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/registration_sign_up_button" />
+                app:layout_constraintTop_toBottomOf="@id/what_is_cred" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/registration_have_a_cred_elsewhere"

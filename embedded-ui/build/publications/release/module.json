@@ -3,15 +3,14 @@
   "component": {
     "group": "com.beyondidentity.android.sdk",
     "module": "embedded-ui",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "attributes": {
       "org.gradle.status": "release"
     }
   },
   "createdBy": {
     "gradle": {
-      "version": "6.5",
-      "buildId": "73bqozxqwvgtfie52gyogbl36i"
+      "version": "7.2"
     }
   },
   "variants": [
@@ -25,13 +24,13 @@
       },
       "files": [
         {
-          "name": "embedded-ui-0.1.0.aar",
-          "url": "embedded-ui-0.1.0.aar",
-          "size": 354807,
-          "sha512": "58d3630de0967fe23f885a80c261f794350256c3adee985a0c270dac92114a5e639e3e20db23887dac5e22c598072b6cb5b715d7d94189172c8f7872e9a1f257",
-          "sha256": "dd6ac99f0ce93217bfadf6df1151deb429628892ee9b0f2185c2fc8946ee9972",
-          "sha1": "b9c947fcc672976117a62b939103ca78519021cd",
-          "md5": "273e3f7867f892430fb04263aff721ec"
+          "name": "embedded-ui-0.1.1.aar",
+          "url": "embedded-ui-0.1.1.aar",
+          "size": 387300,
+          "sha512": "1aa536672e96d85c3f840581f5759fefde0c5c1fbc1695c2de246f8b9b3ece3201935e12dfe2bc2d51255efb25c7adc9cb20e4ca143ba6c277f57358bf0aa9f9",
+          "sha256": "52449473931153f984185141dc14a7cb922af4737a2a5e1455ebec2f48e60b18",
+          "sha1": "3207edae1e3595126be8fa791a773d346fe52c4e",
+          "md5": "17aa5562c2d85fcb227dfeb6193db2a9"
         }
       ]
     },
@@ -55,12 +54,12 @@
           "group": "com.beyondidentity.android.sdk",
           "module": "embedded",
           "version": {
-            "requires": "0.1.0"
+            "requires": "0.1.1"
           }
         },
         {
           "group": "org.jetbrains.kotlin",
-          "module": "kotlin-stdlib",
+          "module": "kotlin-stdlib-jdk8",
           "version": {
             "requires": "1.4.31"
           }
@@ -103,13 +102,13 @@
       ],
       "files": [
         {
-          "name": "embedded-ui-0.1.0.aar",
-          "url": "embedded-ui-0.1.0.aar",
-          "size": 354807,
-          "sha512": "58d3630de0967fe23f885a80c261f794350256c3adee985a0c270dac92114a5e639e3e20db23887dac5e22c598072b6cb5b715d7d94189172c8f7872e9a1f257",
-          "sha256": "dd6ac99f0ce93217bfadf6df1151deb429628892ee9b0f2185c2fc8946ee9972",
-          "sha1": "b9c947fcc672976117a62b939103ca78519021cd",
-          "md5": "273e3f7867f892430fb04263aff721ec"
+          "name": "embedded-ui-0.1.1.aar",
+          "url": "embedded-ui-0.1.1.aar",
+          "size": 387300,
+          "sha512": "1aa536672e96d85c3f840581f5759fefde0c5c1fbc1695c2de246f8b9b3ece3201935e12dfe2bc2d51255efb25c7adc9cb20e4ca143ba6c277f57358bf0aa9f9",
+          "sha256": "52449473931153f984185141dc14a7cb922af4737a2a5e1455ebec2f48e60b18",
+          "sha1": "3207edae1e3595126be8fa791a773d346fe52c4e",
+          "md5": "17aa5562c2d85fcb227dfeb6193db2a9"
         }
       ]
     }

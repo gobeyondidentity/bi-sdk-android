@@ -7,10 +7,11 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.os.Bundle
 import com.beyondidentity.authenticator.sdk.android.embedded.EMBEDDED_KEYGUARD_REQUEST
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.ConfidentialClientData
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.PublicClientData
+import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.Config
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
-import com.beyondidentity.embedded.sdk.EmbeddedSdk.AuthenticationData.ConfidentialClientData
-import com.beyondidentity.embedded.sdk.EmbeddedSdk.AuthenticationData.PublicClientData
-import com.beyondidentity.embedded.sdk.EmbeddedSdk.Config
 import timber.log.Timber
 
 class App : Application(), ActivityLifecycleCallbacks {
@@ -33,16 +34,15 @@ class App : Application(), ActivityLifecycleCallbacks {
 
         EmbeddedSdk.init(
             app = this,
-            apiToken = BuildConfig.BUILD_CONFIG_BI_DEMO_API_TOKEN,
-            config = Config(
-                appDisplayName = "Acme App",
-                supportEmail = "support@acme.com",
-                authenticationData = publicAuthData,
-            ),
             keyguardPrompt = keyguardPrompt,
             logger = { log ->
                 Timber.d(log)
             }
+        )
+        EmbeddedUiConfig.config = Config(
+            appDisplayName = "Acme App",
+            supportUrlOrEmail = "https://www.beyondidentity.com/support",
+            authenticationData = confAuthData,
         )
         registerActivityLifecycleCallbacks(this)
     }

@@ -5,7 +5,7 @@
 5    <uses-sdk
 6        android:minSdkVersion="28"
 6-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/src/main/AndroidManifest.xml
-7        android:targetSdkVersion="30" />
+7        android:targetSdkVersion="31" />
 7-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/src/main/AndroidManifest.xml
 8
 9</manifest>

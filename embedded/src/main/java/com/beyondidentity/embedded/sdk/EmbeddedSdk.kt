@@ -5,14 +5,15 @@ package com.beyondidentity.embedded.sdk
 import android.app.Application
 import android.hardware.biometrics.BiometricPrompt
 import android.os.CancellationSignal
+import androidx.preference.PreferenceManager
 import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
 import com.beyondidentity.authenticator.sdk.embedded.R
+import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
 import com.beyondidentity.embedded.sdk.export.ExportCredentialListener
 import com.beyondidentity.embedded.sdk.models.Credential
 import com.beyondidentity.embedded.sdk.models.ExportResponse
 import com.beyondidentity.embedded.sdk.models.PkceResponse
 import com.beyondidentity.embedded.sdk.models.TokenResponse
-import com.beyondidentity.embedded.sdk.models.UserResponse
 import com.beyondidentity.embedded.sdk.utils.Qr.generateQrCode
 import com.beyondidentity.embedded.sdk.utils.appVersionName
 import com.beyondidentity.embedded.sdk.utils.postMain
@@ -24,7 +25,6 @@ import com.beyondidentity.sdk.android.bicore.models.CodeChallenge
 import com.beyondidentity.sdk.android.bicore.models.CoreExportStatus
 import com.beyondidentity.sdk.android.bicore.models.PkceCodeChallengeMethod.S256
 import com.beyondidentity.sdk.android.bicore.models.TrustedSource
-import com.beyondidentity.sdk.android.bicore.models.UserRecoverRequest
 import com.beyondidentity.sdk.android.bicore.partials.CoreFailure
 import com.beyondidentity.sdk.android.bicore.partials.CoreSuccess
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,38 +38,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.util.UUID
 import java.util.concurrent.Executors
 import kotlin.Result.Companion
+import kotlin.jvm.Throws
 
 object EmbeddedSdk {
-    const val BI_SUPPORT_EMAIL = "support@beyondidentity.com"
-
-    data class Config(
-        val appDisplayName: String,
-        val supportEmail: String = BI_SUPPORT_EMAIL,
-        val authenticationData: AuthenticationData,
-    )
-
-    sealed class AuthenticationData {
-
-        data class PublicClientData(
-            val clientId: String,
-            val redirectUri: String,
-        ) : AuthenticationData()
-
-        data class ConfidentialClientData(
-            val clientId: String,
-            val redirectUri: String,
-            val scope: String,
-        ) : AuthenticationData()
-    }
+    private const val BI_APP_INSTANCE_ID_PREF_KEY = "beyond-identity-app-instance-id"
 
     private val answers = Channel<Boolean>()
     private lateinit var app: Application
-    private lateinit var apiToken: String
     private var logger: ((String) -> Unit)? = null
     private var keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)? = null
-    lateinit var config: Config
 
     private val executor = Executors.newFixedThreadPool(3)
 
@@ -137,20 +117,16 @@ object EmbeddedSdk {
      * Initialize and configure the Beyond Identity Embedded SDK.
      *
      * @param app [Application]
-     * @param apiToken API token used to authenticate to Beyond Identity's register user endpoint.
      * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
      * @param logger Custom logger to get logs from the SDK
      */
+    @Throws(DatabaseSetupException::class)
     fun init(
         app: Application,
-        apiToken: String,
-        config: Config,
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
         logger: (String) -> Unit,
     ) {
         this.app = app
-        this.apiToken = apiToken
-        this.config = config
         this.keyguardPrompt = keyguardPrompt
         this.logger = logger
 
@@ -166,7 +142,7 @@ object EmbeddedSdk {
             },
             authenticationPrompt = { true },
             appVersion = app.appVersionName(),
-            appInstancePrefKey = "",
+            appInstancePrefKey = getAppInstanceId(app),
             localhostServicePrefKey = "",
             accessibilityServicePrefKey = "",
             deviceGatewayUrl = BuildConfig.BUILD_CONFIG_DEVICE_GATEWAY_URL,
@@ -195,15 +171,19 @@ object EmbeddedSdk {
         return path
     }
 
+    @Throws(DatabaseSetupException::class)
     private fun dbMigrate() {
         logger?.invoke("Running DB migration")
         BiSdk.migrateDb(
-            boltPath = newDBFile("auth.db"),
+            boltPath = newDBFile("auth.db"), // todo remove bolt db
             sqlitePath = newDBFile("auth.sqlite")
         ) {
             when (it) {
                 is CoreSuccess -> logger?.invoke("DB migration success")
-                is CoreFailure -> logger?.invoke("DB migration failure")
+                is CoreFailure -> {
+                    logger?.invoke("DB migration failure")
+                    throw DatabaseSetupException("DB migration failure")
+                }
             }
         }
     }
@@ -260,130 +240,12 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Creates a new user under tenant
-     *
-     * @param externalId Identifier which corresponds to the user in the app's database.
-     * @param email User's email.
-     * @param userName Internal field to identify the user.
-     * @param displayName Internal field to identify the user's name.
-     * @param callback [Result] of [UserResponse] or [Throwable]
-     */
-    fun createUser(
-        externalId: String,
-        email: String,
-        displayName: String,
-        userName: String,
-        callback: (Result<UserResponse>) -> Unit,
-    ) {
-        executor.execute {
-            BiSdk.createUser(
-                apiToken = apiToken,
-                registrationUrl = "${BuildConfig.BUILD_CONFIG_PUBLIC_API_URL}/v0/users",
-                externalId = externalId,
-                email = email,
-                displayName = displayName,
-                userName = userName,
-            ) { userResponse ->
-                when (userResponse) {
-                    is CoreSuccess ->
-                        postMain { callback(Result.success(UserResponse.from(userResponse.value))) }
-                    is CoreFailure ->
-                        postMain { callback(Result.failure(Throwable(userResponse.value.localizedDescription))) }
-                }
-            }
-        }
-    }
-
-    /**
-     * Creates a new user under tenant
-     *
-     * @param externalId Identifier which corresponds to the user in the app's database.
-     * @param email User's email.
-     * @param userName Internal field to identify the user.
-     * @param displayName Internal field to identify the user's name.
-     *
-     * @return [Flow] [Result] of [UserResponse] or [Throwable]
-     */
-    @ExperimentalCoroutinesApi
-    fun createUser(
-        externalId: String,
-        email: String,
-        displayName: String,
-        userName: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) = callbackFlow<Result<UserResponse>> {
-        BiSdk.createUser(
-            apiToken = apiToken,
-            registrationUrl = "${BuildConfig.BUILD_CONFIG_PUBLIC_API_URL}/v0/users",
-            externalId = externalId,
-            email = email,
-            displayName = displayName,
-            userName = userName,
-        ) { userResponse ->
-            when (userResponse) {
-                is CoreSuccess -> sendBlocking(Result.success(UserResponse.from(userResponse.value)))
-                is CoreFailure -> sendBlocking(Result.failure(Throwable(userResponse.value.localizedDescription)))
-            }
-        }
-    }.flowOn(dispatcher)
-
-    /**
-     * Recovers a user under tenant
-     *
-     * @param externalId Identifier which corresponds to the user in the app's database.
-     * @param callback [Result] of [UserResponse]
-     */
-    fun recoverUser(
-        externalId: String,
-        callback: (Result<UserResponse>) -> Unit,
-    ) {
-        executor.execute {
-            BiSdk.recoverUser(
-                apiToken = apiToken,
-                recoverUrl = "${BuildConfig.BUILD_CONFIG_PUBLIC_API_URL}/v1/manage/recover-user",
-                request = UserRecoverRequest(externalId = externalId)
-            ) { userResponse ->
-                when (userResponse) {
-                    is CoreSuccess ->
-                        postMain { callback(Result.success(UserResponse.from(userResponse.value))) }
-                    is CoreFailure ->
-                        postMain { callback(Result.failure(Throwable(userResponse.value.localizedDescription))) }
-                }
-            }
-        }
-    }
-
-    /**
-     * Recovers a user under tenant
-     *
-     * @param externalId Identifier which corresponds to the user in the app's database.
-     *
-     * @return [Flow] [Result] of [UserResponse]
-     */
-    @ExperimentalCoroutinesApi
-    fun recoverUser(
-        externalId: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) = callbackFlow<Result<UserResponse>> {
-        BiSdk.recoverUser(
-            apiToken = apiToken,
-            recoverUrl = "${BuildConfig.BUILD_CONFIG_PUBLIC_API_URL}/v1/manage/recover-user",
-            request = UserRecoverRequest(externalId = externalId),
-        ) { userResponse ->
-            when (userResponse) {
-                is CoreSuccess -> sendBlocking(Result.success(UserResponse.from(userResponse.value)))
-                is CoreFailure -> sendBlocking(Result.failure(Throwable(userResponse.value.localizedDescription)))
-            }
-        }
-    }.flowOn(dispatcher)
-
-    /**
      * Use a registration link to register a credential for user
      *
      * @param url registration url used to create a credential
      * @param callback [Result] of [Credential] or [Throwable]
      */
-    fun register(
+    fun registerCredential(
         url: String,
         callback: (Result<Credential>) -> Unit,
     ) {
@@ -414,7 +276,7 @@ object EmbeddedSdk {
      * @return [Flow] with [Result] of [Credential] or [Throwable]
      */
     @ExperimentalCoroutinesApi
-    fun register(
+    fun registerCredential(
         url: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) = callbackFlow<Result<Credential>> {
@@ -445,7 +307,7 @@ object EmbeddedSdk {
      * @param scope string list of OIDC scopes used during authentication to authorize access to a user's specific details. Only "openid" is currently supported.
      * @param callback returns an AuthorizationCode to exchange for access and id token.
      */
-    fun authenticateConfidential(
+    fun authorize(
         clientId: String,
         redirectUri: String,
         scope: String,
@@ -484,7 +346,7 @@ object EmbeddedSdk {
      * @return [Flow] an AuthorizationCode to exchange for access and id token.
      */
     @ExperimentalCoroutinesApi
-    fun authenticateConfidential(
+    fun authorize(
         clientId: String,
         redirectUri: String,
         scope: String,
@@ -515,7 +377,7 @@ object EmbeddedSdk {
      * @param redirectUri URI where the user will be redirected after the authorization has completed. The redirect URI must be one of the URIs passed in the OIDC configuration.
      * @param callback returns a [TokenResponse] that contains the access and id token.
      */
-    fun authenticatePublic(
+    fun authenticate(
         clientId: String,
         redirectUri: String,
         callback: (Result<TokenResponse>) -> Unit,
@@ -549,7 +411,7 @@ object EmbeddedSdk {
      * @return [Flow] [Result] of [TokenResponse] or [Throwable]
      */
     @ExperimentalCoroutinesApi
-    fun authenticatePublic(
+    fun authenticate(
         clientId: String,
         redirectUri: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -669,7 +531,7 @@ object EmbeddedSdk {
      * After the challenge is completed, a rendezvous token is provided
      * with 90s TTL after which a new token is generated.
      *
-     * NOTE: To cancel the export flow, [EmbeddedSdk.cancel] must be invoked.
+     * NOTE: To cancel the export flow, [EmbeddedSdk.cancelExport] must be invoked.
      *
      * @param credentialHandles [List] of credential handles to be exported
      */
@@ -681,7 +543,6 @@ object EmbeddedSdk {
         var error: RuntimeException? = null
         BiSdk.export(
             handles = credentialHandles,
-            url = BuildConfig.BUILD_CONFIG_MIGRATED_URL,
             export = { coreExportStatus ->
                 when (coreExportStatus) {
                     is CoreExportStatus.Started -> {
@@ -733,7 +594,7 @@ object EmbeddedSdk {
      * After the challenge is completed, a rendezvous token is provided
      * with 60s TTL after which a new token is generated.
      *
-     * NOTE: To cancel the export flow, [EmbeddedSdk.cancel] must be invoked.
+     * NOTE: To cancel the export flow, [EmbeddedSdk.cancelExport] must be invoked.
      *
      * @param credentialHandle [List] of credential handles to be exported
      * @param listener When biometrics are not set, fallback to pin.
@@ -745,7 +606,6 @@ object EmbeddedSdk {
         executor.execute {
             BiSdk.export(
                 handles = credentialHandle,
-                url = BuildConfig.BUILD_CONFIG_MIGRATED_URL,
                 export = { coreExportStatus ->
                     when (coreExportStatus) {
                         is CoreExportStatus.Started -> postMain {
@@ -799,7 +659,6 @@ object EmbeddedSdk {
         executor.execute {
             BiSdk.import(
                 token = token,
-                url = BuildConfig.BUILD_CONFIG_MIGRATED_URL,
             ) { importProfileResult ->
                 when (importProfileResult) {
                     is CoreSuccess ->
@@ -826,7 +685,6 @@ object EmbeddedSdk {
     ) = callbackFlow<Result<List<Credential>>> {
         BiSdk.import(
             token = token,
-            url = BuildConfig.BUILD_CONFIG_MIGRATED_URL,
         ) { importProfileResult ->
             when (importProfileResult) {
                 is CoreSuccess ->
@@ -838,9 +696,9 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Cancels ongoing requests.
+     * Cancels ongoing export requests.
      */
-    fun cancel(
+    fun cancelExport(
         callback: (Result<Unit>) -> Unit
     ) {
         BiSdk.cancel { response ->
@@ -855,10 +713,10 @@ object EmbeddedSdk {
     }
 
     /**
-     * Cancels ongoing requests.
+     * Cancels ongoing export requests.
      */
     @ExperimentalCoroutinesApi
-    fun cancel(
+    fun cancelExport(
         dispatcher: CoroutineDispatcher = Dispatchers.Default
     ) = callbackFlow<Result<Unit>> {
         BiSdk.cancel { response ->
@@ -881,6 +739,17 @@ object EmbeddedSdk {
         answers.sendBlocking(answer)
     }
 
-    fun deviceInfo() {
+    private fun getAppInstanceId(app: Application): String {
+        val pref = PreferenceManager.getDefaultSharedPreferences(app)
+        pref.getString(BI_APP_INSTANCE_ID_PREF_KEY, null)?.let {
+            return it
+        } ?: run {
+            val appId = UUID.randomUUID().toString()
+            pref.edit().apply {
+                putString(BI_APP_INSTANCE_ID_PREF_KEY, appId)
+                apply()
+            }
+            return appId
+        }
     }
 }

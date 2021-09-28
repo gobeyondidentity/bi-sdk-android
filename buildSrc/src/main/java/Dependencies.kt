@@ -18,14 +18,14 @@ object Versions {
     const val ANDROIDX_ESPRESSO_CORE = "3.3.0"
 
     // Classpath
-    const val ANDROID_GRADLE_TOOLS = "4.1.2"
+    const val ANDROID_GRADLE_TOOLS = "7.0.2"
     const val KTLINT = "10.0.0"
     const val DOKKA = "1.5.0"
 }
 
 object Libs {
     // Kotlin
-    const val KOTLIN_STD_LIB = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.KOTLIN}"
+    const val KOTLIN_STD_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}"
     const val KOTLINX_SERIALIZATION =
         "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KOTLINX_SERIALIZATION}"
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/bi_sheet_background"
     android:paddingStart="@dimen/spacing_xl"
     android:paddingTop="@dimen/spacing_xxl"
     android:paddingEnd="@dimen/spacing_xl"
@@ -35,11 +36,11 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/what_is_cred_got_it"
         style="@style/PrimaryButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_xl"
         android:padding="@dimen/spacing_m_and_half"
-        android:text="@string/got_it"
+        android:text="@string/what_is_cred_got_it"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />

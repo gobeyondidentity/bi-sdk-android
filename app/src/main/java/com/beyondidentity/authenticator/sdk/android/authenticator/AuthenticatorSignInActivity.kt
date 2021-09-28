@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.beyondidentity.authenticator.sdk.AuthView
+import com.beyondidentity.authenticator.sdk.android.BuildConfig
 import com.beyondidentity.authenticator.sdk.android.R
-import com.beyondidentity.authenticator.sdk.android.utils.ACME_CLOUD_URL
 
 class AuthenticatorSignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +15,7 @@ class AuthenticatorSignInActivity : AppCompatActivity() {
         val logInButton = findViewById<AuthView>(R.id.auth_view)
 
         // example setup where the confidential client (backend) handles everything
-        val url = "$ACME_CLOUD_URL/start"
+        val url = "${BuildConfig.BUILD_CONFIG_ACME_URL}/start"
         val redirectUrl = "${getString(R.string.authenticator_app_scheme)}://${getString(R.string.authenticator_app_host)}"
 
         val loginUriWithRedirect = Uri.parse(url).buildUpon().apply {

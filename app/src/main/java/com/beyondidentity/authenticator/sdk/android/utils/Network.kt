@@ -13,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -34,9 +35,54 @@ data class TokenResponse(
     val idToken: String,
 )
 
+data class CreateUserRequest(
+    @SerializedName("binding_token_delivery_method")
+    val bindingTokenDeliveryMethod: String,
+    @SerializedName("external_id")
+    val externalId: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("user_name")
+    val userName: String,
+    @SerializedName("display_name")
+    val displayName: String,
+)
+
+data class RecoverUserRequest(
+    @SerializedName("binding_token_delivery_method")
+    val bindingTokenDeliveryMethod: String,
+    @SerializedName("external_id")
+    val externalId: String,
+)
+
+data class UserResponse(
+    @SerializedName("internal_id")
+    val internalId: String,
+    @SerializedName("external_id")
+    val externalId: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("user_name")
+    val userName: String,
+    @SerializedName("display_name")
+    val displayName: String,
+    @SerializedName("date_created")
+    val dateCreated: String,
+    @SerializedName("date_modified")
+    val dateModified: String,
+    @SerializedName("status")
+    val status: String,
+)
+
 interface AcmeApiService {
     @GET("balance")
     suspend fun getBalance(@Query("session") session: String): BalanceResponse
+
+    @POST("users")
+    suspend fun createUser(@Body createUserRequest: CreateUserRequest): UserResponse
+
+    @POST("recover-user")
+    suspend fun recoverUser(@Body recoverUserRequest: RecoverUserRequest): UserResponse
 }
 
 interface BiApiService {
@@ -52,11 +98,8 @@ interface BiApiService {
 
 object RetrofitBuilder {
 
-    private fun getOkHttpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = BODY
-
-        return OkHttpClient.Builder()
+    private fun getOkHttpClient() =
+        OkHttpClient.Builder()
             .addInterceptor(
                 BasicAuthInterceptor(
                     user = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
@@ -66,13 +109,17 @@ object RetrofitBuilder {
                     password = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_SECRET,
                 )
             )
-            .addInterceptor(interceptor)
+            .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
             .build()
-    }
 
     private fun getAcmeRetrofit() = Retrofit.Builder()
-        .baseUrl(ACME_CLOUD_URL)
+        .baseUrl(BuildConfig.BUILD_CONFIG_ACME_URL)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(
+            OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
+                .build()
+        )
         .build()
 
     private fun getBiApiRetrofit() = Retrofit.Builder()

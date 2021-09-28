@@ -4,7 +4,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-id/values-id.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-2/files-2.1/0b4a99b1dbd7256ddedcd5574b4a9793/jetified-zxing-android-embedded-4.1.0/res/values-id/values-id.xml",
+                    "source": "/root/.gradle/caches/transforms-3/85d3253e81b16c281a28ff7777fae434/transformed/jetified-zxing-android-embedded-4.1.0/res/values-id/values-id.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -16,10 +16,10 @@
             ]
         },
         {
-            "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/res/merged/release/values-id/values-id.xml",
+            "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/values-id/values-id.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-2/files-2.1/0b4a99b1dbd7256ddedcd5574b4a9793/jetified-zxing-android-embedded-4.1.0/res/values-id/values-id.xml",
+                    "source": "/root/.gradle/caches/transforms-3/85d3253e81b16c281a28ff7777fae434/transformed/jetified-zxing-android-embedded-4.1.0/res/values-id/values-id.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

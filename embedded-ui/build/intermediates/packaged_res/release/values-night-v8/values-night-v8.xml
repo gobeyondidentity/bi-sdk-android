@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bi_button_background">#1C1C1C</color>
+    <color name="bi_button_border">#fff</color>
+    <color name="bi_sheet_background">#1C1C1C</color>
+    <color name="bi_sheet_shadow">#FFFFFF</color>
+    <color name="neutral_10">#000000</color>
+    <color name="neutral_100">#FFFFFF</color>
+    <color name="neutral_30">#595959</color>
+    <color name="neutral_60">#FFFFFF</color>
+    <color name="neutral_70">#FFFFFF</color>
+    <color name="neutral_90">#FFFFFF</color>
+</resources>

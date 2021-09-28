@@ -20,6 +20,14 @@
         <item name="fontWeight">700</item>
     </style>
 
+    <style name="TextL" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_l</item>
+    </style>
+
+    <style name="TextL.Bold" parent="TextM">
+        <item name="fontWeight">700</item>
+    </style>
+
     <style name="HeadingS" parent="BiTextBase">
         <item name="android:textSize">@dimen/heading_s</item>
     </style>
@@ -38,7 +46,7 @@
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>
         <item name="android:foreground">?android:selectableItemBackground</item>
-        <item name="android:textColor">@color/neutral_10</item>
+        <item name="android:textColor">@color/white_static</item>
     </style>
 
     <style name="PrimaryButtonDanger" parent="PrimaryButton">
@@ -53,5 +61,14 @@
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/dialog_background</item>
+    </style>
+
+    <!--    Card View   -->
+    <style name="BeyondIdentityCardView" parent="CardView">
+        <item name="cardBackgroundColor">@color/bi_sheet_background</item>
+        <item name="android:outlineAmbientShadowColor">@color/bi_sheet_shadow</item>
+        <item name="android:outlineSpotShadowColor">@color/bi_sheet_shadow</item>
+        <item name="cardCornerRadius">@dimen/spacing_m</item>
+        <item name="elevation">@dimen/spacing_m</item>
     </style>
 </resources>

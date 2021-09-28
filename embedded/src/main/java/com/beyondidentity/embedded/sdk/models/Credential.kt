@@ -3,7 +3,7 @@ package com.beyondidentity.embedded.sdk.models
 import com.beyondidentity.sdk.android.bicore.models.ProfileResponse as CoreProfile
 
 /**
- * Represent [UserResponse]'s credential, wrapper for X.509 Certificate
+ * Represent User's credential, wrapper for X.509 Certificate
  *
  * @property created  The date the `Credential` was created.
  * @property handle The handle for the `Credential`. This is identical to your `tenant_id`.

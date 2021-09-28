@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.beyondidentity.embedded.embeddedui.R
-import com.beyondidentity.embedded.embeddedui.ui.BiDeleteCredentialDialog.OnCredDeleteListener
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialDeleted
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.DeleteCredential
+import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiObserver
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import java.util.Locale
 
 class BeyondIdentityCredentialInfoFragment :
     BiBaseBottomSheetDialogFragment(),
-    OnCredDeleteListener {
+    BiObserver {
     private lateinit var credInfoTenant: AppCompatTextView
     private lateinit var credInfoCredFor: AppCompatTextView
     private lateinit var credInfoModel: AppCompatTextView
@@ -21,8 +25,6 @@ class BeyondIdentityCredentialInfoFragment :
     private lateinit var credInfoDeleteCred: AppCompatTextView
 
     private var credHandle: String? = null
-
-    var credentialInfoListener: CredentialInfoListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +35,12 @@ class BeyondIdentityCredentialInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews(view)
+        BiEventBus.registerObserver(this)
+    }
+
+    override fun onDestroyView() {
+        BiEventBus.unRegisterObserver(this)
+        super.onDestroyView()
     }
 
     private fun setupViews(view: View) {
@@ -56,10 +64,9 @@ class BeyondIdentityCredentialInfoFragment :
                         getString(R.string.cred_info_version_text, android.os.Build.VERSION.RELEASE)
 
                     credInfoDeleteCred.setOnClickListener {
-                        val fragment = BiDeleteCredentialDialog
+                        val fragment = BeyondIdentityDeleteCredentialDialog
                             .newInstance()
-                        fragment.onCredDeletedListener = this
-                        fragment.show(parentFragmentManager, BiDeleteCredentialDialog.TAG)
+                        fragment.show(parentFragmentManager, BeyondIdentityDeleteCredentialDialog.TAG)
                     }
                 }
             }
@@ -68,7 +75,7 @@ class BeyondIdentityCredentialInfoFragment :
         }
     }
 
-    override fun onDeleteCred() {
+    private fun onDeleteCred() {
         credHandle?.let { handle ->
             EmbeddedSdk.deleteCredential(handle) { result ->
                 result.onSuccess {
@@ -77,7 +84,7 @@ class BeyondIdentityCredentialInfoFragment :
                         getString(R.string.delete_cred_success),
                         Toast.LENGTH_SHORT
                     ).show()
-                    credentialInfoListener?.onCredDeleted()
+                    BiEventBus.post(CredentialDeleted)
                     dismiss()
                 }
 
@@ -92,8 +99,11 @@ class BeyondIdentityCredentialInfoFragment :
         }
     }
 
-    interface CredentialInfoListener {
-        fun onCredDeleted()
+    override fun onEvent(event: BiEvent) {
+        when (event) {
+            is DeleteCredential -> onDeleteCred()
+            else -> Unit
+        }
     }
 
     companion object {
