@@ -193,7 +193,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         code: String,
     ) {
         showRegistration()
-        EmbeddedSdk.import(code) { result ->
+        EmbeddedSdk.importCredentials(code) { result ->
             result.onSuccess { credList ->
                 val prefs = PreferenceManager
                     .getDefaultSharedPreferences(context)

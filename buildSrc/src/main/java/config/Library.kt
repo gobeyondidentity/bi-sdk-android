@@ -61,4 +61,8 @@ fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtensi
         isCheckReleaseBuilds = false
         isAbortOnError = false
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }

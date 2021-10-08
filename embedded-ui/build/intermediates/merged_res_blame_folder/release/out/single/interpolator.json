@@ -1,34 +1,34 @@
 [
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/fast_out_slow_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/6afdb68433959bfd2104f9ff61cbbb01/transformed/appcompat-1.3.1/res/interpolator/fast_out_slow_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/interpolator/fast_out_slow_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/interpolator/mtrl_linear.xml",
-        "source": "/root/.gradle/caches/transforms-3/50a73299bfecb60ddda0372c00a894c9/transformed/material-1.4.0/res/interpolator/mtrl_linear.xml"
+        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/interpolator/mtrl_linear.xml"
     }
 ]

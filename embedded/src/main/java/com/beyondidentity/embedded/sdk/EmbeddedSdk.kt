@@ -31,6 +31,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -121,6 +122,7 @@ object EmbeddedSdk {
      * @param logger Custom logger to get logs from the SDK
      */
     @Throws(DatabaseSetupException::class)
+    @JvmStatic
     fun init(
         app: Application,
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
@@ -199,6 +201,7 @@ object EmbeddedSdk {
      *
      * code_challenge is function of code_verifier BASE64URL(SHA256(ASCII(code_verifier)))
      */
+    @JvmStatic
     fun createPkce(
         callback: (Result<PkceResponse>) -> Unit,
     ) {
@@ -229,7 +232,7 @@ object EmbeddedSdk {
      */
     @ExperimentalCoroutinesApi
     fun createPkce(
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<PkceResponse>> {
         BiSdk.createPkce { pkceResponse ->
             when (pkceResponse) {
@@ -237,6 +240,7 @@ object EmbeddedSdk {
                 is CoreFailure -> sendBlocking(Result.failure(Throwable(pkceResponse.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
@@ -245,6 +249,7 @@ object EmbeddedSdk {
      * @param url registration url used to create a credential
      * @param callback [Result] of [Credential] or [Throwable]
      */
+    @JvmStatic
     fun registerCredential(
         url: String,
         callback: (Result<Credential>) -> Unit,
@@ -293,6 +298,7 @@ object EmbeddedSdk {
                     sendBlocking(Result.failure(Throwable(urlResponse.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
@@ -307,6 +313,7 @@ object EmbeddedSdk {
      * @param scope string list of OIDC scopes used during authentication to authorize access to a user's specific details. Only "openid" is currently supported.
      * @param callback returns an AuthorizationCode to exchange for access and id token.
      */
+    @JvmStatic
     fun authorize(
         clientId: String,
         redirectUri: String,
@@ -365,6 +372,7 @@ object EmbeddedSdk {
                 is CoreFailure -> sendBlocking(Result.failure(Throwable(oidcResponse.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
@@ -377,6 +385,7 @@ object EmbeddedSdk {
      * @param redirectUri URI where the user will be redirected after the authorization has completed. The redirect URI must be one of the URIs passed in the OIDC configuration.
      * @param callback returns a [TokenResponse] that contains the access and id token.
      */
+    @JvmStatic
     fun authenticate(
         clientId: String,
         redirectUri: String,
@@ -427,17 +436,20 @@ object EmbeddedSdk {
                 is CoreFailure -> sendBlocking(Result.failure(Throwable(oidcResponse.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
      * Get all current credentials for this device.
+     * Only one credential per device is currently supported.
      *
      * Only one credential per device is supported currently.
      *
      * @return [List] of [Credential]
      */
+    @JvmStatic
     fun getCredentials(
-        callback: (Result<List<Credential>>) -> Unit
+        callback: (Result<List<Credential>>) -> Unit,
     ) {
         executor.execute {
             BiSdk.allProfiles { allProfilesResult ->
@@ -453,6 +465,7 @@ object EmbeddedSdk {
 
     /**
      * Get all current credentials for this device.
+     * Only one credential per device is currently supported.
      *
      * Only one credential per device is supported currently.
      *
@@ -460,7 +473,7 @@ object EmbeddedSdk {
      */
     @ExperimentalCoroutinesApi
     fun getCredentials(
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<List<Credential>>> {
         BiSdk.allProfiles { allProfilesResult ->
             when (allProfilesResult) {
@@ -470,6 +483,7 @@ object EmbeddedSdk {
                     sendBlocking(Result.failure(Throwable(allProfilesResult.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
@@ -480,6 +494,7 @@ object EmbeddedSdk {
      * @param credentialHandle credential handle, uniquely  identifying a [Credential].
      * @param callback [Result] of [Unit]
      */
+    @JvmStatic
     fun deleteCredential(
         credentialHandle: String,
         callback: (Result<Unit>) -> Unit,
@@ -519,6 +534,7 @@ object EmbeddedSdk {
                 is CoreFailure -> sendBlocking(Companion.failure(Throwable(result.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
@@ -536,7 +552,7 @@ object EmbeddedSdk {
      * @param credentialHandles [List] of credential handles to be exported
      */
     @ExperimentalCoroutinesApi
-    fun export(
+    fun exportCredentials(
         credentialHandles: List<String>,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ): Flow<ExportResponse?> = callbackFlow {
@@ -583,10 +599,13 @@ object EmbeddedSdk {
             logger?.invoke("Credentials exported")
             close()
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
      * Export credentials from one device to another.
+     * The user must be in an authenticated state to export any credentials.
+     * Only one credential per device is currently supported.
      *
      * During this flow the user is prompted for a biometric challenge,
      * If biometrics are not set, it falls back to pin.
@@ -596,16 +615,17 @@ object EmbeddedSdk {
      *
      * NOTE: To cancel the export flow, [EmbeddedSdk.cancelExport] must be invoked.
      *
-     * @param credentialHandle [List] of credential handles to be exported
+     * @param credentialHandles [List] of credential handles to be exported
      * @param listener When biometrics are not set, fallback to pin.
      */
-    fun export(
-        credentialHandle: List<String>,
+    @JvmStatic
+    fun exportCredentials(
+        credentialHandles: List<String>,
         listener: ExportCredentialListener,
     ) {
         executor.execute {
             BiSdk.export(
-                handles = credentialHandle,
+                handles = credentialHandles,
                 export = { coreExportStatus ->
                     when (coreExportStatus) {
                         is CoreExportStatus.Started -> postMain {
@@ -646,13 +666,15 @@ object EmbeddedSdk {
 
     /**
      * Import a [Credential].
+     * Only one credential per device is currently supported.
      *
      * Use this function to import a [Credential] from one device to another.
      *
-     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.export] on another device.
+     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.exportCredentials] on another device.
      * @param callback [Result] [List] of [Credential]
      */
-    fun import(
+    @JvmStatic
+    fun importCredentials(
         token: String,
         callback: (Result<List<Credential>>) -> Unit,
     ) {
@@ -672,14 +694,15 @@ object EmbeddedSdk {
 
     /**
      * Import a [Credential].
+     * Only one credential per device is currently supported.
      *
      * Use this function to import a [Credential] from one device to another.
      *
-     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.export] on another device.
+     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.exportCredentials] on another device.
      * @return [Result] [List] of [Credential]
      */
     @ExperimentalCoroutinesApi
-    fun import(
+    fun importCredentials(
         token: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) = callbackFlow<Result<List<Credential>>> {
@@ -693,13 +716,15 @@ object EmbeddedSdk {
                     sendBlocking(Result.failure(Throwable(importProfileResult.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**
      * Cancels ongoing export requests.
      */
+    @JvmStatic
     fun cancelExport(
-        callback: (Result<Unit>) -> Unit
+        callback: (Result<Unit>) -> Unit,
     ) {
         BiSdk.cancel { response ->
             logger?.invoke(response.toString())
@@ -717,7 +742,7 @@ object EmbeddedSdk {
      */
     @ExperimentalCoroutinesApi
     fun cancelExport(
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<Unit>> {
         BiSdk.cancel { response ->
             logger?.invoke(response.toString())
@@ -726,6 +751,7 @@ object EmbeddedSdk {
                 is CoreFailure -> sendBlocking(Result.failure(Throwable(response.value.localizedDescription)))
             }
         }
+        awaitClose()
     }.flowOn(dispatcher)
 
     /**

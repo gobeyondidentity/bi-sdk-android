@@ -35,6 +35,7 @@ val biSdkVersion = getProp("BUILD_CONFIG_BI_SDK_VERSION")
 dependencies {
     implementation(project(":embedded"))
     implementation(Libs.KOTLIN_STD_LIB)
+    implementation(Libs.KOTLIN_REFLECTION)
     implementation(Libs.KOTLINX_SERIALIZATION)
     implementation(Libs.ANDROIDX_PREFERENCES)
     implementation(Libs.ANDROIDX_APPCOMAPT)

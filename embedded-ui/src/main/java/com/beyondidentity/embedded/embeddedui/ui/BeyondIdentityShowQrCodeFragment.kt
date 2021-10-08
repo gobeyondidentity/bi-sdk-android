@@ -65,7 +65,7 @@ class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
 
     private fun export() {
         credHandle?.let { handle ->
-            EmbeddedSdk.export(
+            EmbeddedSdk.exportCredentials(
                 listOf(handle),
                 object : ExportCredentialListener {
                     override fun onUpdate(token: ExportResponse?) {

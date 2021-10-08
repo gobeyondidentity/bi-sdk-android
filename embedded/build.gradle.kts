@@ -35,7 +35,9 @@ val biSdkVersion = getProp("BUILD_CONFIG_BI_SDK_VERSION")
 
 dependencies {
     implementation(Libs.KOTLIN_STD_LIB)
+    implementation(Libs.KOTLIN_REFLECTION)
     implementation(Libs.KOTLINX_SERIALIZATION)
+    implementation(Libs.KOTLINX_COROUTINES_ANDROID)
     implementation(Libs.ANDROIDX_PREFERENCES)
     implementation(Libs.ANDROIDX_BIOMETRICS)
     implementation(Libs.ZXING_EMBEDDED)
@@ -48,7 +50,14 @@ dependencies {
     implementation("${Libs.OPTICS}:$biSdkVersion")
 
     testImplementation(TestLibs.JUNIT)
+    testImplementation(TestLibs.ANDROIDX_TEST_CORE)
+    testImplementation(TestLibs.ROBOLECTRIC)
 
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_EXT_JUNIT)
+    androidTestImplementation(TestLibs.ANDROIDX_TEST_CORE)
     androidTestImplementation(AndroidTestLibs.ANDROIDX_ESPRESSO_CORE)
+    androidTestImplementation(AndroidTestLibs.ANDROIDX_EXT_JUNIT)
+    androidTestImplementation(AndroidTestLibs.ANDROIDX_RUNNER)
+    androidTestImplementation(AndroidTestLibs.ANDROIDX_RULES)
+    androidTestImplementation(AndroidTestLibs.MOCKITO_CORE)
+    androidTestImplementation(AndroidTestLibs.MOCKITO_ANDROID)
 }

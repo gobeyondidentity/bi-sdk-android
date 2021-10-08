@@ -248,7 +248,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
 
         exportProfileText.copyOnHold()
         exportProfileButton.setOnClickListener {
-            EmbeddedSdk.export(
+            EmbeddedSdk.exportCredentials(
                 credentialHandles = listOf(BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_DEMO_TENANT),
             )
                 .onCompletion {
@@ -278,7 +278,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         }
 
         importProfileButton.setOnClickListener {
-            EmbeddedSdk.import(importProfileText.text.toString())
+            EmbeddedSdk.importCredentials(importProfileText.text.toString())
                 .onCompletion { Timber.d("Import completed") }
                 .onEach {
                     Timber.d("Imported profiles $it")
@@ -310,9 +310,9 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         return jwt.claims.toList().fold("") { acc, pair ->
             acc + "${
                 if (pair.first == "aud")
-                    "${pair.first} =  ${pair.second.asArray(String::class.java).joinToString()}"
+                    "${pair.first} = ${pair.second.asArray(String::class.java).joinToString()}"
                 else
-                    "${pair.first} =  ${pair.second.asString()}"
+                    "${pair.first} = ${pair.second.asString()}"
             }\n"
         }
     }

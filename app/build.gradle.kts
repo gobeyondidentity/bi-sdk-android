@@ -63,11 +63,11 @@ dependencies {
     implementation(project(":authenticator"))
     implementation(project(":embedded"))
     implementation(project(":embedded-ui"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.KOTLIN}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}")
     implementation("androidx.core:core-ktx:1.6.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
     implementation("com.jakewharton.timber:timber:4.7.1")
 
     //LifeCycle

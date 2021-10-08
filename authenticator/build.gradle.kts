@@ -30,6 +30,7 @@ configureMavenPublish(
 
 dependencies {
     implementation(Libs.KOTLIN_STD_LIB)
+    implementation(Libs.KOTLIN_REFLECTION)
     implementation(Libs.ANDROIDX_BROWSER)
     implementation(Libs.ANDROIDX_CONSTRAINT_LAYOUT)
 
