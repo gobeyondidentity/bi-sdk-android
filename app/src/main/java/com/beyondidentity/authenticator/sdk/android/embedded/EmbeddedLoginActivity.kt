@@ -1,5 +1,6 @@
 package com.beyondidentity.authenticator.sdk.android.embedded
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.Creden
 import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialRegistered
 import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.CredentialSetup
 import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiObserver
+import com.beyondidentity.embedded.sdk.EmbeddedSdk
 
 class EmbeddedLoginActivity : AppCompatActivity(), BiObserver {
     private lateinit var signInButton: BeyondIdentityButton
@@ -94,6 +96,16 @@ class EmbeddedLoginActivity : AppCompatActivity(), BiObserver {
                 Toast.makeText(this, "Credential deleted", Toast.LENGTH_SHORT).show()
             }
             else -> Unit
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == EMBEDDED_KEYGUARD_REQUEST) {
+            when (resultCode) {
+                RESULT_OK -> EmbeddedSdk.answer(true)
+                RESULT_CANCELED -> EmbeddedSdk.answer(false)
+            }
         }
     }
 }

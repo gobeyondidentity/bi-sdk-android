@@ -18,6 +18,8 @@ public final class BuildConfig {
   // Field from default config.
   public static final String BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID = "9a1d484d3f00ed26e972127e05e42c43";
   // Field from default config.
+  public static final String BUILD_CONFIG_BI_SDK_VERSION = "0.3.0";
+  // Field from default config.
   public static final String BUILD_CONFIG_CHANNEL = "production";
   // Field from default config.
   public static final String BUILD_CONFIG_DEVICE_GATEWAY_URL = "https://device-gateway.byndid.com";

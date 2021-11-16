@@ -4,17 +4,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/incremental/mergeDebugUnitTestResources/merged.dir/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-v24/values-v24.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,212",
-                        "endColumns": "156,134",
-                        "endOffsets": "207,342"
-                    }
-                },
-                {
-                    "source": "/root/.gradle/caches/transforms-3/a71484dc7da19c475d2389ae03bb51e4/transformed/media-1.0.0/res/values-v24/values-v24.xml",
+                    "source": "/root/.gradle/caches/transforms-3/af06ec227af442303e7e5cc6b3c92b33/transformed/media-1.0.0/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -28,6 +18,16 @@
                         "startOffsets": "347,413,474,540",
                         "endColumns": "65,60,65,66",
                         "endOffsets": "408,469,535,602"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
                     }
                 }
             ]

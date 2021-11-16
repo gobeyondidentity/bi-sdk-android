@@ -4,7 +4,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-hdpi-v4/values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -20,7 +20,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-hdpi-v4/values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

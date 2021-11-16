@@ -4,7 +4,24 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/incremental/mergeDebugUnitTestResources/merged.dir/values-ja/values-ja.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/values-ja/values-ja.xml",
+                    "source": "/root/.gradle/caches/transforms-3/b3b0fd7790b06d84c4a043f180e9ab71/transformed/jetified-zxing-android-embedded-4.1.0/res/values-ja/values-ja.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,109,156,256",
+                        "endColumns": "53,46,99,81",
+                        "endOffsets": "104,151,251,333"
+                    },
+                    "to": {
+                        "startLines": "107,108,109,110",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "8718,8772,8819,8919",
+                        "endColumns": "53,46,99,81",
+                        "endOffsets": "8767,8814,8914,8996"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/values-ja/values-ja.xml",
                     "from": {
                         "startLines": "2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,24 +40,7 @@
                     }
                 },
                 {
-                    "source": "/root/.gradle/caches/transforms-3/e5eaf9239a71037b8af1bd65d4e72229/transformed/jetified-zxing-android-embedded-4.1.0/res/values-ja/values-ja.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,109,156,256",
-                        "endColumns": "53,46,99,81",
-                        "endOffsets": "104,151,251,333"
-                    },
-                    "to": {
-                        "startLines": "107,108,109,110",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "8718,8772,8819,8919",
-                        "endColumns": "53,46,99,81",
-                        "endOffsets": "8767,8814,8914,8996"
-                    }
-                },
-                {
-                    "source": "/root/.gradle/caches/transforms-3/6c81f56999a8f6bc81d0769694fb3008/transformed/biometric-1.0.1/res/values-ja/values-ja.xml",
+                    "source": "/root/.gradle/caches/transforms-3/be6f8bbd6139704125e7424ebcb84e92/transformed/biometric-1.0.1/res/values-ja/values-ja.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
@@ -57,24 +57,7 @@
                     }
                 },
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-ja/values-ja.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,202,295,400,482,580,688,766,841,932,1025,1120,1214,1314,1407,1502,1596,1687,1778,1856,1958,2056,2151,2254,2350,2446,2594,2691",
-                        "endColumns": "96,92,104,81,97,107,77,74,90,92,94,93,99,92,94,93,90,90,77,101,97,94,102,95,95,147,96,78",
-                        "endOffsets": "197,290,395,477,575,683,761,836,927,1020,1115,1209,1309,1402,1497,1591,1682,1773,1851,1953,2051,2146,2249,2345,2441,2589,2686,2765"
-                    },
-                    "to": {
-                        "startLines": "6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,102",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "258,355,448,553,635,733,841,919,994,1085,1178,1273,1367,1467,1560,1655,1749,1840,1931,2009,2111,2209,2304,2407,2503,2599,2747,8214",
-                        "endColumns": "96,92,104,81,97,107,77,74,90,92,94,93,99,92,94,93,90,90,77,101,97,94,102,95,95,147,96,78",
-                        "endOffsets": "350,443,548,630,728,836,914,989,1080,1173,1268,1362,1462,1555,1650,1744,1835,1926,2004,2106,2204,2299,2402,2498,2594,2742,2839,8288"
-                    }
-                },
-                {
-                    "source": "/root/.gradle/caches/transforms-3/93aa73d2bc2431ddfff1046df01a468b/transformed/preference-1.1.1/res/values-ja/values-ja.xml",
+                    "source": "/root/.gradle/caches/transforms-3/90f35819279cd74364e8759dab885f44/transformed/preference-1.1.1/res/values-ja/values-ja.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",
@@ -91,7 +74,7 @@
                     }
                 },
                 {
-                    "source": "/root/.gradle/caches/transforms-3/07bc3f8fadd947d778ed3c75024ecd80/transformed/core-1.5.0/res/values-ja/values-ja.xml",
+                    "source": "/root/.gradle/caches/transforms-3/80a4181a0804c5bd4b9079c4fb01cfa1/transformed/core-1.5.0/res/values-ja/values-ja.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -105,6 +88,23 @@
                         "startOffsets": "8293",
                         "endColumns": "100",
                         "endOffsets": "8389"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-ja/values-ja.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,202,295,400,482,580,688,766,841,932,1025,1120,1214,1314,1407,1502,1596,1687,1778,1856,1958,2056,2151,2254,2350,2446,2594,2691",
+                        "endColumns": "96,92,104,81,97,107,77,74,90,92,94,93,99,92,94,93,90,90,77,101,97,94,102,95,95,147,96,78",
+                        "endOffsets": "197,290,395,477,575,683,761,836,927,1020,1115,1209,1309,1402,1497,1591,1682,1773,1851,1953,2051,2146,2249,2345,2441,2589,2686,2765"
+                    },
+                    "to": {
+                        "startLines": "6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,102",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "258,355,448,553,635,733,841,919,994,1085,1178,1273,1367,1467,1560,1655,1749,1840,1931,2009,2111,2209,2304,2407,2503,2599,2747,8214",
+                        "endColumns": "96,92,104,81,97,107,77,74,90,92,94,93,99,92,94,93,90,90,77,101,97,94,102,95,95,147,96,78",
+                        "endOffsets": "350,443,548,630,728,836,914,989,1080,1173,1268,1362,1462,1555,1650,1744,1835,1926,2004,2106,2204,2299,2402,2498,2594,2742,2839,8288"
                     }
                 }
             ]

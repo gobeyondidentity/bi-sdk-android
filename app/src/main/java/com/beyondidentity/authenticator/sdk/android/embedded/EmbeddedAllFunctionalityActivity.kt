@@ -133,7 +133,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                         Toast.makeText(this, "Credentials deleted", Toast.LENGTH_SHORT).show()
                     }
                     result.onFailure {
-                        Timber.d("Credentials deletion failed")
+                        Timber.d("Credentials deletion failed.")
                         Toast.makeText(this, "Credentials deletion failed", Toast.LENGTH_SHORT)
                             .show()
                     }

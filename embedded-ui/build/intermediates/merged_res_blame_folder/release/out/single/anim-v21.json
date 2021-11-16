@@ -1,22 +1,22 @@
 [
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim-v21/design_bottom_sheet_slide_out.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim-v21/design_bottom_sheet_slide_out.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim-v21/design_bottom_sheet_slide_out.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim-v21/fragment_fast_out_extra_slow_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/6abe759f02f06fb98cfbf3594d7afb61/transformed/fragment-1.3.6/res/anim-v21/fragment_fast_out_extra_slow_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/a3b68571ea34ebbbcc3a2d282be3ec9a/transformed/fragment-1.3.6/res/anim-v21/fragment_fast_out_extra_slow_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim-v21/design_bottom_sheet_slide_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim-v21/design_bottom_sheet_slide_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim-v21/design_bottom_sheet_slide_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim-v21/mtrl_bottom_sheet_slide_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim-v21/mtrl_bottom_sheet_slide_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim-v21/mtrl_bottom_sheet_slide_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim-v21/mtrl_bottom_sheet_slide_out.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim-v21/mtrl_bottom_sheet_slide_out.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim-v21/mtrl_bottom_sheet_slide_out.xml"
     }
 ]

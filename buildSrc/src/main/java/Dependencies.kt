@@ -1,7 +1,7 @@
 object Versions {
-    const val KOTLIN = "1.4.31"
+    const val KOTLIN = "1.5.31"
     const val KOTLINX_SERIALIZATION = "1.0.1"
-    const val KOTLINX_COROUTINES = "1.4.2"
+    const val KOTLINX_COROUTINES = "1.5.2"
     const val ANDROIDX_BROWSER = "1.3.0"
     const val ANDROIDX_CONSTRAINT_LAYOUT = "2.0.4"
     const val ANDROIDX_PREFERENCES = "1.1.1"
@@ -22,7 +22,7 @@ object Versions {
     const val MOCKITO_ANDROID_TEST = "3.6.0"
 
     // Classpath
-    const val ANDROID_GRADLE_TOOLS = "7.0.2"
+    const val ANDROID_GRADLE_TOOLS = "7.0.3"
     const val KTLINT = "10.0.0"
     const val DOKKA = "1.5.0"
 }

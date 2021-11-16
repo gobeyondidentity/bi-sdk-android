@@ -4,7 +4,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/values-v28/values-v28.xml",
+                    "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-v28/values-v28.xml",
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",
@@ -38,7 +38,7 @@
             "outputFile": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/values-v28/values-v28.xml",
+                    "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -48,7 +48,7 @@
                     }
                 },
                 {
-                    "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/values-v28/values-v28.xml",
+                    "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",

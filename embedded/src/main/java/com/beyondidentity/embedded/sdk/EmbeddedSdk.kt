@@ -17,6 +17,7 @@ import com.beyondidentity.embedded.sdk.models.TokenResponse
 import com.beyondidentity.embedded.sdk.utils.Qr.generateQrCode
 import com.beyondidentity.embedded.sdk.utils.appVersionName
 import com.beyondidentity.embedded.sdk.utils.postMain
+import com.beyondidentity.endpoint.android.lib.deviceinfo.DeviceInfo
 import com.beyondidentity.endpoint.android.lib.log.BiLogger
 import com.beyondidentity.endpoint.android.lib.log.LogCategory
 import com.beyondidentity.endpoint.android.lib.log.LogType
@@ -143,12 +144,19 @@ object EmbeddedSdk {
                 }
             },
             authenticationPrompt = { true },
-            appVersion = app.appVersionName(),
+            // This is the version of the native platform authenticator. Since this SDK has nothing to do
+            // with the native platform authenticator, we set this to a dummy value.
+            appVersion = "0.0.0",
             appInstancePrefKey = getAppInstanceId(app),
             localhostServicePrefKey = "",
             accessibilityServicePrefKey = "",
             deviceGatewayUrl = BuildConfig.BUILD_CONFIG_DEVICE_GATEWAY_URL,
             channel = BuildConfig.BUILD_CONFIG_CHANNEL,
+            biSdkInfo = DeviceInfo.BiSdkInfo(
+                sdkVersion = BuildConfig.BUILD_CONFIG_BI_SDK_VERSION,
+                appVersion = app.appVersionName(),
+                clientId = "<TODO>: Pass this in through initializer",
+            ),
             biLogger = object : BiLogger {
                 override fun log(
                     type: LogType,
@@ -681,6 +689,7 @@ object EmbeddedSdk {
         executor.execute {
             BiSdk.import(
                 token = token,
+                overwrite = true,
             ) { importProfileResult ->
                 when (importProfileResult) {
                     is CoreSuccess ->

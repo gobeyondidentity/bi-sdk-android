@@ -1,22 +1,22 @@
 [
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/xml/standalone_badge_gravity_top_start.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/xml/standalone_badge_gravity_top_start.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/xml/standalone_badge_gravity_top_start.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/xml/standalone_badge.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/xml/standalone_badge.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/xml/standalone_badge.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/xml/standalone_badge_gravity_bottom_start.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/xml/standalone_badge_gravity_bottom_start.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/xml/standalone_badge_gravity_bottom_start.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/xml/standalone_badge_offset.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/xml/standalone_badge_offset.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/xml/standalone_badge_offset.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/xml/standalone_badge_gravity_bottom_end.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/xml/standalone_badge_gravity_bottom_end.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/xml/standalone_badge_gravity_bottom_end.xml"
     }
 ]

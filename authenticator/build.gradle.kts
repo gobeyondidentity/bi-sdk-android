@@ -21,6 +21,12 @@ tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
 ktlintCheckConfig()
 
 configureMavenPublish(

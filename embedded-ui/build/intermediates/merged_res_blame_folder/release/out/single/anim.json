@@ -1,110 +1,110 @@
 [
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_slide_out_bottom.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_slide_out_bottom.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_slide_out_bottom.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_fade_out.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_fade_out.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_fade_out.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/design_snackbar_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim/design_snackbar_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim/design_snackbar_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_tooltip_exit.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_tooltip_exit.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_tooltip_exit.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_slide_in_bottom.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_slide_in_bottom.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_slide_in_bottom.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_slide_in_top.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_slide_in_top.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_slide_in_top.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_tooltip_enter.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_tooltip_enter.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_tooltip_enter.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/mtrl_card_lowers_interpolator.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim/mtrl_card_lowers_interpolator.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim/mtrl_card_lowers_interpolator.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_popup_exit.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_popup_exit.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_popup_exit.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_fade_in.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_fade_in.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_fade_in.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_unchecked_icon_null_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_icon_null_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_icon_null_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_off_mtrl_dot_group_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_dot_group_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_off_mtrl_dot_group_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_on_mtrl_dot_group_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_dot_group_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_dot_group_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_grow_fade_in_from_bottom.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_grow_fade_in_from_bottom.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_grow_fade_in_from_bottom.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_shrink_fade_out_from_bottom.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_shrink_fade_out_from_bottom.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_shrink_fade_out_from_bottom.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_slide_out_top.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_slide_out_top.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_slide_out_top.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/abc_popup_enter.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/abc_popup_enter.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/abc_popup_enter.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_checkbox_to_checked_icon_null_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_icon_null_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_checkbox_to_checked_icon_null_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml",
-        "source": "/root/.gradle/caches/transforms-3/9f1565b05100ef15daaff75fbdcb4f5c/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml"
+        "source": "/root/.gradle/caches/transforms-3/678adaf3e2abdbdee06bc62ede0bbea6/transformed/appcompat-1.3.1/res/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml"
     },
     {
         "merged": "/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/merged_res/release/anim/design_snackbar_out.xml",
-        "source": "/root/.gradle/caches/transforms-3/da433a68b45f0f034c0067538d484f74/transformed/material-1.4.0/res/anim/design_snackbar_out.xml"
+        "source": "/root/.gradle/caches/transforms-3/c2491ee1e10992beb4df5a8f259791d8/transformed/material-1.4.0/res/anim/design_snackbar_out.xml"
     }
 ]
