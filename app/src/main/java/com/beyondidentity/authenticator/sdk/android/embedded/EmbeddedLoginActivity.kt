@@ -55,6 +55,16 @@ class EmbeddedLoginActivity : AppCompatActivity(), BiObserver {
         BiEventBus.unRegisterObserver(this)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == EMBEDDED_KEYGUARD_REQUEST) {
+            when (resultCode) {
+                RESULT_OK -> EmbeddedSdk.answer(true)
+                RESULT_CANCELED -> EmbeddedSdk.answer(false)
+            }
+        }
+    }
+
     override fun onEvent(event: BiEvent) {
         when (event) {
             CredentialSetup -> {
@@ -96,16 +106,6 @@ class EmbeddedLoginActivity : AppCompatActivity(), BiObserver {
                 Toast.makeText(this, "Credential deleted", Toast.LENGTH_SHORT).show()
             }
             else -> Unit
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == EMBEDDED_KEYGUARD_REQUEST) {
-            when (resultCode) {
-                RESULT_OK -> EmbeddedSdk.answer(true)
-                RESULT_CANCELED -> EmbeddedSdk.answer(false)
-            }
         }
     }
 }

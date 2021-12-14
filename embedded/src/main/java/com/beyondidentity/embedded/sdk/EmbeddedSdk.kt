@@ -46,10 +46,11 @@ import kotlin.Result.Companion
 import kotlin.jvm.Throws
 
 object EmbeddedSdk {
+    private const val FLOW_TYPE_EMBEDDED = "embedded"
     private const val BI_APP_INSTANCE_ID_PREF_KEY = "beyond-identity-app-instance-id"
-
     private val answers = Channel<Boolean>()
     private lateinit var app: Application
+    private lateinit var biometricAskPrompt: String
     private var logger: ((String) -> Unit)? = null
     private var keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)? = null
 
@@ -64,6 +65,7 @@ object EmbeddedSdk {
         val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
+                logger?.invoke("Biometric failed | errCode = $errorCode, errString = $errString")
                 keyguardPrompt?.invoke { result, exception ->
                     if (exception == null) {
                         logger?.invoke("The exception is null for auth error")
@@ -98,7 +100,7 @@ object EmbeddedSdk {
         }
 
         BiometricPrompt.Builder(app)
-            .setTitle(app.getString(R.string.embedded_export_biometric_prompt_title))
+            .setTitle(biometricAskPrompt)
             .setNegativeButton(
                 app.getString(R.string.embedded_export_biometric_prompt_cancel),
                 executor,
@@ -119,6 +121,8 @@ object EmbeddedSdk {
      * Initialize and configure the Beyond Identity Embedded SDK.
      *
      * @param app [Application]
+     * @param biometricAskPrompt A prompt the user will see when asked for biometrics during credential export
+     * @param clientId: The public or confidential client ID generated during the OIDC configuration
      * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
      * @param logger Custom logger to get logs from the SDK
      */
@@ -126,12 +130,15 @@ object EmbeddedSdk {
     @JvmStatic
     fun init(
         app: Application,
+        clientId: String,
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
         logger: (String) -> Unit,
+        biometricAskPrompt: String = app.getString(R.string.embedded_export_biometric_prompt_title),
     ) {
         this.app = app
         this.keyguardPrompt = keyguardPrompt
         this.logger = logger
+        this.biometricAskPrompt = biometricAskPrompt
 
         BiSdk.init(
             app = app,
@@ -155,7 +162,7 @@ object EmbeddedSdk {
             biSdkInfo = DeviceInfo.BiSdkInfo(
                 sdkVersion = BuildConfig.BUILD_CONFIG_BI_SDK_VERSION,
                 appVersion = app.appVersionName(),
-                clientId = "<TODO>: Pass this in through initializer",
+                clientId = clientId,
             ),
             biLogger = object : BiLogger {
                 override fun log(
@@ -266,6 +273,7 @@ object EmbeddedSdk {
             BiSdk.handle(
                 url = url,
                 trustedSource = TrustedSource.EmbeddedSource,
+                flowType = FLOW_TYPE_EMBEDDED,
             ) { urlResponse ->
                 when (urlResponse) {
                     is CoreSuccess -> postMain {
@@ -296,6 +304,7 @@ object EmbeddedSdk {
         BiSdk.handle(
             url = url,
             trustedSource = TrustedSource.EmbeddedSource,
+            flowType = FLOW_TYPE_EMBEDDED,
         ) { urlResponse ->
             when (urlResponse) {
                 is CoreSuccess ->

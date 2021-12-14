@@ -34,6 +34,7 @@ class App : Application(), ActivityLifecycleCallbacks {
 
         EmbeddedSdk.init(
             app = this,
+            clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
             keyguardPrompt = keyguardPrompt,
             logger = { log ->
                 Timber.d(log)
