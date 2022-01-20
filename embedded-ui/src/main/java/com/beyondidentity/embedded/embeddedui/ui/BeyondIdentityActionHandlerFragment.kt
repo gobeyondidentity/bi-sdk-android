@@ -67,7 +67,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
 
         runAction(actionType) { actionType ->
             when (actionType) {
-                is Registration -> registerCredential(actionType.registerUri)
+                is Registration -> registerCredentialsWithUrl(actionType.registerUri)
                 Authentication -> authenticate(false)
                 is Migration -> migration(actionType.code)
             }
@@ -75,7 +75,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        EmbeddedSdk.cancelExport {
+        EmbeddedSdk.cancelExtendCredentials {
             super.onDismiss(dialog)
         }
     }
@@ -106,11 +106,11 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         }
     }
 
-    private fun registerCredential(
+    private fun registerCredentialsWithUrl(
         registerUri: String,
     ) {
         showRegistration()
-        EmbeddedSdk.registerCredential(registerUri) { result ->
+        EmbeddedSdk.registerCredentialsWithUrl(registerUri) { result ->
             result.onSuccess { credential ->
                 authenticate(true)
                 BiEventBus.post(CredentialRegistered(credential))
@@ -193,7 +193,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
         code: String,
     ) {
         showRegistration()
-        EmbeddedSdk.importCredentials(code) { result ->
+        EmbeddedSdk.registerCredentialsWithToken(code) { result ->
             result.onSuccess { credList ->
                 val prefs = PreferenceManager
                     .getDefaultSharedPreferences(context)
@@ -265,7 +265,7 @@ class BeyondIdentityActionHandlerFragment : BiBaseBottomSheetDialogFragment() {
                 when (at) {
                     is Registration -> {
                         showRegistration()
-                        registerCredential(at.registerUri)
+                        registerCredentialsWithUrl(at.registerUri)
                     }
                     else -> showNoDataError()
                 }

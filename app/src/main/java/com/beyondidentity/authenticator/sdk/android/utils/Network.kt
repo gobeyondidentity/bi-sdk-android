@@ -56,6 +56,9 @@ data class RecoverUserRequest(
 )
 
 data class UserResponse(
+    val user: User,
+)
+data class User(
     @SerializedName("internal_id")
     val internalId: String,
     @SerializedName("external_id")

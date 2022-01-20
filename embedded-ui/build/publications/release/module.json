@@ -3,7 +3,7 @@
   "component": {
     "group": "com.beyondidentity.android.sdk",
     "module": "embedded-ui",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -24,13 +24,13 @@
       },
       "files": [
         {
-          "name": "embedded-ui-0.4.0.aar",
-          "url": "embedded-ui-0.4.0.aar",
-          "size": 366393,
-          "sha512": "30970c8559ec18893b84fd6ae194ec80608b34ea6ff3134af9daa40d46876aa577321ff37d0eb3bf7d89936558fc3e45e85edf255ab0816cba5145c8b016ecb4",
-          "sha256": "ad5e43e8dbb326b8303b5cf4cb5efd2b56d61d7b75ddf1ce9dd249a4d5439b22",
-          "sha1": "7fcc28a177d34d984d347013554a248e9fecbd91",
-          "md5": "cdbb838afd33c354fe033184842daf15"
+          "name": "embedded-ui-0.5.0.aar",
+          "url": "embedded-ui-0.5.0.aar",
+          "size": 367071,
+          "sha512": "15b4c18b95bb1d5775644ba9f48c3b5bb3789af0f918b859faf3cfd13b62fd0b9b493c0f4e62c5b3b54b19bdbe25ba280ac83b6c22f50efc08d525506010288a",
+          "sha256": "e0460aecde47471b0df5cd83b6647afd880024f34870d3d161863a5bde2ff879",
+          "sha1": "d27ea76fe5304f0416f363059c28bc3d97bcc478",
+          "md5": "94b155a08bb1c2df47fa2146471105af"
         }
       ]
     },
@@ -54,7 +54,7 @@
           "group": "com.beyondidentity.android.sdk",
           "module": "embedded",
           "version": {
-            "requires": "0.4.0"
+            "requires": "0.5.0"
           }
         },
         {
@@ -109,13 +109,13 @@
       ],
       "files": [
         {
-          "name": "embedded-ui-0.4.0.aar",
-          "url": "embedded-ui-0.4.0.aar",
-          "size": 366393,
-          "sha512": "30970c8559ec18893b84fd6ae194ec80608b34ea6ff3134af9daa40d46876aa577321ff37d0eb3bf7d89936558fc3e45e85edf255ab0816cba5145c8b016ecb4",
-          "sha256": "ad5e43e8dbb326b8303b5cf4cb5efd2b56d61d7b75ddf1ce9dd249a4d5439b22",
-          "sha1": "7fcc28a177d34d984d347013554a248e9fecbd91",
-          "md5": "cdbb838afd33c354fe033184842daf15"
+          "name": "embedded-ui-0.5.0.aar",
+          "url": "embedded-ui-0.5.0.aar",
+          "size": 367071,
+          "sha512": "15b4c18b95bb1d5775644ba9f48c3b5bb3789af0f918b859faf3cfd13b62fd0b9b493c0f4e62c5b3b54b19bdbe25ba280ac83b6c22f50efc08d525506010288a",
+          "sha256": "e0460aecde47471b0df5cd83b6647afd880024f34870d3d161863a5bde2ff879",
+          "sha1": "d27ea76fe5304f0416f363059c28bc3d97bcc478",
+          "md5": "94b155a08bb1c2df47fa2146471105af"
         }
       ]
     }

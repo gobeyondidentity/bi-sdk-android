@@ -5,11 +5,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import com.beyondidentity.embedded.embeddedui.R
-import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityBeforeAuthFragment
-import com.beyondidentity.embedded.embeddedui.ui.BeyondIdentityRegistrationFragment
-import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus
-import com.beyondidentity.embedded.embeddedui.ui.utils.BiEventBus.BiEvent.BiEventError
-import com.beyondidentity.embedded.sdk.EmbeddedSdk
+import com.beyondidentity.embedded.embeddedui.ui.continueWithBeyondIdentity
 
 class BeyondIdentityButton : FrameLayout {
     constructor(context: Context) : super(context) {
@@ -34,24 +30,7 @@ class BeyondIdentityButton : FrameLayout {
     fun setViewData(
         fm: FragmentManager,
     ) {
-        setOnClickListener {
-            EmbeddedSdk.getCredentials { result ->
-                result.onSuccess { credentials ->
-                    if (credentials.isNotEmpty()) {
-                        BeyondIdentityBeforeAuthFragment.newInstance()
-                            .show(fm, BeyondIdentityBeforeAuthFragment.TAG)
-                    } else {
-                        val registrationFragment =
-                            BeyondIdentityRegistrationFragment.newInstance(false)
-
-                        registrationFragment.show(fm, BeyondIdentityRegistrationFragment.TAG)
-                    }
-                }
-                result.onFailure {
-                    BiEventBus.post(BiEventError(it))
-                }
-            }
-        }
+        setOnClickListener { continueWithBeyondIdentity(fm) }
     }
 
     private fun initView() {

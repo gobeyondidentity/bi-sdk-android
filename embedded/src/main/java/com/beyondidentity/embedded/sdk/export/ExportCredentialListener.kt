@@ -3,7 +3,7 @@ package com.beyondidentity.embedded.sdk.export
 import com.beyondidentity.embedded.sdk.models.ExportResponse
 
 /**
- * Status of Exporting Credentials
+ * Status of Extending Credentials
  */
 interface ExportCredentialListener {
     /**
@@ -14,12 +14,12 @@ interface ExportCredentialListener {
     fun onUpdate(token: ExportResponse?)
 
     /**
-     * Export complete.
+     * Extend credential complete.
      */
     fun onFinish()
 
     /**
-     * Export failed.
+     * Extending credential failed.
      *
      * @param throwable
      */

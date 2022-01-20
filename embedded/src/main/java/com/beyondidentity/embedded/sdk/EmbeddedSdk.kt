@@ -72,7 +72,7 @@ object EmbeddedSdk {
                         answers.sendBlocking(result)
                     } else {
                         logger?.invoke("The exception is $exception")
-                        // security challenge not present, cancel export and ask user to add a challenge
+                        // security challenge not present, cancel extend and ask user to add a challenge
                         answers.sendBlocking(false)
                     }
                 }
@@ -121,7 +121,7 @@ object EmbeddedSdk {
      * Initialize and configure the Beyond Identity Embedded SDK.
      *
      * @param app [Application]
-     * @param biometricAskPrompt A prompt the user will see when asked for biometrics during credential export
+     * @param biometricAskPrompt A prompt the user will see when asked for biometrics while extending a credential to another device.
      * @param clientId: The public or confidential client ID generated during the OIDC configuration
      * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
      * @param logger Custom logger to get logs from the SDK
@@ -265,7 +265,7 @@ object EmbeddedSdk {
      * @param callback [Result] of [Credential] or [Throwable]
      */
     @JvmStatic
-    fun registerCredential(
+    fun registerCredentialsWithUrl(
         url: String,
         callback: (Result<Credential>) -> Unit,
     ) {
@@ -297,7 +297,7 @@ object EmbeddedSdk {
      * @return [Flow] with [Result] of [Credential] or [Throwable]
      */
     @ExperimentalCoroutinesApi
-    fun registerCredential(
+    fun registerCredentialsWithUrl(
         url: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) = callbackFlow<Result<Credential>> {
@@ -555,8 +555,8 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Export a list of credentials from one device to another.
-     * The user must be in an authenticated state to export any credentials.
+     * Extend a list of credentials from one device to another.
+     * The user must be in an authenticated state to extend any credentials.
      *
      * During this flow the user is prompted for a biometric challenge,
      * If biometrics are not set, it falls back to pin.
@@ -564,12 +564,12 @@ object EmbeddedSdk {
      * After the challenge is completed, a rendezvous token is provided
      * with 90s TTL after which a new token is generated.
      *
-     * NOTE: To cancel the export flow, [EmbeddedSdk.cancelExport] must be invoked.
+     * NOTE: To cancel the extend credentials flow, [EmbeddedSdk.cancelExtendCredentials] must be invoked.
      *
-     * @param credentialHandles [List] of credential handles to be exported
+     * @param credentialHandles [List] of credential handles to be extended
      */
     @ExperimentalCoroutinesApi
-    fun exportCredentials(
+    fun extendCredentials(
         credentialHandles: List<String>,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ): Flow<ExportResponse?> = callbackFlow {
@@ -610,18 +610,18 @@ object EmbeddedSdk {
         }
 
         error?.let {
-            logger?.invoke("Export Credentials failed ${it.message ?: ""}")
+            logger?.invoke("Extend Credentials failed ${it.message ?: ""}")
             close(it)
         } ?: run {
-            logger?.invoke("Credentials exported")
+            logger?.invoke("Credentials extended")
             close()
         }
         awaitClose()
     }.flowOn(dispatcher)
 
     /**
-     * Export credentials from one device to another.
-     * The user must be in an authenticated state to export any credentials.
+     * Extend credentials from one device to another.
+     * The user must be in an authenticated state to extend any credentials.
      * Only one credential per device is currently supported.
      *
      * During this flow the user is prompted for a biometric challenge,
@@ -630,13 +630,13 @@ object EmbeddedSdk {
      * After the challenge is completed, a rendezvous token is provided
      * with 60s TTL after which a new token is generated.
      *
-     * NOTE: To cancel the export flow, [EmbeddedSdk.cancelExport] must be invoked.
+     * NOTE: To cancel the extend credentials flow, [EmbeddedSdk.cancelExtendCredentials] must be invoked.
      *
-     * @param credentialHandles [List] of credential handles to be exported
+     * @param credentialHandles [List] of credential handles to be extended
      * @param listener When biometrics are not set, fallback to pin.
      */
     @JvmStatic
-    fun exportCredentials(
+    fun extendCredentials(
         credentialHandles: List<String>,
         listener: ExportCredentialListener,
     ) {
@@ -682,16 +682,16 @@ object EmbeddedSdk {
     }
 
     /**
-     * Import a [Credential].
+     * Register a [Credential].
      * Only one credential per device is currently supported.
      *
-     * Use this function to import a [Credential] from one device to another.
+     * Use this function to register a [Credential] from one device to another.
      *
-     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.exportCredentials] on another device.
+     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.extendCredentials] on another device.
      * @param callback [Result] [List] of [Credential]
      */
     @JvmStatic
-    fun importCredentials(
+    fun registerCredentialsWithToken(
         token: String,
         callback: (Result<List<Credential>>) -> Unit,
     ) {
@@ -699,49 +699,49 @@ object EmbeddedSdk {
             BiSdk.import(
                 token = token,
                 overwrite = true,
-            ) { importProfileResult ->
-                when (importProfileResult) {
+            ) { registerProfileResult ->
+                when (registerProfileResult) {
                     is CoreSuccess ->
-                        postMain { callback(Result.success(importProfileResult.value.map { Credential.from(it) })) }
+                        postMain { callback(Result.success(registerProfileResult.value.map { Credential.from(it) })) }
                     is CoreFailure ->
-                        postMain { callback(Result.failure(Throwable(importProfileResult.value.localizedDescription))) }
+                        postMain { callback(Result.failure(Throwable(registerProfileResult.value.localizedDescription))) }
                 }
             }
         }
     }
 
     /**
-     * Import a [Credential].
+     * Register a [Credential].
      * Only one credential per device is currently supported.
      *
-     * Use this function to import a [Credential] from one device to another.
+     * Use this function to register a [Credential] from one device to another.
      *
-     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.exportCredentials] on another device.
+     * @param token 9 digit code that the user entered generated by [EmbeddedSdk.extendCredentials] on another device.
      * @return [Result] [List] of [Credential]
      */
     @ExperimentalCoroutinesApi
-    fun importCredentials(
+    fun registerCredentialsWithToken(
         token: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) = callbackFlow<Result<List<Credential>>> {
         BiSdk.import(
             token = token,
-        ) { importProfileResult ->
-            when (importProfileResult) {
+        ) { registerProfileResult ->
+            when (registerProfileResult) {
                 is CoreSuccess ->
-                    sendBlocking(Result.success(importProfileResult.value.map { Credential.from(it) }))
+                    sendBlocking(Result.success(registerProfileResult.value.map { Credential.from(it) }))
                 is CoreFailure ->
-                    sendBlocking(Result.failure(Throwable(importProfileResult.value.localizedDescription)))
+                    sendBlocking(Result.failure(Throwable(registerProfileResult.value.localizedDescription)))
             }
         }
         awaitClose()
     }.flowOn(dispatcher)
 
     /**
-     * Cancels ongoing export requests.
+     * Cancels ongoing extend requests.
      */
     @JvmStatic
-    fun cancelExport(
+    fun cancelExtendCredentials(
         callback: (Result<Unit>) -> Unit,
     ) {
         BiSdk.cancel { response ->
@@ -759,7 +759,7 @@ object EmbeddedSdk {
      * Cancels ongoing export requests.
      */
     @ExperimentalCoroutinesApi
-    fun cancelExport(
+    fun cancelExtendCredentials(
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<Unit>> {
         BiSdk.cancel { response ->

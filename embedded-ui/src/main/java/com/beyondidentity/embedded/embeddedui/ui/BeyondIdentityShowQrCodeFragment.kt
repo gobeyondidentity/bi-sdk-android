@@ -47,7 +47,7 @@ class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
-        EmbeddedSdk.cancelExport {}
+        EmbeddedSdk.cancelExtendCredentials {}
         super.onDestroyView()
     }
 
@@ -65,7 +65,7 @@ class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
 
     private fun export() {
         credHandle?.let { handle ->
-            EmbeddedSdk.exportCredentials(
+            EmbeddedSdk.extendCredentials(
                 listOf(handle),
                 object : ExportCredentialListener {
                     override fun onUpdate(token: ExportResponse?) {
@@ -117,7 +117,7 @@ class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
         }
 
     override fun onCancel(dialog: DialogInterface) {
-        EmbeddedSdk.cancelExport {
+        EmbeddedSdk.cancelExtendCredentials {
             super.onCancel(dialog)
         }
     }

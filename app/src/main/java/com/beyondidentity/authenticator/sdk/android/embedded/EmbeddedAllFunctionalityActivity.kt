@@ -54,11 +54,11 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
     private lateinit var authPublicButton: MaterialButton
     private lateinit var authPublicText: MaterialTextView
     private lateinit var exportProfileButton: MaterialButton
-    private lateinit var cancelExportButton: MaterialButton
+    private lateinit var cancelExtendCredentialsButton: MaterialButton
     private lateinit var exportProfileText: MaterialTextView
     private lateinit var exportProfileQr: ImageView
-    private lateinit var importProfileButton: MaterialButton
-    private lateinit var importProfileText: TextInputEditText
+    private lateinit var registerProfileButton: MaterialButton
+    private lateinit var registerProfileText: TextInputEditText
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Timber.e("Caught $exception")
@@ -73,7 +73,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
 
         intent.data?.let { uri ->
             Toast.makeText(this, "Registering Credential...", Toast.LENGTH_LONG).show()
-            EmbeddedSdk.registerCredential(
+            EmbeddedSdk.registerCredentialsWithUrl(
                 url = uri.toString(),
             ).onEach {
                 it.onSuccess { p ->
@@ -109,11 +109,11 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
         authPublicButton = findViewById(R.id.embedded_signin_authpublic_button)
         authPublicText = findViewById(R.id.embedded_signin_authpublic_text)
         exportProfileButton = findViewById(R.id.embedded_exportprofile_button)
-        cancelExportButton = findViewById(R.id.embedded_exportprofile_cancel_button)
+        cancelExtendCredentialsButton = findViewById(R.id.embedded_exportprofile_cancel_button)
         exportProfileText = findViewById(R.id.embedded_exportprofile_text)
         exportProfileQr = findViewById(R.id.embedded_exportprofile_qrcode)
-        importProfileButton = findViewById(R.id.embedded_importprofile_button)
-        importProfileText = findViewById(R.id.embedded_importprofile_text)
+        registerProfileButton = findViewById(R.id.embedded_importprofile_button)
+        registerProfileText = findViewById(R.id.embedded_importprofile_text)
 
         credentialsButton.setOnClickListener {
             EmbeddedSdk.getCredentials()
@@ -248,7 +248,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
 
         exportProfileText.copyOnHold()
         exportProfileButton.setOnClickListener {
-            EmbeddedSdk.exportCredentials(
+            EmbeddedSdk.extendCredentials(
                 credentialHandles = listOf(BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_DEMO_TENANT),
             )
                 .onCompletion {
@@ -269,21 +269,21 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
                 .launchIn(lifecycleScope)
         }
 
-        cancelExportButton.setOnClickListener {
-            EmbeddedSdk.cancelExport()
+        cancelExtendCredentialsButton.setOnClickListener {
+            EmbeddedSdk.cancelExtendCredentials()
                 .onCompletion { Timber.d("Cancel completed") }
                 .onEach { Timber.d(it.toString()) }
                 .catch { Timber.e(it) }
                 .launchIn(lifecycleScope)
         }
 
-        importProfileButton.setOnClickListener {
-            EmbeddedSdk.importCredentials(importProfileText.text.toString())
-                .onCompletion { Timber.d("Import completed") }
+        registerProfileButton.setOnClickListener {
+            EmbeddedSdk.registerCredentialsWithToken(registerProfileText.text.toString())
+                .onCompletion { Timber.d("Register completed") }
                 .onEach {
-                    Timber.d("Imported profiles $it")
-                    importProfileText.text?.clear()
-                    Toast.makeText(this, "Profile imported", Toast.LENGTH_SHORT).show()
+                    Timber.d("Registered profiles $it")
+                    registerProfileText.text?.clear()
+                    Toast.makeText(this, "Profile registered", Toast.LENGTH_SHORT).show()
                 }
                 .catch { Timber.e(it) }
                 .launchIn(lifecycleScope)
@@ -302,7 +302,7 @@ class EmbeddedAllFunctionalityActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        EmbeddedSdk.cancelExport { }
+        EmbeddedSdk.cancelExtendCredentials { }
     }
 
     private fun parseIdToken(idToken: String): String {
