@@ -3,20 +3,20 @@
 3    package="com.beyondidentity.embedded.embeddedui.test" >
 4
 5    <uses-sdk
-5-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:5:5-74
+5-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:5:5-74
 6        android:minSdkVersion="28"
-6-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:5:15-41
+6-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:5:15-41
 7        android:targetSdkVersion="31" />
-7-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:5:42-71
+7-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:5:42-71
 8
 9    <instrumentation
-9-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:11:5-13:93
+9-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:11:5-13:93
 10        android:name="android.test.InstrumentationTestRunner"
-10-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:11:22-75
+10-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:11:22-75
 11        android:label="Tests for com.beyondidentity.embedded.embeddedui.test"
-11-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:13:22-91
+11-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:13:22-91
 12        android:targetPackage="com.beyondidentity.embedded.embeddedui.test" />
-12-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:12:22-89
+12-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:12:22-89
 13
 14    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 14-->[:embedded] /root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded/build/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-72
@@ -66,14 +66,14 @@
 35-->[com.journeyapps:zxing-android-embedded:4.1.0] /root/.gradle/caches/transforms-3/b3b0fd7790b06d84c4a043f180e9ab71/transformed/jetified-zxing-android-embedded-4.1.0/AndroidManifest.xml:44:9-33
 36
 37    <application
-37-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:7:5-9:19
+37-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:7:5-9:19
 38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 38-->[androidx.core:core:1.5.0] /root/.gradle/caches/transforms-3/80a4181a0804c5bd4b9079c4fb01cfa1/transformed/core-1.5.0/AndroidManifest.xml:24:18-86
 39        android:debuggable="true" >
-39-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:7:18-43
+39-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:7:18-43
 40        <uses-library android:name="android.test.runner" />
-40-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:8:9-60
-40-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest3165320706608469761.xml:8:23-57
+40-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:8:9-60
+40-->/root/.go/src/gitlab.com/zeropw/zero/clients/external_sdks/bi-sdk-android/embedded-ui/build/intermediates/tmp/manifest/test/release/tempFile1ProcessTestManifest14003581491825443267.xml:8:23-57
 41
 42        <activity
 42-->[androidx.biometric:biometric:1.0.1] /root/.gradle/caches/transforms-3/be6f8bbd6139704125e7424ebcb84e92/transformed/biometric-1.0.1/AndroidManifest.xml:28:9-31:67

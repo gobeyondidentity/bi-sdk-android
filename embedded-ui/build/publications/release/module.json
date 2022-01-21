@@ -3,7 +3,7 @@
   "component": {
     "group": "com.beyondidentity.android.sdk",
     "module": "embedded-ui",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -24,13 +24,13 @@
       },
       "files": [
         {
-          "name": "embedded-ui-0.5.0.aar",
-          "url": "embedded-ui-0.5.0.aar",
+          "name": "embedded-ui-0.5.1.aar",
+          "url": "embedded-ui-0.5.1.aar",
           "size": 367071,
-          "sha512": "15b4c18b95bb1d5775644ba9f48c3b5bb3789af0f918b859faf3cfd13b62fd0b9b493c0f4e62c5b3b54b19bdbe25ba280ac83b6c22f50efc08d525506010288a",
-          "sha256": "e0460aecde47471b0df5cd83b6647afd880024f34870d3d161863a5bde2ff879",
-          "sha1": "d27ea76fe5304f0416f363059c28bc3d97bcc478",
-          "md5": "94b155a08bb1c2df47fa2146471105af"
+          "sha512": "e03c84878f0c8f9218df2fe515d8ef45de248f499f3cefa745a6d035b1040e18e258f2cbc820670a4077806d891bc550ea1c5d42436082527b229bd0ea0c8cbc",
+          "sha256": "26ff9d9167cd7862d4ec08b7432d50e50599b546fda9b2895cbdb55707d256ab",
+          "sha1": "2db5ce74fb311bb47189b12bfd39dbdf2c95328c",
+          "md5": "2a23cb12f1d77024b740d57424d8672c"
         }
       ]
     },
@@ -54,7 +54,7 @@
           "group": "com.beyondidentity.android.sdk",
           "module": "embedded",
           "version": {
-            "requires": "0.5.0"
+            "requires": "0.5.1"
           }
         },
         {
@@ -109,13 +109,13 @@
       ],
       "files": [
         {
-          "name": "embedded-ui-0.5.0.aar",
-          "url": "embedded-ui-0.5.0.aar",
+          "name": "embedded-ui-0.5.1.aar",
+          "url": "embedded-ui-0.5.1.aar",
           "size": 367071,
-          "sha512": "15b4c18b95bb1d5775644ba9f48c3b5bb3789af0f918b859faf3cfd13b62fd0b9b493c0f4e62c5b3b54b19bdbe25ba280ac83b6c22f50efc08d525506010288a",
-          "sha256": "e0460aecde47471b0df5cd83b6647afd880024f34870d3d161863a5bde2ff879",
-          "sha1": "d27ea76fe5304f0416f363059c28bc3d97bcc478",
-          "md5": "94b155a08bb1c2df47fa2146471105af"
+          "sha512": "e03c84878f0c8f9218df2fe515d8ef45de248f499f3cefa745a6d035b1040e18e258f2cbc820670a4077806d891bc550ea1c5d42436082527b229bd0ea0c8cbc",
+          "sha256": "26ff9d9167cd7862d4ec08b7432d50e50599b546fda9b2895cbdb55707d256ab",
+          "sha1": "2db5ce74fb311bb47189b12bfd39dbdf2c95328c",
+          "md5": "2a23cb12f1d77024b740d57424d8672c"
         }
       ]
     }

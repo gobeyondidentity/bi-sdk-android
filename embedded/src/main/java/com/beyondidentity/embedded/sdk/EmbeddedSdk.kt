@@ -517,7 +517,7 @@ object EmbeddedSdk {
         callback: (Result<Unit>) -> Unit,
     ) {
         executor.execute {
-            BiSdk.deleteProfile(
+            BiSdk.deleteCredential(
                 handle = credentialHandle,
             ) { result ->
                 when (result) {
@@ -543,7 +543,7 @@ object EmbeddedSdk {
         credentialHandle: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<Unit>> {
-        BiSdk.deleteProfile(
+        BiSdk.deleteCredential(
             handle = credentialHandle,
         ) { result ->
             when (result) {
