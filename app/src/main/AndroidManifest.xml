@@ -12,70 +12,127 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticatorSDKAndroid">
-
         <activity
-            android:name=".SdkSelectorActivity"
-            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".embedded.extend.ExtendCredentialActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+                android:host="extend_credential"
+                android:scheme="${embedded_app_scheme}" />
+        </intent-filter>
         </activity>
-
-        <!--        Embedded SDK        -->
         <activity
-            android:name=".embedded.EmbeddedLoginActivity"
+            android:name=".embedded.auth.EmbeddedAuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links.-->
-                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
+
                 <data
-                    android:host="host"
-                    android:path="/register-ui"
+                    android:host="embedded_auth"
                     android:scheme="${embedded_app_scheme}" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".embedded.EmbeddedAllFunctionalityActivity"
+            android:name=".embedded.managecred.ManageCredentialsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="manage_credentials"
+                    android:scheme="${embedded_app_scheme}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".embedded.getstarted.EmbeddedGetStartedActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links.-->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
                 <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data
                     android:host="host"
                     android:path="/register-api"
                     android:scheme="${embedded_app_scheme}" />
             </intent-filter>
+
+            <!--Comment this intent-filter if you want to handle registration with the UI sdk example app-->
+            <!--And uncomment the intent-filter in the EmbeddedUISdkLoginActivity-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links.-->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
                 <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data android:scheme="${embedded_app_scheme}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".embedded.regandrecover.EmbeddedUIRegAndRecoverActivity"
+            android:exported="false"
+            android:label="Register and recover"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar" />
+        <activity
+            android:name=".SdkSelectorActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <!--        Authenticator SDK        -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Embedded SDK -->
+        <activity
+            android:name=".embedded.EmbeddedUISdkLoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
+                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
+                <data
+                    android:host="host"
+                    android:path="/register-ui"
+                    android:scheme="${embedded_app_scheme}" />
+            </intent-filter>
+
+            <!--Uncomment this intent-filter if you want to handle registration with the UI sdk example app-->
+            <!--And comment the intent-filter in the EmbeddedGetStartedActivity-->
+            <!--<intent-filter>-->
+            <!--    <action android:name="android.intent.action.VIEW" />-->
+
+            <!--    <category android:name="android.intent.category.DEFAULT" />-->
+            <!--    <category android:name="android.intent.category.BROWSABLE" />-->
+            <!--    &lt;!&ndash; Accepts URIs that begin with "my-app://home” &ndash;&gt;-->
+            <!--    &lt;!&ndash; !WARNING! Use verified app links (https://yourdomain) instead of deep links. &ndash;&gt;-->
+            <!--    &lt;!&ndash; Deep links with custom schemes like "my-app://home” can be intercepted by other apps &ndash;&gt;-->
+            <!--    <data android:scheme="${embedded_app_scheme}" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity android:name=".authenticator.AuthenticatorSignInActivity" />
-
         <activity android:name=".authenticator.AuthenticatorHomeActivity" />
-
         <activity
             android:name=".authenticator.AuthenticatorOauth2RedirectReceiver"
             android:exported="true">
@@ -85,7 +142,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links.-->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
                 <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data
                     android:host="@string/authenticator_app_host"
@@ -93,4 +150,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

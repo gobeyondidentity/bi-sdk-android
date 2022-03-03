@@ -1,0 +1,34 @@
+package com.beyondidentity.authenticator.sdk.android.utils
+
+fun Any?.toIndentString(): String {
+    val notFancy = toString()
+    return buildString(notFancy.length) {
+        var indent = 0
+        fun StringBuilder.line() {
+            appendln()
+            repeat(2 * indent) { append(' ') }
+        }
+
+        for (char in notFancy) {
+            if (char == ' ') continue
+
+            when (char) {
+                ')', ']' -> {
+                    indent--
+                    line()
+                }
+            }
+
+            if (char == '=') append(' ')
+            append(char)
+            if (char == '=') append(' ')
+
+            when (char) {
+                '(', '[', ',' -> {
+                    if (char != ',') indent++
+                    line()
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 object Versions {
-    const val KOTLIN = "1.5.31"
+    const val KOTLIN = "1.6.10"
     const val KOTLINX_SERIALIZATION = "1.0.1"
     const val KOTLINX_COROUTINES = "1.5.2"
     const val ANDROIDX_BROWSER = "1.3.0"
@@ -22,7 +22,7 @@ object Versions {
     const val MOCKITO_ANDROID_TEST = "3.6.0"
 
     // Classpath
-    const val ANDROID_GRADLE_TOOLS = "7.0.3"
+    const val ANDROID_GRADLE_TOOLS = "7.1.1"
     const val KTLINT = "10.0.0"
     const val DOKKA = "1.5.0"
 }
@@ -48,7 +48,7 @@ object Libs {
 
     // Other
     const val ZXING_EMBEDDED = "com.journeyapps:zxing-android-embedded:${Versions.ZXING_EMBEDDED}"
-    const val CODE_SCANNER = "com.budiyev.android:code-scanner:${Versions.CODE_SCANNER}"
+    const val CODE_SCANNER = "com.github.yuriy-budiyev:code-scanner:${Versions.CODE_SCANNER}"
 
     // ByndId
     const val CORE = "com.beyondidentity.android.sdk:core"

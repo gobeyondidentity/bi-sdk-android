@@ -12,15 +12,16 @@ fun Project.configureMavenPublish(
     groupIdForLib: String,
     artifactIdForLib: String
 ) {
+    val mavenPropPath = "$rootDir/buildProperties/build-maven.properties"
     afterEvaluate {
         configure<PublishingExtension> {
             repositories {
                 maven {
                     name = "cloudsmith"
-                    url = uri(getProp("BUILD_CONFIG_CLOUDSMITH_PUBLISH_URL"))
+                    url = uri(getProp("BUILD_CONFIG_CLOUDSMITH_PUBLISH_URL", mavenPropPath))
                     credentials {
-                        username = getProp("BUILD_CONFIG_CLOUDSMITH_USER").toString()
-                        password = getProp("BUILD_CONFIG_CLOUDSMITH_API_KEY").toString()
+                        username = getProp("BUILD_CONFIG_CLOUDSMITH_USER", mavenPropPath).toString()
+                        password = getProp("BUILD_CONFIG_CLOUDSMITH_API_KEY", mavenPropPath).toString()
                     }
                 }
             }
@@ -33,7 +34,7 @@ fun Project.configureMavenPublish(
 
                     groupId = groupIdForLib
                     artifactId = artifactIdForLib
-                    version = getProp("BUILD_CONFIG_BI_SDK_VERSION").toString()
+                    version = getProp("BUILD_CONFIG_BI_SDK_VERSION", mavenPropPath).toString()
                 }
             }
         }

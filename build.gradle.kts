@@ -26,7 +26,6 @@ allprojects {
         google()
         maven("https://jitpack.io")
         maven(getProp("BUILD_CONFIG_CLOUDSMITH_REPO_URL"))
-        jcenter()
     }
 }
 

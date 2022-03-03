@@ -6,7 +6,6 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.app.KeyguardManager
 import android.content.Context
 import android.os.Bundle
-import com.beyondidentity.authenticator.sdk.android.embedded.EMBEDDED_KEYGUARD_REQUEST
 import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig
 import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.ConfidentialClientData
 import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.PublicClientData
@@ -80,5 +79,9 @@ class App : Application(), ActivityLifecycleCallbacks {
     override fun onActivityDestroyed(activity: Activity) {
         Timber.d("Remove current activity ${activity.localClassName}")
         currentActivity = null
+    }
+
+    companion object {
+        const val EMBEDDED_KEYGUARD_REQUEST = 9481
     }
 }

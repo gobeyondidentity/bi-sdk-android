@@ -39,4 +39,4 @@ dependencies {
 ```
 
 ## Usage
-Check out the [documentation](https://docs.beyondidentity.com) for more info.
+Check out the [documentation](https://developer.beyondidentity.com) for more information.

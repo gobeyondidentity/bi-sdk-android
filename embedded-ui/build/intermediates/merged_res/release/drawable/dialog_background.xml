@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners
-        android:topLeftRadius="@dimen/spacing_m_and_half"
-        android:topRightRadius="@dimen/spacing_m_and_half" />
-    <solid android:color="@color/bi_sheet_background" />
-</shape>

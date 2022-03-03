@@ -33,6 +33,8 @@ data class TokenResponse(
     val tokenType: String,
     @SerializedName("id_token")
     val idToken: String,
+    @SerializedName("expires_in")
+    val expiresIn: Int,
 )
 
 data class CreateUserRequest(
@@ -57,6 +59,7 @@ data class RecoverUserRequest(
 
 data class UserResponse(
     val user: User,
+    val error: String,
 )
 data class User(
     @SerializedName("internal_id")

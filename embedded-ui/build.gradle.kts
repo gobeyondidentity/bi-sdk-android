@@ -39,6 +39,7 @@ configureMavenPublish(
 val biSdkVersion = getProp("BUILD_CONFIG_BI_SDK_VERSION")
 
 dependencies {
+    // todo https://proandroiddev.com/using-type-safe-project-dependencies-on-gradle-493ab7337aa
     implementation(project(":embedded"))
     implementation(Libs.KOTLIN_STD_LIB)
     implementation(Libs.KOTLIN_REFLECTION)
