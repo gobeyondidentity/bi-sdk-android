@@ -12,8 +12,8 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.os.bundleOf
 import com.beyondidentity.embedded.embeddedui.R
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
-import com.beyondidentity.embedded.sdk.export.ExportCredentialListener
-import com.beyondidentity.embedded.sdk.models.ExportResponse
+import com.beyondidentity.embedded.sdk.extend.ExtendCredentialListener
+import com.beyondidentity.embedded.sdk.models.ExtendResponse
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
@@ -67,8 +67,8 @@ class BeyondIdentityShowQrCodeFragment : BiBaseBottomSheetDialogFragment() {
         credHandle?.let { handle ->
             EmbeddedSdk.extendCredentials(
                 listOf(handle),
-                object : ExportCredentialListener {
-                    override fun onUpdate(token: ExportResponse?) {
+                object : ExtendCredentialListener {
+                    override fun onUpdate(token: ExtendResponse?) {
                         contentGroup.visible()
                         progressView.gone()
 

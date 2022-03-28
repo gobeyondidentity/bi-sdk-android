@@ -61,6 +61,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/show_qr_image_code" />
 
+    <View
+        android:id="@+id/show_qr_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/neutral_30"
+        app:layout_constraintTop_toBottomOf="@id/show_qr_desc" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/shoq_qr_no_camera"
         android:layout_width="0dp"

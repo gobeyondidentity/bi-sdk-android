@@ -9,9 +9,9 @@ import androidx.preference.PreferenceManager
 import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
 import com.beyondidentity.authenticator.sdk.embedded.R
 import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
-import com.beyondidentity.embedded.sdk.export.ExportCredentialListener
+import com.beyondidentity.embedded.sdk.extend.ExtendCredentialListener
 import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.ExportResponse
+import com.beyondidentity.embedded.sdk.models.ExtendResponse
 import com.beyondidentity.embedded.sdk.models.PkceResponse
 import com.beyondidentity.embedded.sdk.models.TokenResponse
 import com.beyondidentity.embedded.sdk.utils.Qr.generateQrCode
@@ -469,12 +469,12 @@ object EmbeddedSdk {
         callback: (Result<List<Credential>>) -> Unit,
     ) {
         executor.execute {
-            BiSdk.allProfiles { allProfilesResult ->
-                when (allProfilesResult) {
+            BiSdk.allCredentials { allCredentialsResult ->
+                when (allCredentialsResult) {
                     is CoreSuccess ->
-                        postMain { callback(Result.success(allProfilesResult.value.map { Credential.from(it) })) }
+                        postMain { callback(Result.success(allCredentialsResult.value.map { Credential.from(it) })) }
                     is CoreFailure ->
-                        postMain { callback(Result.failure(Throwable(allProfilesResult.value.localizedDescription))) }
+                        postMain { callback(Result.failure(Throwable(allCredentialsResult.value.localizedDescription))) }
                 }
             }
         }
@@ -492,12 +492,12 @@ object EmbeddedSdk {
     fun getCredentials(
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<List<Credential>>> {
-        BiSdk.allProfiles { allProfilesResult ->
-            when (allProfilesResult) {
+        BiSdk.allCredentials { allCredentialsResult ->
+            when (allCredentialsResult) {
                 is CoreSuccess ->
-                    sendBlocking(Result.success(allProfilesResult.value.map { Credential.from(it) }))
+                    sendBlocking(Result.success(allCredentialsResult.value.map { Credential.from(it) }))
                 is CoreFailure ->
-                    sendBlocking(Result.failure(Throwable(allProfilesResult.value.localizedDescription)))
+                    sendBlocking(Result.failure(Throwable(allCredentialsResult.value.localizedDescription)))
             }
         }
         awaitClose()
@@ -572,7 +572,7 @@ object EmbeddedSdk {
     fun extendCredentials(
         credentialHandles: List<String>,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ): Flow<ExportResponse?> = callbackFlow {
+    ): Flow<ExtendResponse?> = callbackFlow {
         var error: RuntimeException? = null
         BiSdk.export(
             handles = credentialHandles,
@@ -581,7 +581,7 @@ object EmbeddedSdk {
                     is CoreExportStatus.Started -> {
                         logger?.invoke("export started with token ${coreExportStatus.token}")
                         sendBlocking(
-                            ExportResponse(
+                            ExtendResponse(
                                 rendezvousToken = coreExportStatus.token,
                                 rendezvousTokenBitmap = generateQrCode(coreExportStatus.token),
                             )
@@ -590,7 +590,7 @@ object EmbeddedSdk {
                     is CoreExportStatus.Token -> {
                         logger?.invoke("token timeout. new token ${coreExportStatus.token}")
                         sendBlocking(
-                            ExportResponse(
+                            ExtendResponse(
                                 rendezvousToken = coreExportStatus.token,
                                 rendezvousTokenBitmap = generateQrCode(coreExportStatus.token),
                             )
@@ -638,7 +638,7 @@ object EmbeddedSdk {
     @JvmStatic
     fun extendCredentials(
         credentialHandles: List<String>,
-        listener: ExportCredentialListener,
+        listener: ExtendCredentialListener,
     ) {
         executor.execute {
             BiSdk.export(
@@ -648,7 +648,7 @@ object EmbeddedSdk {
                         is CoreExportStatus.Started -> postMain {
                             logger?.invoke("export started with token ${coreExportStatus.token}")
                             listener.onUpdate(
-                                ExportResponse(
+                                ExtendResponse(
                                     rendezvousToken = coreExportStatus.token,
                                     rendezvousTokenBitmap = generateQrCode(coreExportStatus.token),
                                 )
@@ -657,7 +657,7 @@ object EmbeddedSdk {
                         is CoreExportStatus.Token -> postMain {
                             logger?.invoke("token timeout. new token ${coreExportStatus.token}")
                             listener.onUpdate(
-                                ExportResponse(
+                                ExtendResponse(
                                     rendezvousToken = coreExportStatus.token,
                                     rendezvousTokenBitmap = generateQrCode(coreExportStatus.token),
                                 )

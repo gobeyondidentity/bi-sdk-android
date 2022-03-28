@@ -1,17 +1,17 @@
-package com.beyondidentity.embedded.sdk.export
+package com.beyondidentity.embedded.sdk.extend
 
-import com.beyondidentity.embedded.sdk.models.ExportResponse
+import com.beyondidentity.embedded.sdk.models.ExtendResponse
 
 /**
  * Status of Extending Credentials
  */
-interface ExportCredentialListener {
+interface ExtendCredentialListener {
     /**
-     * On new [ExportResponse] token generated
+     * On new [ExtendResponse] token generated
      *
      * @param token  A random 9 digit token associated with Credentials exported
      */
-    fun onUpdate(token: ExportResponse?)
+    fun onUpdate(token: ExtendResponse?)
 
     /**
      * Extend credential complete.
