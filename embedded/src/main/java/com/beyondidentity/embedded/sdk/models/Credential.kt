@@ -1,84 +1,95 @@
 package com.beyondidentity.embedded.sdk.models
 
-import com.beyondidentity.embedded.sdk.models.CredentialState.ACTIVE
-import com.beyondidentity.sdk.android.bicore.models.CredentialResponse
-import com.beyondidentity.sdk.android.bicore.models.ProfileResponse as CoreProfile
+import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
 
 /**
  * Represent User's credential, wrapper for X.509 Certificate
  *
- * @property created  The date the `Credential` was created.
- * @property handle The handle for the `Credential`.
- * @property keyHandle The keystore key handle.
- * @property name The display name of the `Credential`.
- * @property imageUrl The uri of your company or app's logo.
- * @property chain The certificate chain of the `Credential`.
- * @property rootFingerprint The SHA256 hash of the root certificate as a base64 encoded string.
- * @property loginUri The uri of your app's sign in screen. This is where the user would authenticate into your app.
- * @property enrollUri The uri of your app's sign up screen. This is where the user would register with your service.
- * @property state Current state of the `Credential`
+ * @property id The Globally unique ID of this Credential.
+ * @property localCreated The time when this credential was created locally. This could be different from "created" which is the time when this credential was created on the server.
+ * @property localUpdated The last time when this credential was updated locally. This could be different from "updated" which is the last time when this credential was updated on the server.
+ * @property apiBaseURL The base url for all binding & auth requests
+ * @property tenantId The Identity's Tenant.
+ * @property realmId The Identity's Realm.
+ * @property identityId The Identity that owns this Credential.
+ * @property keyHandle Associated key handle.
+ * @property state The current state of this credential
+ * @property created The time this credential was created.
+ * @property updated The last time this credential was updated.
+ * @property realm Realm information associated with this credential.
+ * @property identity Identity information associated with this credential.
+ * @property theme Theme information associated with this credential
  */
 data class Credential(
-    val created: String,
-    val handle: String,
-    val keyHandle: String,
-    val name: String,
-    val imageUrl: String,
-    val chain: List<String>,
-    val rootFingerprint: String,
-    val loginUri: String? = null,
-    val enrollUri: String? = null,
+    val id: CredentialID,
+    val localCreated: String,
+    val localUpdated: String,
+    val apiBaseURL: String,
+    val tenantId: TenantID,
+    val realmId: RealmID,
+    val identityId: IdentityID,
+    val keyHandle: KeyHandle,
     val state: CredentialState,
+    val created: String,
+    val updated: String,
+    val realm: Realm,
+    val identity: Identity,
+    val theme: Theme,
 ) {
     companion object {
-        fun from(coreCredential: CredentialResponse): Credential {
-            var isValidChain = true
-            val chain = coreCredential.chain.map {
-                it.error?.let { isValidChain = false }
-                it.value ?: ""
-            }
-            // If any IntegrityResult contains an error, credential is invalid
-            val status = if (
-                coreCredential.handle.error != null ||
-                coreCredential.keyHandle.error != null ||
-                coreCredential.created.error != null ||
-                coreCredential.rootFingerprint.error != null ||
-                !isValidChain
-            ) {
-                CredentialState.INVALID
-            } else {
-                CredentialState.from(coreCredential.state)
-            }
-
-            return Credential(
-                created = coreCredential.created.value ?: "",
-                handle = coreCredential.handle.value ?: "",
-                keyHandle = coreCredential.keyHandle.value ?: "",
-                name = coreCredential.name,
-                imageUrl = coreCredential.imageUrl,
-                chain = chain,
-                rootFingerprint = coreCredential.rootFingerprint.value ?: "",
-                loginUri = coreCredential.loginUri,
-                enrollUri = coreCredential.enrollUri,
-                state = status,
-            )
-        }
-
-        fun from(coreProfile: CoreProfile) =
+        fun from(coreAuthNCredential: AuthNCredentialResponse) =
             Credential(
-                created = coreProfile.created,
-                handle = coreProfile.handle,
-                keyHandle = coreProfile.keyHandle,
-                name = coreProfile.name,
-                imageUrl = coreProfile.imageUrl,
-                chain = coreProfile.chain,
-                rootFingerprint = coreProfile.rootFingerprint,
-                loginUri = coreProfile.loginUri,
-                enrollUri = coreProfile.enrollUri,
-                state = ACTIVE,
+                id = coreAuthNCredential.id,
+                localCreated = coreAuthNCredential.localCreated,
+                localUpdated = coreAuthNCredential.localUpdated,
+                apiBaseURL = coreAuthNCredential.apiBaseUrl,
+                tenantId = coreAuthNCredential.tenantId,
+                realmId = coreAuthNCredential.realmId,
+                identityId = coreAuthNCredential.identityId,
+                keyHandle = coreAuthNCredential.keyHandle,
+                state = CredentialState.from(coreAuthNCredential.state),
+                created = coreAuthNCredential.created,
+                updated = coreAuthNCredential.updated,
+                realm = Realm(
+                    displayName = coreAuthNCredential.realm.displayName,
+                ),
+                identity = Identity(
+                    displayName = coreAuthNCredential.identity.displayName,
+                    username = coreAuthNCredential.identity.username,
+                ),
+                theme = Theme(
+                    logoUrlLight = coreAuthNCredential.theme.logoUrlLight,
+                    logoUrlDark = coreAuthNCredential.theme.logoUrlDark,
+                    supportUrl = coreAuthNCredential.theme.supportUrl,
+                ),
             )
     }
 }
+
+/**
+ * The Globally unique ID of a Credential.
+ */
+typealias CredentialID = String
+
+/**
+ * The Identity that owns a Credential.
+ */
+typealias IdentityID = String
+
+/**
+ * Associated key handle.
+ */
+typealias KeyHandle = String
+
+/**
+ * The Identity's Realm.
+ */
+typealias RealmID = String
+
+/**
+ * The Identity's Tenant.
+ */
+typealias TenantID = String
 
 /**
  * State of given [Credential]
@@ -92,38 +103,16 @@ enum class CredentialState {
             return "active"
         }
     },
+
     /**
-     * Device has been deleted
+     * Credential is revoked
      */
-    DEVICE_DELETED {
+    REVOKED {
         override fun toString(): String {
-            return "deviceDeleted"
+            return "revoked"
         }
     },
-    /**
-     * One or more fields failed their integrity checks
-     */
-    INVALID {
-        override fun toString(): String {
-            return "invalid"
-        }
-    },
-    /**
-     * User has been deleted
-     */
-    USER_DELETED {
-        override fun toString(): String {
-            return "userDeleted"
-        }
-    },
-    /**
-     * User is suspended
-     */
-    USER_SUSPENDED {
-        override fun toString(): String {
-            return "userSuspended"
-        }
-    },
+
     /**
      * Unable to determine the state of the credential
      */
@@ -137,11 +126,41 @@ enum class CredentialState {
         fun from(state: String): CredentialState =
             when (state.lowercase()) {
                 "active" -> ACTIVE
-                "devicedeleted" -> DEVICE_DELETED
-                "userdeleted" -> USER_DELETED
-                "usersuspended" -> USER_SUSPENDED
-                "invalid" -> INVALID
+                "revoked" -> REVOKED
                 else -> UNKNOWN
             }
     }
 }
+
+/**
+ * Realm information associated with a credential.
+ *
+ * @property displayName The display name of the realm.
+ */
+data class Realm(
+    val displayName: String,
+)
+
+/**
+ * Identity information associated with a credential.
+ *
+ * @property displayName The display name of the identity.
+ * @property username The username of the identity.
+ */
+data class Identity(
+    val displayName: String,
+    val username: String,
+)
+
+/**
+ * Theme associated with a credential.
+ *
+ * @property logoUrlLight URL to for resolving the logo image for light mode.
+ * @property logoUrlDark URL to for resolving the logo image for dark mode.
+ * @property supportUrl URL for customer support portal.
+ */
+data class Theme(
+    val logoUrlLight: String,
+    val logoUrlDark: String,
+    val supportUrl: String,
+)

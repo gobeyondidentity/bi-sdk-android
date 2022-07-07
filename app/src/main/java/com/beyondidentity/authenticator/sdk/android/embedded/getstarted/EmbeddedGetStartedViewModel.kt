@@ -3,18 +3,19 @@ package com.beyondidentity.authenticator.sdk.android.embedded.getstarted
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.CredentialRegistration
-import com.beyondidentity.authenticator.sdk.android.utils.CreateUserRequest
-import com.beyondidentity.authenticator.sdk.android.utils.RecoverUserRequest
-import com.beyondidentity.authenticator.sdk.android.utils.RetrofitBuilder
+import com.beyondidentity.authenticator.sdk.android.embedded.auth.SelectCredentialDialogFragment
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.AuthenticateEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindCredentialEvent
 import com.beyondidentity.authenticator.sdk.android.utils.toIndentString
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
-import java.util.*
+import com.beyondidentity.embedded.sdk.models.Credential
+import com.beyondidentity.embedded.sdk.models.OnSelectCredential
+import com.beyondidentity.embedded.sdk.models.OnSelectedCredential
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.catch
@@ -35,67 +36,141 @@ class EmbeddedGetStartedViewModel : ViewModel() {
     private val _events = MutableSharedFlow<EmbeddedGetStartedEvents>()
     val events: SharedFlow<EmbeddedGetStartedEvents> = _events
 
-    fun onRegistrationEmailTextChange(text: String) {
-        state = state.copy(registerEmail = text)
+    fun onBindCredentialUrlTextChange(text: String) {
+        state = state.copy(bindCredentialUrl = text)
     }
 
-    fun onRecoverEmailTextChange(text: String) {
-        state = state.copy(recoverEmail = text)
+    fun onAuthenticateUrlTextChange(text: String) {
+        state = state.copy(authenticateUrl = text)
     }
 
-    fun onRegisterUser() {
-        state = state.copy(registerResult = "")
-        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
-            val result = RetrofitBuilder.ACME_API_SERVICE.createUser(
-                CreateUserRequest(
-                    bindingTokenDeliveryMethod = "email",
-                    externalId = state.registerEmail,
-                    email = state.registerEmail,
-                    displayName = UUID.randomUUID().toString(),
-                    userName = UUID.randomUUID().toString(),
-                )
-            )
-
-            state = state.copy(registerResult = result.toIndentString(), registerEmail = "")
-            Timber.d("got result for createUser = $result")
-        }
+    fun onUrlValidationBindCredentialUrlTextChange(text: String) {
+        state = state.copy(urlValidationBindCredentialUrl = text)
     }
 
-    fun onRecoverUser() {
-        state = state.copy(recoverResult = "")
-        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
-            val result = RetrofitBuilder.ACME_API_SERVICE.recoverUser(
-                RecoverUserRequest(
-                    bindingTokenDeliveryMethod = "email",
-                    externalId = state.recoverEmail,
-                )
-            )
-
-            state = state.copy(recoverResult = result.toIndentString(), recoverEmail = "")
-            Timber.d("got result for recoverUser = $result")
-        }
+    fun onUrlValidationAuthenticateUrlTextChange(text: String) {
+        state = state.copy(urlValidationAuthenticateUrl = text)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun registerCredentialWithUrl(url: String) {
-        EmbeddedSdk.registerCredentialsWithUrl(url)
+    fun onBindCredential(url: String) {
+        EmbeddedSdk.bindCredential(url)
             .flowOn(Dispatchers.Main + coroutineExceptionHandler)
             .onEach {
-                it.onSuccess { cred ->
-                    Timber.d("Credential registered = $cred")
-                    onGetStartedEvent(CredentialRegistration("Credential successfully registered!\nYou can start exploring the Embedded SDK"))
+                it.onSuccess { success ->
+                    state = state.copy(
+                        bindCredentialUrl = "",
+                        bindCredentialResult = success.toIndentString(),
+                    )
+                    Timber.d("Bind Credential success = $success")
+                    onBindCredentialEvent(BindCredentialEvent("Bind Credential success!\nYou can start exploring the Embedded SDK"))
                 }
-                it.onFailure { t ->
-                    Timber.e("Credential registration failed $t")
-                    onGetStartedEvent(CredentialRegistration("Credential registration failed"))
+                it.onFailure { failure ->
+                    state = state.copy(
+                        bindCredentialUrl = state.bindCredentialUrl,
+                        bindCredentialResult = failure.toIndentString(),
+                    )
+                    Timber.e("Bind Credential failure = $failure")
+                    onBindCredentialEvent(BindCredentialEvent("Bind Credential failed"))
                 }
             }
             .catch {
-                val message = "Cancel extend credential failed ${it.message}"
-                Timber.e(message)
-                onGetStartedEvent(CredentialRegistration("Credential registration failed"))
+                state = state.copy(
+                    bindCredentialUrl = state.bindCredentialUrl,
+                    bindCredentialResult = it.toIndentString(),
+                )
+                Timber.e("Bind Credential exception = ${it.message}")
+                onBindCredentialEvent(BindCredentialEvent("Bind Credential failed"))
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun onBindCredentialEvent(event: EmbeddedGetStartedEvents) {
+        viewModelScope.launch {
+            _events.emit(event)
+        }
+    }
+
+    private fun onSelectCredential(
+        activity: FragmentActivity,
+        credentials: List<Credential>,
+        selectedCredentialCallback: OnSelectedCredential,
+    ) {
+        SelectCredentialDialogFragment.newInstance(credentials, selectedCredentialCallback)
+            .show(activity.supportFragmentManager, SelectCredentialDialogFragment.TAG)
+    }
+
+    fun onAuthenticate(activity: FragmentActivity, url: String) {
+        EmbeddedSdk.authenticate(
+            url,
+            object : OnSelectCredential {
+                override fun invoke(
+                    credentials: List<Credential>,
+                    selectedCredentialCallback: OnSelectedCredential,
+                ) {
+                    onSelectCredential(activity, credentials, selectedCredentialCallback)
+                }
+            },
+        )
+            .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+            .onEach {
+                it.onSuccess { success ->
+                    state = state.copy(
+                        authenticateUrl = "",
+                        authenticateResult = success.toIndentString(),
+                    )
+                    Timber.d("Authenticate success = $success")
+                    onAuthenticateEvent(AuthenticateEvent("Authenticate success!\nYou can start exploring the Embedded SDK"))
+                }
+                it.onFailure { failure ->
+                    state = state.copy(
+                        authenticateUrl = state.authenticateUrl,
+                        authenticateResult = failure.toIndentString(),
+                    )
+                    Timber.e("Authenticate failure = $failure")
+                    onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
+                }
+            }
+            .catch {
+                state = state.copy(
+                    authenticateUrl = state.authenticateUrl,
+                    authenticateResult = it.toIndentString(),
+                )
+                Timber.e("Authenticate exception = ${it.message}")
+                onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun onAuthenticateEvent(event: EmbeddedGetStartedEvents) {
+        viewModelScope.launch {
+            _events.emit(event)
+        }
+    }
+
+    fun onValidateBindCredentialUrl() {
+        state = state.copy(validateBindCredentialUrlResult = "")
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            val result = EmbeddedSdk.isBindCredentialUrl(state.urlValidationBindCredentialUrl)
+
+            state = state.copy(
+                validateBindCredentialUrlResult = result.toIndentString(),
+                urlValidationBindCredentialUrl = "",
+            )
+            Timber.d("got result for validateBindCredentialUrl = $result")
+        }
+    }
+
+    fun onValidateAuthenticateUrl() {
+        state = state.copy(validateAuthenticateUrlResult = "")
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            val result = EmbeddedSdk.isAuthenticateUrl(state.urlValidationAuthenticateUrl)
+
+            state = state.copy(
+                validateAuthenticateUrlResult = result.toIndentString(),
+                urlValidationAuthenticateUrl = "",
+            )
+            Timber.d("got result for validateAuthenticateUrl = $result")
+        }
     }
 
     fun onGetStartedEvent(event: EmbeddedGetStartedEvents) {

@@ -18,10 +18,10 @@ fun Project.configureMavenPublish(
             repositories {
                 maven {
                     name = "cloudsmith"
-                    url = uri(getProp("BUILD_CONFIG_CLOUDSMITH_PUBLISH_URL", mavenPropPath))
+                    url = uri(System.getenv().getOrDefault("CLOUDSMITH_PUBLISH_URL", "https://www.example.com"))
                     credentials {
-                        username = getProp("BUILD_CONFIG_CLOUDSMITH_USER", mavenPropPath).toString()
-                        password = getProp("BUILD_CONFIG_CLOUDSMITH_API_KEY", mavenPropPath).toString()
+                        username = System.getenv().getOrDefault("CLOUDSMITH_USER", "username")
+                        password = System.getenv().getOrDefault("CLOUDSMITH_API_KEY", "password")
                     }
                 }
             }

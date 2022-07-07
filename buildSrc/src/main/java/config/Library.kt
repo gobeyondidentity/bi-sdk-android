@@ -2,7 +2,6 @@ package config
 
 import AndroidConfig
 import com.android.build.gradle.BaseExtension
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 import utils.getProp
@@ -54,8 +53,8 @@ fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtensi
     }
 
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_11)
-        targetCompatibility(JavaVersion.VERSION_11)
+        sourceCompatibility(AndroidConfig.JAVA_VERSION)
+        targetCompatibility(AndroidConfig.JAVA_VERSION)
     }
 
     lintOptions {

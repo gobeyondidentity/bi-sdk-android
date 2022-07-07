@@ -7,10 +7,9 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [30])
+@RunWith(RobolectricTestRunner::class)
 class IntentUtilsTest {
-
     @Test
     fun `supportIntent assert support email intent`() {
         val i = supportIntent("user@gmail.com")

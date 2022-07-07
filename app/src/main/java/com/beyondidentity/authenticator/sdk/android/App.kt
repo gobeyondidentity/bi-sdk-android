@@ -6,26 +6,11 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.app.KeyguardManager
 import android.content.Context
 import android.os.Bundle
-import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig
-import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.ConfidentialClientData
-import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.PublicClientData
-import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.Config
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import timber.log.Timber
 
 class App : Application(), ActivityLifecycleCallbacks {
     private var currentActivity: Activity? = null
-
-    private val publicAuthData = PublicClientData(
-        clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID,
-        redirectUri = "${BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME}://",
-    )
-
-    private val confAuthData = ConfidentialClientData(
-        clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
-        redirectUri = "${BuildConfig.BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME}://",
-        scope = "openid",
-    )
 
     override fun onCreate() {
         super.onCreate()
@@ -33,16 +18,10 @@ class App : Application(), ActivityLifecycleCallbacks {
 
         EmbeddedSdk.init(
             app = this,
-            clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
             keyguardPrompt = keyguardPrompt,
             logger = { log ->
                 Timber.d(log)
             }
-        )
-        EmbeddedUiConfig.config = Config(
-            appDisplayName = "Acme App",
-            supportUrlOrEmail = "https://www.beyondidentity.com/support",
-            authenticationData = confAuthData,
         )
         registerActivityLifecycleCallbacks(this)
     }

@@ -2,7 +2,6 @@ package com.beyondidentity.authenticator.sdk.android.embedded;
 
 import com.beyondidentity.embedded.sdk.EmbeddedSdk;
 import com.beyondidentity.embedded.sdk.models.Credential;
-import com.beyondidentity.embedded.sdk.models.PkceResponse;
 import com.beyondidentity.embedded.sdk.utils.JavaResult;
 import com.beyondidentity.embedded.sdk.utils.JavaUtils;
 
@@ -24,31 +23,12 @@ public class JavaExampleUsage {
                 case JavaResult.SUCCESS: {
                     Timber.d(credentialsJava.getData().toString());
 
-                    Timber.d(credentialsJava.getData().get(0).getRootFingerprint());
+                    Timber.d(credentialsJava.getData().get(0).getId());
                 }
                 case JavaResult.FAILURE: {
                     Timber.e(credentialsJava.getError());
                 }
             }
-            return Unit.INSTANCE;
-        });
-    }
-
-    void createPkce() {
-        EmbeddedSdk.createPkce(pkceResponse -> {
-            // Map kotlin.Result to JavaResult
-            JavaResult<PkceResponse> pkceJava = JavaUtils.toJavaResult(pkceResponse);
-
-            // Use JavaResult.type to switch on JavaResult.SUCCESS or case JavaResult.ERROR
-            switch (pkceJava.getType()) {
-                case JavaResult.SUCCESS: {
-                    Timber.d(pkceJava.getData().toString());
-                }
-                case JavaResult.FAILURE: {
-                    Timber.e(pkceJava.getError());
-                }
-            }
-
             return Unit.INSTANCE;
         });
     }

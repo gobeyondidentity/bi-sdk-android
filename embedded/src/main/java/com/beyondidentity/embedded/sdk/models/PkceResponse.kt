@@ -1,7 +1,5 @@
 package com.beyondidentity.embedded.sdk.models
 
-import com.beyondidentity.sdk.android.bicore.models.Pkce
-
 /**
  * Represent PKCE authorization request parameters.
  *
@@ -13,13 +11,4 @@ data class PkceResponse(
     val codeVerifier: String,
     val codeChallenge: String,
     val codeChallengeMethod: String,
-) {
-    companion object {
-        fun from(pkce: Pkce) =
-            PkceResponse(
-                codeVerifier = pkce.codeVerifier.value,
-                codeChallenge = pkce.codeChallenge.challenge,
-                codeChallengeMethod = pkce.codeChallenge.method.name,
-            )
-    }
-}
+)

@@ -1,7 +1,7 @@
 plugins {
     `kotlin-dsl`
     id("maven-publish")
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
 repositories {
@@ -13,5 +13,5 @@ repositories {
 dependencies {
     implementation("com.android.tools.build:gradle:7.1.1")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.0.0")
+    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.3.0")
 }

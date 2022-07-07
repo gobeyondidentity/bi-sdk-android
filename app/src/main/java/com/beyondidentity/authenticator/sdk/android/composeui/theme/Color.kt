@@ -11,8 +11,6 @@ val BiSecondary = Color(0xFF2484FF)
 
 val BiGray300Light = Color(0xFFEEEEEE)
 
-
-
 ///// DARK ////////////
 val BiGray200Dark = Color(0xFF1c1c1c)
 val BiGray300Dark = Color(0xFF333333)

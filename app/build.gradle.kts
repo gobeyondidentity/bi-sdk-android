@@ -1,12 +1,13 @@
-import kotlin.collections.listOf
+@file:Suppress("SuspiciousCollectionReassignment")
+
+import checks.ktlintCheckConfigSampleApp
 import utils.getProp
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("org.jlleitschuh.gradle.ktlint")
 }
-
-val composeVersion = "1.2.0-alpha02"
 
 android {
     compileSdk = AndroidConfig.COMPILE_SDK_VERSION
@@ -28,15 +29,15 @@ android {
         manifestPlaceholders["embedded_app_scheme"] = getProp("BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME")
 
         listOf(
-                "BUILD_CONFIG_BI_DEMO_API_TOKEN",
-                "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID",
-                "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_SECRET",
-                "BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID",
-                "BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME",
-                "BUILD_CONFIG_BEYOND_IDENTITY_DEMO_TENANT",
-                "BUILD_CONFIG_AUTH_URL",
-                "BUILD_CONFIG_ACME_URL",
-                "BUILD_CONFIG_BI_SDK_VERSION"
+            "BUILD_CONFIG_BI_DEMO_API_TOKEN",
+            "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID",
+            "BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_SECRET",
+            "BUILD_CONFIG_BI_DEMO_PUBLIC_CLIENT_ID",
+            "BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME",
+            "BUILD_CONFIG_BEYOND_IDENTITY_DEMO_TENANT",
+            "BUILD_CONFIG_AUTH_URL",
+            "BUILD_CONFIG_ACME_URL",
+            "BUILD_CONFIG_BI_SDK_VERSION"
         ).forEach { key ->
             buildConfigField("String", key, "\"${getProp(key)}\"")
         }
@@ -53,12 +54,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_11)
-        targetCompatibility(JavaVersion.VERSION_11)
+        sourceCompatibility(AndroidConfig.JAVA_VERSION)
+        targetCompatibility(AndroidConfig.JAVA_VERSION)
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = AndroidConfig.JAVA_VERSION.toString()
+        freeCompilerArgs += listOf(
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        )
     }
 
     buildFeatures {
@@ -66,7 +71,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerVersion = Versions.KOTLIN
+        kotlinCompilerExtensionVersion = Versions.ANDROIDX_COMPOSE
     }
 
     packagingOptions {
@@ -98,39 +104,41 @@ android {
     }
 }
 
+ktlintCheckConfigSampleApp()
+
 dependencies {
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    debugImplementation(DebugLibs.ANDROIDX_COMPOSE_UI_TOOLING)
 
-    implementation(project(":authenticator"))
-    implementation(project(":embedded"))
-    implementation(project(":embedded-ui"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}")
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    implementation("androidx.activity:activity-compose:1.5.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    implementation(project(Modules.EMBEDDED))
+//    implementation(project(Modules.EMBEDDED_UI))
+    implementation(Libs.KOTLIN_STD_LIB)
+    implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
+    implementation(Libs.ANDROIDX_APPCOMPAT)
+    implementation(Libs.ANDROIDX_COMPOSE_MATERIAL)
+    implementation(Libs.ANDROIDX_COMPOSE_UI)
+    implementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING_PREVIEW)
+    implementation(Libs.ANDROIDX_CONSTRAINT_LAYOUT)
+    implementation(Libs.ANDROIDX_CORE_KTX)
+    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_COMPOSE)
+    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_KTX)
+    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_SAVEDSTATE)
+    implementation(Libs.MATERIAL)
 
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation(Libs.TIMBER)
 
-    //LifeCycle
-    implementation("androidx.lifecycle:lifecycle-common:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    //Retrofit
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
-    implementation("com.squareup.retrofit2:retrofit:2.7.1")
-    implementation("com.google.code.gson:gson:2.8.6")
-    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    // LifeCycle
+    implementation(Libs.ANDROIDX_LIFECYCLE_COMMON)
+    implementation(Libs.ANDROIDX_LIFECYCLE_RUNTIME_KTX)
 
-    //Coroutines
+    // Retrofit
+    implementation(Libs.GSON)
+    implementation(Libs.OKHTTP)
+    implementation(Libs.OKHTTP_LOGGING_INTERCEPTOR)
+    implementation(Libs.RETROFIT)
+    implementation(Libs.RETROFIT_CONVERTER_GSON)
+
+    // Coroutines
     implementation(Libs.KOTLINX_COROUTINES_ANDROID)
 
-    implementation("com.auth0.android:jwtdecode:2.0.0")
+    implementation(Libs.JWTDECODE)
 }

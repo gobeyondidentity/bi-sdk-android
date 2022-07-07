@@ -5,7 +5,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
@@ -25,26 +24,24 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import com.beyondidentity.authenticator.sdk.android.embedded.auth.EmbeddedAuthActivity
-import com.beyondidentity.authenticator.sdk.android.embedded.extend.ExtendCredentialActivity
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.Authenticate
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.CredentialRegistration
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.ExtendCredentials
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.ManageCredentials
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitDocsEvent
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitSupportEvent
-import com.beyondidentity.authenticator.sdk.android.embedded.managecred.ManageCredentialsActivity
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiAppBar
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiDivider
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiVersionText
 import com.beyondidentity.authenticator.sdk.android.composeui.components.InteractionResponseInputView
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
-import kotlinx.coroutines.flow.collect
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.AuthenticateEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindCredentialEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.CredentialRegistration
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.ManageCredentials
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitDocsEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitSupportEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.managecred.ManageCredentialsActivity
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class EmbeddedGetStartedActivity : ComponentActivity() {
+class EmbeddedGetStartedActivity : FragmentActivity() {
     private val viewModel: EmbeddedGetStartedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,29 +53,32 @@ class EmbeddedGetStartedActivity : ComponentActivity() {
                     Scaffold(topBar = {
                         BiAppBar()
                     }) {
-                        EmbeddedGetStartedScreen(viewModel)
+                        EmbeddedGetStartedScreen(this@EmbeddedGetStartedActivity, viewModel)
                     }
                 }
             }
         }
 
-        intent.data?.let { uri ->
-            Toast.makeText(this, "Registering Credential...", Toast.LENGTH_LONG).show()
-            viewModel.registerCredentialWithUrl(uri.toString())
-        }
-
         lifecycleScope.launch {
             viewModel.events.collect { event ->
                 when (event) {
-                    is VisitSupportEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
-                    is VisitDocsEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
-                    Authenticate,
-                    ExtendCredentials,
                     ManageCredentials -> launchActivity(event = event)
+                    is VisitDocsEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
+                    is VisitSupportEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
+                    is BindCredentialEvent -> bindCredentialMessage(event.result)
+                    is AuthenticateEvent -> authenticateMessage(event.result)
                     is CredentialRegistration -> credentialRegistrationMessage(event.result)
                 }
             }
         }
+    }
+
+    private fun bindCredentialMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun authenticateMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun credentialRegistrationMessage(message: String) {
@@ -87,8 +87,6 @@ class EmbeddedGetStartedActivity : ComponentActivity() {
 
     private fun launchActivity(event: EmbeddedGetStartedEvents) {
         when (event) {
-            Authenticate -> startActivity(Intent(this, EmbeddedAuthActivity::class.java))
-            ExtendCredentials -> startActivity(Intent(this, ExtendCredentialActivity::class.java))
             ManageCredentials -> startActivity(Intent(this, ManageCredentialsActivity::class.java))
             else -> Timber.d("noop")
         }
@@ -96,13 +94,19 @@ class EmbeddedGetStartedActivity : ComponentActivity() {
 }
 
 @Composable
-fun EmbeddedGetStartedScreen(viewModel: EmbeddedGetStartedViewModel) {
+fun EmbeddedGetStartedScreen(activity: FragmentActivity, viewModel: EmbeddedGetStartedViewModel) {
     EmbeddedGetStartedLayout(
         state = viewModel.state,
-        onRegistrationEmailTextChange = viewModel::onRegistrationEmailTextChange,
-        onRegisterUser = viewModel::onRegisterUser,
-        onRecoveryEmailTextChange = viewModel::onRecoverEmailTextChange,
-        onRecoverUser = viewModel::onRecoverUser,
+        onBindCredentialUrlTextChange = viewModel::onBindCredentialUrlTextChange,
+        onBindCredential = { viewModel.onBindCredential(viewModel.state.bindCredentialUrl) },
+        onAuthenticateUrlTextChange = viewModel::onAuthenticateUrlTextChange,
+        onAuthenticate = {
+            viewModel.onAuthenticate(activity, viewModel.state.authenticateUrl)
+        },
+        onUrlValidationBindCredentialUrlTextChange = viewModel::onUrlValidationBindCredentialUrlTextChange,
+        onValidateBindCredentialUrl = viewModel::onValidateBindCredentialUrl,
+        onUrlValidationAuthenticateUrlTextChange = viewModel::onUrlValidationAuthenticateUrlTextChange,
+        onValidateAuthenticateUrl = viewModel::onValidateAuthenticateUrl,
         onNavigate = viewModel::onGetStartedEvent,
     )
 }
@@ -111,10 +115,14 @@ fun EmbeddedGetStartedScreen(viewModel: EmbeddedGetStartedViewModel) {
 @Composable
 fun EmbeddedGetStartedLayout(
     state: EmbeddedGetStartedState,
-    onRegistrationEmailTextChange: (String) -> Unit,
-    onRegisterUser: () -> Unit,
-    onRecoveryEmailTextChange: (String) -> Unit,
-    onRecoverUser: () -> Unit,
+    onBindCredentialUrlTextChange: (String) -> Unit,
+    onBindCredential: () -> Unit,
+    onAuthenticateUrlTextChange: (String) -> Unit,
+    onAuthenticate: () -> Unit,
+    onUrlValidationBindCredentialUrlTextChange: (String) -> Unit,
+    onValidateBindCredentialUrl: () -> Unit,
+    onUrlValidationAuthenticateUrlTextChange: (String) -> Unit,
+    onValidateAuthenticateUrl: () -> Unit,
     onNavigate: (EmbeddedGetStartedEvents) -> Unit,
 ) {
     Column(
@@ -125,93 +133,86 @@ fun EmbeddedGetStartedLayout(
         Text(
             text = "Embedded SDK",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .padding(top = 24.dp, bottom = 8.dp)
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp)
         )
 
         BiVersionText()
 
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
+
         Text(
-            text = "Get Started",
+            text = "Bind Credential",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
-        )
-
-        Text(
-            text = "Register Credential".uppercase(),
-            style = MaterialTheme.typography.subtitle2,
-        )
-
-        InteractionResponseInputView(
-            description = "To get started with using our embedded SDK sample app, " +
-                    "enter your email below for directions to register an account and credential.",
-            inputValue = state.registerEmail,
-            onInputChanged = onRegistrationEmailTextChange,
-            buttonText = "Register Credential",
-            onSubmit = onRegisterUser,
-            submitResult = state.registerResult,
-        )
-
-        Text(
-            text = "Recover Credential".uppercase(),
-            style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.padding(top = 32.dp)
         )
 
         InteractionResponseInputView(
-            description = "If you have an account with a credential you can’t access anymore, " +
-                    "enter your email below for directions to recover your account and create a new credential." +
-                    "\n\nNote: If you recover an account, it will deactivate all existing credentials attached to the account.",
-            inputValue = state.recoverEmail,
-            onInputChanged = onRecoveryEmailTextChange,
-            buttonText = "Recover Account",
-            onSubmit = onRecoverUser,
-            submitResult = state.recoverResult,
-            modifier = Modifier.padding(bottom = 16.dp)
+            description = "Paste the Bind Credential URL you received in your email or generated through the API in order to bind a credential.",
+            inputValue = state.bindCredentialUrl,
+            inputHint = "Bind Credential URL",
+            onInputChanged = onBindCredentialUrlTextChange,
+            buttonText = "Bind Credential",
+            onSubmit = onBindCredential,
+            submitResult = state.bindCredentialResult,
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
 
         Text(
-            text = "SDK Functionality",
+            text = "Authenticate",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
+            modifier = Modifier.padding(top = 32.dp)
         )
 
-        Text(
-            text = "Explore the various functions available in embedded SDK.",
-            modifier = Modifier.padding(bottom = 16.dp)
+        InteractionResponseInputView(
+            description = "Authenticates against a credential bound to the device. If more than one credential is present, you must select a credential during authentication.",
+            inputValue = state.authenticateUrl,
+            inputHint = "Authenticate URL",
+            onInputChanged = onAuthenticateUrlTextChange,
+            buttonText = "Authenticate",
+            onSubmit = onAuthenticate,
+            submitResult = state.authenticateResult,
         )
 
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
+
         Text(
-            text = "Manage Credentials",
+            text = "Url Validation",
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.padding(top = 32.dp)
+        )
+
+        InteractionResponseInputView(
+            description = "Paste a Url here to validate if it's a bind credential url.",
+            inputValue = state.urlValidationBindCredentialUrl,
+            inputHint = "Bind Credential URL",
+            onInputChanged = onUrlValidationBindCredentialUrlTextChange,
+            buttonText = "Validate Url",
+            onSubmit = onValidateBindCredentialUrl,
+            submitResult = state.validateBindCredentialUrlResult,
+        )
+
+        InteractionResponseInputView(
+            description = "Paste a Url here to validate if it's an authenticate url.",
+            inputValue = state.urlValidationAuthenticateUrl,
+            inputHint = "Authenticate URL",
+            onInputChanged = onUrlValidationAuthenticateUrlTextChange,
+            buttonText = "Validate Url",
+            onSubmit = onValidateAuthenticateUrl,
+            submitResult = state.validateAuthenticateUrlResult,
+        )
+
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
+
+        Text(
+            text = "Credentials",
+            style = MaterialTheme.typography.subtitle1,
             modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp)
-                .fillMaxSize()
+                .padding(top = 32.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { onNavigate(ManageCredentials) })
-        )
-        BiDivider()
-        Text(
-            text = "Extend Credentials", modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp)
-                .fillMaxSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onNavigate(ExtendCredentials) })
-        )
-        BiDivider()
-        Text(
-            text = "Authenticate", modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp)
-                .fillMaxSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onNavigate(Authenticate) }
+                    onClick = { onNavigate(ManageCredentials) }
                 )
         )
 
@@ -239,9 +240,12 @@ fun EmbeddedGetStartedLayout(
                     onClick = { onNavigate(VisitDocsEvent(Uri.parse("https://developer.beyondidentity.com"))) }
                 )
         )
+
         BiDivider()
+
         Text(
-            text = "Visit Support", modifier = Modifier
+            text = "Visit Support",
+            modifier = Modifier
                 .padding(top = 16.dp, bottom = 16.dp)
                 .fillMaxSize()
                 .clickable(
@@ -263,7 +267,11 @@ fun EmbeddedGetStartedPreview() {
             {},
             {},
             {},
-            {}
+            {},
+            {},
+            {},
+            {},
+            {},
         )
     }
 }
@@ -278,7 +286,11 @@ fun EmbeddedGetStartedPreviewDark() {
             {},
             {},
             {},
-            {}
+            {},
+            {},
+            {},
+            {},
+            {},
         )
     }
 }

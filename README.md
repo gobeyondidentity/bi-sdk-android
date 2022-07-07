@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/238738/173244201-e403272c-fa59-4122-91a2-eba4614b8081.svg" width="300px">
+![beyond-identity-logo](https://user-images.githubusercontent.com/6578679/172954923-7a0c741a-8ee6-4ba3-a610-1b073f3eec59.png)
 
 # Beyond Identity Android SDKs
 
@@ -8,12 +8,6 @@
 
 The Embedded SDK is a holistic SDK solution offering the entire experience embedded in your product. Users will not need
 to download the Beyond Identity Authenticator.
-
-### [Authenticator](wiki/authenticator/getting_started)
-
-The Authenticator SDK is used in conjunction with the
-existing [Beyond Identity Authenticator](https://app.byndid.com/downloads) where most of the heavy lifting is handled in
-the Beyond Identity Authenticator and will need to be downloaded by your users.
 
 ## Installation
 
@@ -34,7 +28,7 @@ After the repository is added, we can specify the Beyond Identity dependencies.
 
 ```groovy
 dependencies {
-    implementation 'com.beyondidentity.android.sdk:[embedded|authenticator]:[version]'
+    implementation 'com.beyondidentity.android.sdk:[embedded|embedded-ui]:[version]'
 }
 ```
 

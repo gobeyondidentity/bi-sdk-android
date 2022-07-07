@@ -9,38 +9,10 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticatorSDKAndroid">
-        <activity
-            android:name=".embedded.extend.ExtendCredentialActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data
-                android:host="extend_credential"
-                android:scheme="${embedded_app_scheme}" />
-        </intent-filter>
-        </activity>
-        <activity
-            android:name=".embedded.auth.EmbeddedAuthActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="embedded_auth"
-                    android:scheme="${embedded_app_scheme}" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".embedded.managecred.ManageCredentialsActivity"
             android:exported="true">
@@ -73,8 +45,6 @@
                     android:scheme="${embedded_app_scheme}" />
             </intent-filter>
 
-            <!--Comment this intent-filter if you want to handle registration with the UI sdk example app-->
-            <!--And uncomment the intent-filter in the EmbeddedUISdkLoginActivity-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -87,11 +57,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".embedded.regandrecover.EmbeddedUIRegAndRecoverActivity"
-            android:exported="false"
-            android:label="Register and recover"
-            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar" />
-        <activity
             android:name=".SdkSelectorActivity"
             android:exported="true"
             android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar">
@@ -101,54 +66,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Embedded SDK -->
-        <activity
-            android:name=".embedded.EmbeddedUISdkLoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
-                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
-                <data
-                    android:host="host"
-                    android:path="/register-ui"
-                    android:scheme="${embedded_app_scheme}" />
-            </intent-filter>
-
-            <!--Uncomment this intent-filter if you want to handle registration with the UI sdk example app-->
-            <!--And comment the intent-filter in the EmbeddedGetStartedActivity-->
-            <!--<intent-filter>-->
-            <!--    <action android:name="android.intent.action.VIEW" />-->
-
-            <!--    <category android:name="android.intent.category.DEFAULT" />-->
-            <!--    <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--    &lt;!&ndash; Accepts URIs that begin with "my-app://home” &ndash;&gt;-->
-            <!--    &lt;!&ndash; !WARNING! Use verified app links (https://yourdomain) instead of deep links. &ndash;&gt;-->
-            <!--    &lt;!&ndash; Deep links with custom schemes like "my-app://home” can be intercepted by other apps &ndash;&gt;-->
-            <!--    <data android:scheme="${embedded_app_scheme}" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".authenticator.AuthenticatorSignInActivity" />
-        <activity android:name=".authenticator.AuthenticatorHomeActivity" />
-        <activity
-            android:name=".authenticator.AuthenticatorOauth2RedirectReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "my-app://home” -->
-                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
-                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
-                <data
-                    android:host="@string/authenticator_app_host"
-                    android:scheme="@string/authenticator_app_scheme" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

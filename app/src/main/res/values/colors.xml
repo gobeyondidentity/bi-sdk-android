@@ -8,4 +8,26 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#a6a6a6</color>
+
+    <!-- embedded-ui colors -->
+    <color name="white_static">#FFFFFF</color>
+
+    <color name="bi_sheet_background">#FFFFFF</color>
+    <color name="bi_sheet_shadow">#000000</color>
+
+    <color name="bi_button_background">#FFFFFF</color>
+    <color name="bi_button_border">#333333</color>
+
+    <color name="neutral_10">#FFFFFF</color>
+    <color name="neutral_30">#EEEEEE</color>
+    <color name="neutral_60">#767676</color>
+    <color name="neutral_70">#595959</color>
+    <color name="neutral_90">#333333</color>
+    <color name="neutral_100">#000000</color>
+
+    <color name="primary_main">#4673D3</color>
+
+    <color name="standard_link">#346EEE</color>
+
+    <color name="danger_main">#D32222</color>
 </resources>

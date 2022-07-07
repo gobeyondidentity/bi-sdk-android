@@ -5,15 +5,11 @@ import static com.beyondidentity.embedded.sdk.utils.JavaUtilsTestHelper.getResul
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.beyondidentity.embedded.sdk.models.PkceResponse;
-
 import org.junit.Test;
 
 import kotlin.Unit;
 
-
 public class JavaUtilsTest {
-
     @Test
     public void toJavaResult_Success() {
         getResultSuccess("Hello", result -> {
@@ -35,17 +31,6 @@ public class JavaUtilsTest {
 
             return Unit.INSTANCE;
         });
-
-        PkceResponse pkce = new PkceResponse("1", "2", "S256");
-        getResultSuccess(pkce, result -> {
-            JavaResult<PkceResponse> jr = JavaUtils.toJavaResult(result);
-
-            assertEquals(jr.getData(), pkce);
-            assertEquals(jr.getType(), JavaResult.SUCCESS);
-            assertNull(jr.getError());
-
-            return Unit.INSTANCE;
-        });
     }
 
     @Test
@@ -60,5 +45,4 @@ public class JavaUtilsTest {
             return Unit.INSTANCE;
         });
     }
-
 }

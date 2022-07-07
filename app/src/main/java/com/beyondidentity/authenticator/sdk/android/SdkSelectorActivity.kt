@@ -25,16 +25,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.beyondidentity.authenticator.sdk.android.authenticator.AuthenticatorSignInActivity
-import com.beyondidentity.authenticator.sdk.android.embedded.EmbeddedUISdkLoginActivity
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedActivity
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiAppBar
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiDivider
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiVersionText
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedActivity
 
-@ExperimentalCoroutinesApi
 class SdkSelectorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +48,6 @@ class SdkSelectorActivity : ComponentActivity() {
     }
 }
 
-@ExperimentalCoroutinesApi
 @Composable
 fun SdkSelectorLayout() {
     Column(
@@ -105,50 +100,6 @@ fun SdkSelectorLayout() {
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
         )
 
-        Text(
-            text = "Embedded UI SDK",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
-
-        Text(text = "The EmbeddedUI SDK provides view wrappers around the Embedded SDK functions.")
-        Button(
-            onClick = { context.startActivity(Intent(context, EmbeddedUISdkLoginActivity::class.java)) },
-            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "View Embedded UI SDK")
-        }
-
-        BiDivider(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-        )
-
-        Text(
-            text = "Authenticator SDK",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
-
-        Text(text = "Embed Passwordless Authentication into your Android app using the Beyond Identity Authenticator.")
-        Button(
-            onClick = {
-                context.startActivity(Intent(context, AuthenticatorSignInActivity::class.java))
-            },
-            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "View Authenticator SDK")
-        }
-
-        BiDivider(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-        )
-
         Image(
             painter = painterResource(id = R.drawable.ic_powered_by_bi),
             contentDescription = "",
@@ -159,7 +110,6 @@ fun SdkSelectorLayout() {
     }
 }
 
-@ExperimentalCoroutinesApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -168,7 +118,6 @@ fun DefaultPreview() {
     }
 }
 
-@ExperimentalCoroutinesApi
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun NightModePreview() {

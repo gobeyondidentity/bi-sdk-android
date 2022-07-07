@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BiTextBase">
+        <item name="android:fontFamily">@font/overpass</item>
+        <item name="android:textColor">@color/neutral_60</item>
+        <item name="fontWeight">400</item>
+    </style>
+
+    <!--    Text   -->
+    <style name="TextS" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_s</item>
+    </style>
+
+    <style name="TextM" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_m</item>
+    </style>
+
+    <style name="TextM.Bold" parent="TextM">
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="TextL" parent="BiTextBase">
+        <item name="android:textSize">@dimen/text_l</item>
+    </style>
+
+    <style name="TextL.Bold" parent="TextM">
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="HeadingS" parent="BiTextBase">
+        <item name="android:textSize">@dimen/heading_s</item>
+    </style>
+
+    <style name="HeadingS.Bold">
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="HeadingM" parent="BiTextBase">
+        <item name="android:textSize">@dimen/heading_m</item>
+    </style>
+
+    <!--    Buttons   -->
+    <style name="PrimaryButton" parent="TextM">
+        <item name="android:background">@drawable/primary_button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:textColor">@color/white_static</item>
+    </style>
+
+</resources>

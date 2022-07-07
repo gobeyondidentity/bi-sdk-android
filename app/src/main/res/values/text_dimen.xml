@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_xs">10sp</dimen>
+    <dimen name="text_s">12sp</dimen>
+    <dimen name="text_m">14sp</dimen>
+    <dimen name="text_l">16sp</dimen>
+    <dimen name="heading_s">18sp</dimen>
+    <dimen name="heading_m">20sp</dimen>
+
+    <dimen name="headline1">96sp</dimen>
+    <dimen name="headline2">60sp</dimen>
+    <dimen name="headline3">48sp</dimen>
+    <dimen name="headline4">34sp</dimen>
+    <dimen name="headline5">24sp</dimen>
+    <dimen name="headline6">20sp</dimen>
+    <dimen name="body_1">16sp</dimen>
+    <dimen name="body_2">14sp</dimen>
+    <dimen name="subtitle_1">16sp</dimen>
+    <dimen name="subtitle_2">14sp</dimen>
+    <dimen name="button">14sp</dimen>
+    <dimen name="caption">12sp</dimen>
+    <dimen name="overline">10sp</dimen>
+</resources>

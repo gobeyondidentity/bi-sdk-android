@@ -12,7 +12,7 @@ private val DarkColorPalette = darkColors(
     secondary = BiPrimaryMain,
     // surface = BiGray200Dark,
     // background = BiGray200Dark,
-    )
+)
 
 private val LightColorPalette = lightColors(
     primary = BiPrimaryMain,

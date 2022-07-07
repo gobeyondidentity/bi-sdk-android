@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Embedded SDK Example App</string>
     <string name="dev_env">Production</string>
-    <string name="authenticator_app_scheme">acme-app</string>
-    <string name="authenticator_app_host">oauth2redirect</string>
+    <string name="visit_support">Visit support</string>
+    <string name="add_to_this_device">Add to this device</string>
+    <string name="not_you">Not you?</string>
+    <string name="setup_new_account">Set up new account</string>
+    <string name="have_a_credential_elsewhere">Have a credential elsewhere?</string>
+    <string name="questions_or_issues">Questions or issues?</string>
+    <string name="select_account_title">Select Account</string>
 </resources>

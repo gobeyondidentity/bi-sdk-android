@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiAppBar
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiDivider
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiVersionText
+import com.beyondidentity.authenticator.sdk.android.composeui.components.InteractionResponseInputView
 import com.beyondidentity.authenticator.sdk.android.composeui.components.InteractionResultView
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
 
@@ -47,6 +48,8 @@ fun ManageCredentialsScreen(viewModel: ManageCredentialsViewModel) {
     ManageCredentialsLayout(
         viewModel.state.getCredentialResult,
         viewModel::onGetCredentials,
+        viewModel.state.deleteCredential,
+        viewModel::onDeleteCredentialTextChange,
         viewModel.state.deleteCredentialResult,
         viewModel::onDeleteCredentials,
     )
@@ -56,6 +59,8 @@ fun ManageCredentialsScreen(viewModel: ManageCredentialsViewModel) {
 fun ManageCredentialsLayout(
     getCredentialResult: String,
     onGetCredential: () -> Unit,
+    deleteCredential: String,
+    onDeleteCredentialTextChange: (String) -> Unit,
     deleteCredentialResult: String,
     onDeleteCredential: () -> Unit,
 ) {
@@ -80,8 +85,8 @@ fun ManageCredentialsLayout(
         )
 
         InteractionResultView(
-            descriptionText = "View details of your credential, such as date created, root " +
-                    "fingerprint, chain length, and information related to your device.",
+            descriptionText = "View details of your Credential, such as date created, " +
+                    "identity and other information related to your device.",
             buttonText = "View Credential",
             onButtonClicked = onGetCredential,
             resultText = getCredentialResult,
@@ -97,12 +102,14 @@ fun ManageCredentialsLayout(
             modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
-        InteractionResultView(
-            descriptionText = "Delete your credential on your device.",
+        InteractionResponseInputView(
+            description = "Delete your credential on your device.",
+            inputValue = deleteCredential,
+            inputHint = "Credential ID",
+            onInputChanged = onDeleteCredentialTextChange,
             buttonText = "Delete Credential",
-            onButtonClicked = onDeleteCredential,
-            resultText = deleteCredentialResult,
+            onSubmit = onDeleteCredential,
+            submitResult = deleteCredentialResult,
         )
     }
 }
-
