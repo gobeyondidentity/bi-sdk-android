@@ -26,6 +26,10 @@ android {
             useSupportLibrary = true
         }
 
+        manifestPlaceholders["acme_app_scheme"] = "acme"
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.okta.dev-43409302"
+        manifestPlaceholders["auth0Domain"] = "dev-pt10fbkg.us.auth0.com"
+        manifestPlaceholders["auth0Scheme"] = "acme"
         manifestPlaceholders["embedded_app_scheme"] = getProp("BUILD_CONFIG_BEYOND_IDENTITY_SDK_SAMPLEAPP_SCHEME")
 
         listOf(
@@ -62,7 +66,6 @@ android {
         jvmTarget = AndroidConfig.JAVA_VERSION.toString()
         freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
         )
     }
 
@@ -78,6 +81,7 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/okta/version.properties"
         }
     }
 
@@ -119,26 +123,32 @@ dependencies {
     implementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING_PREVIEW)
     implementation(Libs.ANDROIDX_CONSTRAINT_LAYOUT)
     implementation(Libs.ANDROIDX_CORE_KTX)
+    implementation(Libs.ANDROIDX_LIFECYCLE_COMMON)
+    implementation(Libs.ANDROIDX_LIFECYCLE_RUNTIME_KTX)
     implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_COMPOSE)
     implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_KTX)
     implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_SAVEDSTATE)
     implementation(Libs.MATERIAL)
 
+    implementation(Libs.JWTDECODE)
     implementation(Libs.TIMBER)
 
-    // LifeCycle
-    implementation(Libs.ANDROIDX_LIFECYCLE_COMMON)
-    implementation(Libs.ANDROIDX_LIFECYCLE_RUNTIME_KTX)
+    // Auth0
+    implementation(Libs.AUTH0)
 
-    // Retrofit
+    // Coroutines
+    implementation(Libs.KOTLINX_COROUTINES_ANDROID)
+
+    // Okta
+    implementation(Libs.OKTA_IDX_JAVA_API)
+    implementation(Libs.OKTA_JWT_VERIFIER)
+    implementation(Libs.OKTA_JWT_VERIFIER_IMPL)
+    implementation(Libs.OKTA_OIDC_ANDROID)
+
+    // Square
     implementation(Libs.GSON)
     implementation(Libs.OKHTTP)
     implementation(Libs.OKHTTP_LOGGING_INTERCEPTOR)
     implementation(Libs.RETROFIT)
     implementation(Libs.RETROFIT_CONVERTER_GSON)
-
-    // Coroutines
-    implementation(Libs.KOTLINX_COROUTINES_ANDROID)
-
-    implementation(Libs.JWTDECODE)
 }

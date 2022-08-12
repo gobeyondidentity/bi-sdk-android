@@ -1,74 +1,83 @@
 package com.beyondidentity.authenticator.sdk.android.utils
 
-import com.beyondidentity.authenticator.sdk.android.BuildConfig
 import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-data class CreateUserRequest(
-    @SerializedName("binding_token_delivery_method")
-    val bindingTokenDeliveryMethod: String,
-    @SerializedName("external_id")
-    val externalId: String,
+data class CredentialBindingLinkRequest(
+    @SerializedName("username")
+    val username: String,
+    @SerializedName("authenticator_type")
+    val authenticatorType: String = "native",
+    @SerializedName("delivery_method")
+    val deliveryMethod: String = "return",
     @SerializedName("email")
-    val email: String,
-    @SerializedName("user_name")
-    val userName: String,
-    @SerializedName("display_name")
-    val displayName: String,
+    val email: String? = null,
 )
 
-data class RecoverUserRequest(
-    @SerializedName("binding_token_delivery_method")
-    val bindingTokenDeliveryMethod: String,
-    @SerializedName("external_id")
-    val externalId: String,
+data class RecoverCredentialBindingLinkRequest(
+    @SerializedName("username")
+    val username: String,
+    @SerializedName("authenticator_type")
+    val authenticatorType: String = "native",
+    @SerializedName("delivery_method")
+    val deliveryMethod: String = "return",
 )
 
-data class UserResponse(
-    val user: User,
-    val error: String,
+data class CredentialBindingResponse(
+    @SerializedName("credential_binding_job")
+    val credentialBindingJob: CredentialBindingJob?,
+    @SerializedName("credential_binding_link")
+    val credentialBindingLink: String?,
 )
-data class User(
-    @SerializedName("internal_id")
-    val internalId: String,
-    @SerializedName("external_id")
-    val externalId: String,
-    @SerializedName("email")
-    val email: String,
-    @SerializedName("user_name")
-    val userName: String,
-    @SerializedName("display_name")
-    val displayName: String,
-    @SerializedName("date_created")
-    val dateCreated: String,
-    @SerializedName("date_modified")
-    val dateModified: String,
-    @SerializedName("status")
-    val status: String,
+
+data class CredentialBindingJob(
+    @SerializedName("authenticator_config_id")
+    val authenticatorConfigId: String,
+    @SerializedName("create_time")
+    val createTime: String,
+    @SerializedName("delivery_method")
+    val deliveryMethod: String,
+    @SerializedName("expire_time")
+    val expireTime: String,
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("identity_id")
+    val identityId: String,
+    @SerializedName("post_binding_redirect_uri")
+    val postBindingRedirectUri: String,
+    @SerializedName("realm_id")
+    val realmId: String,
+    @SerializedName("state")
+    val state: String,
+    @SerializedName("tenant_id")
+    val tenantId: String,
+    @SerializedName("update_time")
+    val updateTime: String,
 )
 
 interface AcmeApiService {
-    @POST("users")
-    suspend fun createUser(@Body createUserRequest: CreateUserRequest): UserResponse
+    @POST("credential-binding-link")
+    suspend fun credentialBindingLink(@Body credentialBindingLinkRequest: CredentialBindingLinkRequest): Response<CredentialBindingResponse>
 
-    @POST("recover-user")
-    suspend fun recoverUser(@Body recoverUserRequest: RecoverUserRequest): UserResponse
+    @POST("recover-credential-binding-link")
+    suspend fun recoverCredentialBindingLink(@Body recoverCredentialBindingLinkRequest: RecoverCredentialBindingLinkRequest): Response<CredentialBindingResponse>
 }
 
 object RetrofitBuilder {
     private fun getAcmeRetrofit() = Retrofit.Builder()
-        .baseUrl(BuildConfig.BUILD_CONFIG_ACME_URL)
+        .baseUrl("https://acme-cloud.byndid.com")
         .addConverterFactory(GsonConverterFactory.create())
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
-                .build()
+                .build(),
         )
         .build()
 

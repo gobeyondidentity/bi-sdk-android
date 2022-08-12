@@ -14,22 +14,60 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AuthenticatorSDKAndroid">
         <activity
-            android:name=".embedded.managecred.ManageCredentialsActivity"
-            android:exported="true">
+            android:name=".embedded.authenticate.EmbeddedAuthenticateActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid">
+            <!-- Beyond Identity -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
+                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data
-                    android:host="manage_credentials"
-                    android:scheme="${embedded_app_scheme}" />
+                    android:path="/bi-authenticate"
+                    android:scheme="${acme_app_scheme}" />
+            </intent-filter>
+            <!-- Auth0 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
+                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
+                <data
+                    android:host="auth0"
+                    android:scheme="${acme_app_scheme}" />
+            </intent-filter>
+            <!-- Okta -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
+                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
+                <!--android:path="/callback"-->
+                <data
+                    android:host="okta"
+                    android:scheme="${acme_app_scheme}" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".embedded.customtab.EmbeddedCustomTabActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid" />
+        <activity
             android:name=".embedded.getstarted.EmbeddedGetStartedActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AuthenticatorSDKAndroid">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -56,6 +94,34 @@
                 <data android:scheme="${embedded_app_scheme}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".embedded.managecredentials.ManageCredentialsActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "my-app://home” -->
+                <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
+                <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
+                <data
+                    android:host="manage_credentials"
+                    android:scheme="${embedded_app_scheme}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".embedded.urlvalidation.EmbeddedUrlValidationActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid" />
+        <activity
+            android:name=".embedded.webview.EmbeddedWebViewActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AuthenticatorSDKAndroid" />
         <activity
             android:name=".SdkSelectorActivity"
             android:exported="true"

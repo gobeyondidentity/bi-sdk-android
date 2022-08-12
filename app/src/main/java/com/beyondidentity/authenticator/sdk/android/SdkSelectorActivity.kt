@@ -1,6 +1,7 @@
 package com.beyondidentity.authenticator.sdk.android
 
 import android.content.Intent
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,8 +36,10 @@ import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.Embedded
 class SdkSelectorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             BiSdkAndroidTheme {
+                // A surface container using the 'background' color from the theme
                 Surface {
                     Scaffold(topBar = {
                         BiAppBar()
@@ -84,6 +88,7 @@ fun SdkSelectorLayout() {
                     "embedded in your product. Users will not need to download the Beyond Identity Authenticator. " +
                     "A set of functions are provided to you through the EmbeddedSdk singleton. This SDK supports OIDC and OAuth2."
         )
+
         Button(
             onClick = {
                 context.startActivity(Intent(context, EmbeddedGetStartedActivity::class.java))
@@ -92,13 +97,12 @@ fun SdkSelectorLayout() {
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()
+                .testTag("View Embedded SDK")
         ) {
             Text(text = "View Embedded SDK")
         }
 
-        BiDivider(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-        )
+        BiDivider(modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))
 
         Image(
             painter = painterResource(id = R.drawable.ic_powered_by_bi),
@@ -110,16 +114,16 @@ fun SdkSelectorLayout() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
 fun DefaultPreview() {
     BiSdkAndroidTheme {
         SdkSelectorLayout()
     }
 }
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 fun NightModePreview() {
     BiSdkAndroidTheme {
         SdkSelectorLayout()

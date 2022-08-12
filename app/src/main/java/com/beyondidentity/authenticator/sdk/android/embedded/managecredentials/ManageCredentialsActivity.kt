@@ -1,4 +1,4 @@
-package com.beyondidentity.authenticator.sdk.android.embedded.managecred
+package com.beyondidentity.authenticator.sdk.android.embedded.managecredentials
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,6 +28,7 @@ class ManageCredentialsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             BiSdkAndroidTheme {
                 // A surface container using the 'background' color from the theme
@@ -66,14 +67,13 @@ fun ManageCredentialsLayout(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp)
             .verticalScroll(rememberScrollState())
+            .padding(start = 24.dp, end = 24.dp),
     ) {
         Text(
             text = "Credential Management",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .padding(top = 24.dp, bottom = 8.dp)
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
         )
 
         BiVersionText()
@@ -81,33 +81,34 @@ fun ManageCredentialsLayout(
         Text(
             text = "View Credential",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
         )
 
         InteractionResultView(
             descriptionText = "View details of your Credential, such as date created, " +
                     "identity and other information related to your device.",
             buttonText = "View Credential",
+            testTag = "View Credential",
             onButtonClicked = onGetCredential,
             resultText = getCredentialResult,
         )
 
-        BiDivider(
-            modifier = Modifier.padding(top = 32.dp)
-        )
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
 
         Text(
             text = "Delete Credential",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
         )
 
         InteractionResponseInputView(
             description = "Delete your credential on your device.",
             inputValue = deleteCredential,
             inputHint = "Credential ID",
+            inputTestTag = "Delete Credential Input",
             onInputChanged = onDeleteCredentialTextChange,
             buttonText = "Delete Credential",
+            testTag = "Delete Credential",
             onSubmit = onDeleteCredential,
             submitResult = deleteCredentialResult,
         )

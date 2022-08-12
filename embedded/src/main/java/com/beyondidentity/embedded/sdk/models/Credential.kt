@@ -1,6 +1,7 @@
 package com.beyondidentity.embedded.sdk.models
 
 import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
+import java.lang.Exception
 
 /**
  * Represent User's credential, wrapper for X.509 Certificate
@@ -111,15 +112,6 @@ enum class CredentialState {
         override fun toString(): String {
             return "revoked"
         }
-    },
-
-    /**
-     * Unable to determine the state of the credential
-     */
-    UNKNOWN {
-        override fun toString(): String {
-            return "unknown"
-        }
     };
 
     companion object {
@@ -127,7 +119,7 @@ enum class CredentialState {
             when (state.lowercase()) {
                 "active" -> ACTIVE
                 "revoked" -> REVOKED
-                else -> UNKNOWN
+                else -> throw Exception("Cannot initialize CredentialState from invalid String value $state")
             }
     }
 }

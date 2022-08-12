@@ -1,4 +1,4 @@
-package com.beyondidentity.authenticator.sdk.android.embedded.managecred
+package com.beyondidentity.authenticator.sdk.android.embedded.managecredentials
 
 data class ManageCredentialState(
     val getCredentialResult: String = "",

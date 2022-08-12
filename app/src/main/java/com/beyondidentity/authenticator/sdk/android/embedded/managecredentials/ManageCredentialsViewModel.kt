@@ -1,4 +1,4 @@
-package com.beyondidentity.authenticator.sdk.android.embedded.managecred
+package com.beyondidentity.authenticator.sdk.android.embedded.managecredentials
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

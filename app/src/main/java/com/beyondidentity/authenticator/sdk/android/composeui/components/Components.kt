@@ -3,14 +3,18 @@ package com.beyondidentity.authenticator.sdk.android.composeui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,28 +56,29 @@ import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiGray300
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiPrimaryMain
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
 
-@Preview
 @Composable
+@Preview(showBackground = true)
 fun BiAppBar() {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.BiAppBarColor
+        backgroundColor = MaterialTheme.colors.BiAppBarColor,
     ) {
         Icon(
             painter = painterResource(id = drawable.ic_toolbar_bi_icon),
             contentDescription = null,
             tint = BiPrimaryMain,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
 
 @Composable
-fun BiButton(title: String, onButtonClicked: () -> Unit) {
+fun BiButton(title: String, testTag: String, onButtonClicked: () -> Unit) {
     OutlinedButton(
         onClick = onButtonClicked,
-        contentPadding = PaddingValues(start = 16.dp, top = 13.dp, bottom = 13.dp, end = 16.dp),
+        modifier = Modifier.testTag(testTag),
+        shape = RoundedCornerShape(4.dp),
         border = BorderStroke(1.dp, Color.Gray),
-        shape = RoundedCornerShape(4.dp)
+        contentPadding = PaddingValues(start = 16.dp, top = 13.dp, bottom = 13.dp, end = 16.dp),
     ) {
         Row {
             Text(text = title, color = Color.Black, fontWeight = FontWeight.Light, fontSize = 14.sp)
@@ -82,14 +88,62 @@ fun BiButton(title: String, onButtonClicked: () -> Unit) {
             Image(
                 painter = painterResource(id = drawable.outline_chevron_right_24),
                 colorFilter = ColorFilter.tint(Color.Black),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@Preview(showBackground = true)
+fun PreviewBiButton() {
+    BiSdkAndroidTheme {
+        BiButton(
+            title = "title of user input",
+            testTag = "TestTag",
+            onButtonClicked = { },
+        )
+    }
+}
+
+@Composable
+fun BiTextWithChevron(text: String, testTag: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClick() })
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp)
+            .testTag(testTag),
+    ) {
+        Text(text = text)
+
+        Spacer(modifier = Modifier.weight(fill = true, weight = .5F))
+
+        Image(
+            painter = painterResource(id = drawable.outline_chevron_right_24),
+            colorFilter = ColorFilter.tint(Color.Black),
+            contentDescription = "",
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewBiTextWithChevron() {
+    BiSdkAndroidTheme {
+        BiTextWithChevron(
+            text = "Text",
+            testTag = "TestTag",
+            onClick = { },
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
 fun BiVersionText(modifier: Modifier = Modifier) {
     Text(
         text = "SDK Version: ${BuildConfig.BUILD_CONFIG_BI_SDK_VERSION}\nEnvironment: ${stringResource(id = R.string.dev_env)}",
@@ -108,6 +162,7 @@ fun InteractionResultView(
     modifier: Modifier = Modifier,
     descriptionText: String,
     buttonText: String,
+    testTag: String,
     onButtonClicked: () -> Unit,
     resultText: String,
 ) {
@@ -118,8 +173,9 @@ fun InteractionResultView(
             onClick = onButtonClicked,
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             modifier = Modifier
-                .padding(top = 8.dp)
                 .fillMaxWidth()
+                .padding(top = 8.dp)
+                .testTag(testTag),
         ) {
             Text(text = buttonText)
         }
@@ -128,13 +184,14 @@ fun InteractionResultView(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@Preview(showBackground = true)
 fun PreviewInteractionResultView() {
     BiSdkAndroidTheme {
         InteractionResultView(
             descriptionText = "title of user input",
-            buttonText = "user@email.com",
+            buttonText = "submit text",
+            testTag = "testTag",
             onButtonClicked = { },
             resultText = "result text",
         )
@@ -150,26 +207,25 @@ fun ResponseDataView(
     if (data.isNotEmpty()) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
                 .background(color = MaterialTheme.colors.BiGray300)
+                .fillMaxWidth()
                 .then(modifier),
         ) {
             Column(
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxWidth()
                     .horizontalScroll(scrollState)
+                    .padding(8.dp),
             ) {
                 Text(
                     text = "Response Data",
-                    style = MaterialTheme.typography.subtitle2
+                    style = MaterialTheme.typography.subtitle2,
                 )
 
                 SelectionContainer {
                     Text(
                         text = data,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
@@ -177,15 +233,17 @@ fun ResponseDataView(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
+@OptIn(ExperimentalComposeUiApi::class)
 fun InteractionResponseInputView(
     modifier: Modifier = Modifier,
     description: String,
     inputValue: String,
-    inputHint: String = "Email address",
+    inputHint: String,
+    inputTestTag: String,
     onInputChanged: (String) -> Unit,
     buttonText: String,
+    testTag: String,
     onSubmit: () -> Unit,
     submitResult: String,
 ) {
@@ -196,19 +254,20 @@ fun InteractionResponseInputView(
     Column(modifier = modifier) {
         Text(
             text = description,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
         )
 
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .testTag(inputTestTag),
             value = inputValue,
             onValueChange = onInputChanged,
             label = {
                 Text(
                     text = inputHint,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.body1,
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -229,30 +288,106 @@ fun InteractionResponseInputView(
             },
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             modifier = Modifier
-                .padding(top = 8.dp)
                 .fillMaxWidth()
+                .padding(top = 8.dp)
+                .testTag(testTag),
         ) {
             Text(text = buttonText)
         }
 
         ResponseDataView(
             data = submitResult,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
         )
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@Preview(showBackground = true)
 fun PreviewInteractionResponseInputView() {
     BiSdkAndroidTheme {
         InteractionResponseInputView(
             description = "title of user input",
             inputValue = "user@email.com",
+            inputHint = "Email address",
+            inputTestTag = "testTag",
             onInputChanged = { },
             buttonText = "submit text",
+            testTag = "testTag",
             onSubmit = { },
             submitResult = "result",
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalComposeUiApi::class)
+fun ResponseInputView(
+    modifier: Modifier = Modifier,
+    description: String,
+    buttonText: String,
+    testTag: String,
+    onSubmit: () -> Unit,
+    submitResult: String,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = description,
+            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+        )
+
+        Button(
+            onClick = { onSubmit() },
+            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .testTag(testTag),
+        ) {
+            Text(text = buttonText)
+        }
+
+        ResponseDataView(
+            data = submitResult,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewResponseInputView() {
+    BiSdkAndroidTheme {
+        ResponseInputView(
+            description = "title of user input",
+            buttonText = "submit text",
+            testTag = "testTag",
+            onSubmit = { },
+            submitResult = "result",
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun Spacer16() {
+    BiSdkAndroidTheme {
+        Spacer(
+            Modifier
+                .height(16.dp)
+                .width(16.dp),
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun Spacer32() {
+    BiSdkAndroidTheme {
+        Spacer(
+            Modifier
+                .height(32.dp)
+                .width(32.dp),
         )
     }
 }

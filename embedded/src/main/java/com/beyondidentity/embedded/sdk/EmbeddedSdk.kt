@@ -10,6 +10,7 @@ import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
 import com.beyondidentity.authenticator.sdk.embedded.R
 import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
+import com.beyondidentity.embedded.sdk.models.BindCredentialResponse
 import com.beyondidentity.embedded.sdk.models.Credential
 import com.beyondidentity.embedded.sdk.models.CredentialID
 import com.beyondidentity.embedded.sdk.models.OnSelectCredential
@@ -60,6 +61,7 @@ object EmbeddedSdk {
     private lateinit var biometricAskPrompt: String
     private var logger: ((String) -> Unit)? = null
     private var keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)? = null
+    private var hasInitalizedCore = false
 
     private val executor = Executors.newFixedThreadPool(3)
 
@@ -136,6 +138,8 @@ object EmbeddedSdk {
     /**
      * Initialize and configure the Beyond Identity Embedded SDK.
      *
+     * @param allowedDomains Optional array of domains that we whitelist against for network operations.
+     * This will default to Beyond Identity's allowed domains.
      * @param app [Application]
      * @param biometricAskPrompt A prompt the user will see when asked for biometrics while extending a credential to another device.
      * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
@@ -148,12 +152,16 @@ object EmbeddedSdk {
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
         logger: (String) -> Unit,
         biometricAskPrompt: String = app.getString(R.string.embedded_export_biometric_prompt_title),
-        allowedDomains: List<String>? = listOf("beyondidentity.com"),
+        allowedDomains: List<String>? = null,
     ) {
         this.app = app
         this.keyguardPrompt = keyguardPrompt
         this.logger = logger
         this.biometricAskPrompt = biometricAskPrompt
+
+        if (hasInitalizedCore) {
+            return
+        }
 
         BiSdk.init(
             app = app,
@@ -167,7 +175,7 @@ object EmbeddedSdk {
                 }
             },
             authenticationPrompt = { true },
-            selectCredentialPrompt = { credentials -> null },
+            selectCredentialPrompt = { null },
             selectAuthNCredentialPrompt = { credentials ->
                 runBlocking {
                     launch(Dispatchers.Main) {
@@ -213,7 +221,8 @@ object EmbeddedSdk {
             locale = null,
         )
 
-        dbMigrate(allowedDomains = allowedDomains)
+        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains)
+        this.hasInitalizedCore = true
     }
 
     private fun newDBDirectory(fileName: String): String {
@@ -229,7 +238,7 @@ object EmbeddedSdk {
     }
 
     @Throws(DatabaseSetupException::class)
-    private fun dbMigrate(allowedDomains: List<String>?) {
+    private fun dbMigrate(allowedDomains: List<String>) {
         logger?.invoke("Running DB migration")
         BiSdk.migrateDb(
             allowedDomains = allowedDomains,
@@ -254,12 +263,12 @@ object EmbeddedSdk {
      * Bind a credential to this device.
      *
      * @param url URL used to bind a credential to this device
-     * @param callback [Result] of [Credential] or [Throwable]
+     * @param callback [Result] of [BindCredentialResponse] or [Throwable]
      */
     @JvmStatic
     fun bindCredential(
         url: String,
-        callback: (Result<Credential>) -> Unit,
+        callback: (Result<BindCredentialResponse>) -> Unit,
     ) {
         executor.execute {
             if (!isBindCredentialUrl(url)) {
@@ -272,7 +281,7 @@ object EmbeddedSdk {
                 ) { bindCredentialResult ->
                     when (bindCredentialResult) {
                         is CoreSuccess -> postMain {
-                            callback(Result.success(Credential.from(bindCredentialResult.value.credential)))
+                            callback(Result.success(BindCredentialResponse.from(bindCredentialResult.value)))
                         }
                         is CoreFailure -> postMain {
                             callback(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
@@ -287,12 +296,12 @@ object EmbeddedSdk {
      * Bind a credential to this device.
      *
      * @param url URL used to bind a credential to this device
-     * @return [Flow] with [Result] of [Credential] or [Throwable]
+     * @return [Flow] with [Result] of [BindCredentialResponse] or [Throwable]
      */
     fun bindCredential(
         url: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<Credential>> {
+    ) = callbackFlow<Result<BindCredentialResponse>> {
         if (!isBindCredentialUrl(url)) {
             trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
             awaitClose()
@@ -304,7 +313,7 @@ object EmbeddedSdk {
             ) { bindCredentialResult ->
                 when (bindCredentialResult) {
                     is CoreSuccess ->
-                        trySendBlocking(Result.success(Credential.from(bindCredentialResult.value.credential)))
+                        trySendBlocking(Result.success(BindCredentialResponse.from(bindCredentialResult.value)))
                     is CoreFailure ->
                         trySendBlocking(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
                 }

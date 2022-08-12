@@ -31,7 +31,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         jvmTarget = AndroidConfig.JAVA_VERSION.toString()
         freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
         )
     }
 }

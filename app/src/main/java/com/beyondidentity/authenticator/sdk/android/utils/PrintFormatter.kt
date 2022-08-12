@@ -1,16 +1,16 @@
 package com.beyondidentity.authenticator.sdk.android.utils
 
-fun Any?.toIndentString(): String {
+fun Any?.toIndentString(includeSpace: Boolean = false): String {
     val notFancy = toString()
     return buildString(notFancy.length) {
         var indent = 0
         fun StringBuilder.line() {
-            appendln()
+            appendLine()
             repeat(2 * indent) { append(' ') }
         }
 
         for (char in notFancy) {
-            if (char == ' ') continue
+            if (char == ' ' && !includeSpace) continue
 
             when (char) {
                 ')', ']' -> {
