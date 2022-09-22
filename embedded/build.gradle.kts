@@ -46,7 +46,7 @@ val biSdkVersion = getProp("BUILD_CONFIG_BI_SDK_VERSION")
 
 dependencies {
     implementation(Libs.ANDROIDX_BIOMETRIC)
-    implementation(Libs.ANDROIDX_PREFERENCES_KTX)
+    implementation(Libs.ANDROIDX_PREFERENCE_KTX)
     implementation(Libs.KOTLINX_COROUTINES_ANDROID)
     implementation(Libs.KOTLINX_SERIALIZATION_JSON)
     implementation(Libs.KOTLIN_REFLECTION)

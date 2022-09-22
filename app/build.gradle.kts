@@ -47,6 +47,10 @@ android {
         }
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -62,6 +66,11 @@ android {
         targetCompatibility(AndroidConfig.JAVA_VERSION)
     }
 
+    composeOptions {
+        kotlinCompilerVersion = Versions.KOTLIN
+        kotlinCompilerExtensionVersion = Versions.ANDROIDX_COMPOSE
+    }
+
     kotlinOptions {
         jvmTarget = AndroidConfig.JAVA_VERSION.toString()
         freeCompilerArgs += listOf(
@@ -69,13 +78,9 @@ android {
         )
     }
 
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerVersion = Versions.KOTLIN
-        kotlinCompilerExtensionVersion = Versions.ANDROIDX_COMPOSE
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     packagingOptions {
@@ -83,11 +88,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/okta/version.properties"
         }
-    }
-
-    lint {
-        checkReleaseBuilds = false
-        abortOnError = false
     }
 
     flavorDimensions += "default"
@@ -106,11 +106,27 @@ android {
         }
         create("production") {}
     }
+
+    sourceSets {
+        getByName("androidTest") {
+            java.srcDir("src/androidTest/kotlin")
+        }
+        getByName("main") {
+            java.srcDir("src/main/kotlin")
+        }
+        getByName("test") {
+            java.srcDir("src/test/kotlin")
+        }
+    }
 }
 
 ktlintCheckConfigSampleApp()
 
 dependencies {
+    // Android Test Dependencies
+    androidTestImplementation(AndroidTestLibs.ANDROIDX_COMPOSE_UI_TEST_JUNIT4)
+    androidTestImplementation(AndroidTestLibs.JUNIT)
+    debugImplementation(DebugLibs.ANDROIDX_COMPOSE_UI_TEST_MANIFEST)
     debugImplementation(DebugLibs.ANDROIDX_COMPOSE_UI_TOOLING)
 
     implementation(project(Modules.EMBEDDED))

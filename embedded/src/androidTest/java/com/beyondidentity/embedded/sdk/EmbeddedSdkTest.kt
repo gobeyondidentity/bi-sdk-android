@@ -5,8 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
 import com.beyondidentity.embedded.sdk.models.BindCredentialResponse
 import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.MockOnSelectCredential
-import com.beyondidentity.embedded.sdk.models.OnSelectCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
@@ -66,9 +64,9 @@ class EmbeddedSdkTest {
     //region Authenticate
     private suspend fun authenticate(
         url: String,
-        onSelectCredential: OnSelectCredential,
+        credentialId: String,
     ): Result<AuthenticateResponse> = suspendCoroutine { cont ->
-        EmbeddedSdk.authenticate(url, onSelectCredential) { cont.resume(it) }
+        EmbeddedSdk.authenticate(url, credentialId) { cont.resume(it) }
     }
 
     /**
@@ -79,7 +77,7 @@ class EmbeddedSdkTest {
     fun authenticate_callback_failure() = runTest {
         Timber.d("~~~ authenticate_callback_failure ~~~")
 
-        val result = authenticate(TEST_AUTHENTICATE_URL, MockOnSelectCredential.mock)
+        val result = authenticate(TEST_AUTHENTICATE_URL, TEST_CREDENTIAL_ID)
         assertTrue(result.isFailure)
     }
     //endregion Authenticate

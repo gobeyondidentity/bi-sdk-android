@@ -3,6 +3,7 @@ package com.beyondidentity.embedded.sdk.models
 import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
 import com.beyondidentity.sdk.android.bicore.models.Identity
 import com.beyondidentity.sdk.android.bicore.models.Realm
+import com.beyondidentity.sdk.android.bicore.models.Tenant
 import com.beyondidentity.sdk.android.bicore.models.Theme
 import org.junit.Test
 import java.lang.Exception
@@ -34,12 +35,16 @@ class BindCredentialResponseTest {
             "2022-06-15T12:00:00"
         val UPDATED =
             "2022-06-15T12:00:00"
+        val TENANT_DISPLAY_NAME =
+            "Beyond Identity"
         val REALM_DISPLAY_NAME =
             "Beyond Identity"
         val IDENTITY_DISPLAY_NAME =
             "Beyond Identity"
         val IDENTITY_USERNAME =
             "Beyond Identity"
+        val IDENTITY_PRIMARY_EMAIL_ADDRESS =
+            "foo.bar@beyondidentity.com"
         val THEME_LOGO_URL_LIGHT =
             "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
         val THEME_LOGO_URL_DARK =
@@ -62,12 +67,16 @@ class BindCredentialResponseTest {
                 state = STATE,
                 created = CREATED,
                 updated = UPDATED,
+                tenant = Tenant(
+                    displayName = TENANT_DISPLAY_NAME,
+                ),
                 realm = Realm(
                     displayName = REALM_DISPLAY_NAME,
                 ),
                 identity = Identity(
                     displayName = IDENTITY_DISPLAY_NAME,
                     username = IDENTITY_USERNAME,
+                    primaryEmailAddress = IDENTITY_PRIMARY_EMAIL_ADDRESS,
                 ),
                 theme = Theme(
                     logoUrlLight = THEME_LOGO_URL_LIGHT,
@@ -147,6 +156,12 @@ class BindCredentialResponseTest {
             )
         )
         assert(
+            bindCredentialResponse.credential.tenant.displayName.equals(
+                biBindCredentialResponse.credential.tenant.displayName,
+                ignoreCase = false,
+            )
+        )
+        assert(
             bindCredentialResponse.credential.realm.displayName.equals(
                 biBindCredentialResponse.credential.realm.displayName,
                 ignoreCase = false,
@@ -161,6 +176,12 @@ class BindCredentialResponseTest {
         assert(
             bindCredentialResponse.credential.identity.username.equals(
                 biBindCredentialResponse.credential.identity.username,
+                ignoreCase = false,
+            )
+        )
+        assert(
+            bindCredentialResponse.credential.identity.primaryEmailAddress.equals(
+                biBindCredentialResponse.credential.identity.primaryEmailAddress,
                 ignoreCase = false,
             )
         )
@@ -214,12 +235,16 @@ class BindCredentialResponseTest {
             "2022-06-15T12:00:00"
         val UPDATED =
             "2022-06-15T12:00:00"
+        val TENANT_DISPLAY_NAME =
+            "Beyond Identity"
         val REALM_DISPLAY_NAME =
             "Beyond Identity"
         val IDENTITY_DISPLAY_NAME =
             "Beyond Identity"
         val IDENTITY_USERNAME =
             "Beyond Identity"
+        val IDENTITY_PRIMARY_EMAIL_ADDRESS =
+            "foo.bar@beyondidentity.com"
         val THEME_LOGO_URL_LIGHT =
             "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
         val THEME_LOGO_URL_DARK =
@@ -242,12 +267,16 @@ class BindCredentialResponseTest {
                 state = STATE,
                 created = CREATED,
                 updated = UPDATED,
+                tenant = Tenant(
+                    displayName = TENANT_DISPLAY_NAME,
+                ),
                 realm = Realm(
                     displayName = REALM_DISPLAY_NAME,
                 ),
                 identity = Identity(
                     displayName = IDENTITY_DISPLAY_NAME,
                     username = IDENTITY_USERNAME,
+                    primaryEmailAddress = IDENTITY_PRIMARY_EMAIL_ADDRESS,
                 ),
                 theme = Theme(
                     logoUrlLight = THEME_LOGO_URL_LIGHT,

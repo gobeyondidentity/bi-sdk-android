@@ -10,7 +10,7 @@ object Versions {
     const val ANDROIDX_CONSTRAINT_LAYOUT = "2.1.3"
     const val ANDROIDX_CORE = "1.7.0"
     const val ANDROIDX_LIFECYCLE = "2.4.1"
-    const val ANDROIDX_PREFERENCES = "1.1.1"
+    const val ANDROIDX_PREFERENCE = "1.2.0"
     const val AUTH0 = "2.8.0"
     const val CODE_SCANNER = "2.1.0"
     const val GSON = "2.8.6"
@@ -75,8 +75,8 @@ object Libs {
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.ANDROIDX_LIFECYCLE}"
     const val ANDROIDX_LIFECYCLE_VIEWMODEL_SAVEDSTATE =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.ANDROIDX_LIFECYCLE}"
-    const val ANDROIDX_PREFERENCES_KTX =
-        "androidx.preference:preference-ktx:${Versions.ANDROIDX_PREFERENCES}"
+    const val ANDROIDX_PREFERENCE_KTX =
+        "androidx.preference:preference-ktx:${Versions.ANDROIDX_PREFERENCE}"
     const val MATERIAL = "com.google.android.material:material:${Versions.MATERIAL}"
 
     // Other
@@ -108,6 +108,8 @@ object Libs {
 }
 
 object DebugLibs {
+    const val ANDROIDX_COMPOSE_UI_TEST_MANIFEST =
+        "androidx.compose.ui:ui-test-manifest:${Versions.ANDROIDX_COMPOSE}"
     const val ANDROIDX_COMPOSE_UI_TOOLING =
         "androidx.compose.ui:ui-tooling:${Versions.ANDROIDX_COMPOSE}"
 }
@@ -121,11 +123,14 @@ object TestLibs {
 }
 
 object AndroidTestLibs {
+    const val ANDROIDX_COMPOSE_UI_TEST_JUNIT4 =
+        "androidx.compose.ui:ui-test-junit4:${Versions.ANDROIDX_COMPOSE}"
     const val ANDROIDX_ESPRESSO_CORE =
         "androidx.test.espresso:espresso-core:${Versions.ANDROIDX_ESPRESSO}"
     const val ANDROIDX_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_EXT_JUNIT}"
     const val ANDROIDX_RULES = "androidx.test:rules:${Versions.ANDROIDX_TEST}"
     const val ANDROIDX_RUNNER = "androidx.test:runner:${Versions.ANDROIDX_TEST}"
+    const val JUNIT = "junit:junit:${Versions.JUNIT}"
     const val MOCKITO_ANDROID = "org.mockito:mockito-android:${Versions.MOCKITO}"
     const val MOCKITO_CORE = "org.mockito:mockito-core:${Versions.MOCKITO}"
 }

@@ -37,7 +37,6 @@ import com.beyondidentity.authenticator.sdk.android.utils.PKCEUtil
 import com.beyondidentity.authenticator.sdk.android.utils.toIndentString
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.OnSelectCredential
 import com.beyondidentity.embedded.sdk.models.OnSelectedCredential
 import com.okta.oidc.AuthenticationPayload
 import com.okta.oidc.AuthorizationStatus
@@ -487,8 +486,10 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         activity: FragmentActivity,
         credentials: List<Credential>,
         selectedCredentialCallback: OnSelectedCredential,
-    ) {
-        SelectCredentialDialogFragment.newInstance(credentials, selectedCredentialCallback)
+    ) = when {
+        credentials.isEmpty() -> selectedCredentialCallback.invoke(null)
+        credentials.size == 1 -> selectedCredentialCallback.invoke(credentials[0].id)
+        else -> SelectCredentialDialogFragment.newInstance(credentials, selectedCredentialCallback)
             .show(activity.supportFragmentManager, SelectCredentialDialogFragment.TAG)
     }
 
@@ -505,50 +506,49 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                     authenticateResult = result,
                 )
             }
-        },
+        }
     ) {
-        EmbeddedSdk.authenticate(
-            url = url,
-            onSelectCredential = object : OnSelectCredential {
-                override fun invoke(
-                    credentials: List<Credential>,
-                    selectedCredentialCallback: OnSelectedCredential,
-                ) {
-                    onSelectCredential(activity, credentials, selectedCredentialCallback)
-                }
-            },
-        )
-            .flowOn(Dispatchers.Main + coroutineExceptionHandler)
-            .onEach {
-                it.onSuccess { success ->
-                    updateStateCallback(
-                        "",
-                        success.toIndentString(),
+        EmbeddedSdk.getCredentials { result ->
+            result.onSuccess { list ->
+                onSelectCredential(activity, list) {
+                    EmbeddedSdk.authenticate(
+                        url = url,
+                        credentialId = it ?: "",
                     )
-                    Timber.d("Authenticate success = $success")
-                    onAuthenticateEvent(AuthenticateEvent("Authenticate success!\nYou can start exploring the Embedded SDK"))
-                    onAuthenticateSuccess?.invoke(success)
-                }
-                it.onFailure { failure ->
-                    updateStateCallback(
-                        state.authenticateUrl,
-                        failure.toIndentString(),
-                    )
-                    Timber.e("Authenticate failure = $failure")
-                    onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
-                    onAuthenticateFailure?.invoke(failure)
+                        .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+                        .onEach {
+                            it.onSuccess { success ->
+                                updateStateCallback(
+                                    "",
+                                    success.toIndentString(),
+                                )
+                                Timber.d("Authenticate success = $success")
+                                onAuthenticateEvent(AuthenticateEvent("Authenticate success!\nYou can start exploring the Embedded SDK"))
+                                onAuthenticateSuccess?.invoke(success)
+                            }
+                            it.onFailure { failure ->
+                                updateStateCallback(
+                                    state.authenticateUrl,
+                                    failure.toIndentString(),
+                                )
+                                Timber.e("Authenticate failure = $failure")
+                                onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
+                                onAuthenticateFailure?.invoke(failure)
+                            }
+                        }
+                        .catch { error ->
+                            updateStateCallback(
+                                state.authenticateUrl,
+                                error.toIndentString(),
+                            )
+                            Timber.e("Authenticate exception = ${error.message}")
+                            onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
+                            onAuthenticateError?.invoke(error)
+                        }
+                        .launchIn(viewModelScope)
                 }
             }
-            .catch { error ->
-                updateStateCallback(
-                    state.authenticateUrl,
-                    error.toIndentString(),
-                )
-                Timber.e("Authenticate exception = ${error.message}")
-                onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
-                onAuthenticateError?.invoke(error)
-            }
-            .launchIn(viewModelScope)
+        }
     }
 
     private fun onAuthenticateEvent(event: EmbeddedAuthenticateEvents) {

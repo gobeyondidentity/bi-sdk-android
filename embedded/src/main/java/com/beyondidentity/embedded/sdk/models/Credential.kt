@@ -17,6 +17,7 @@ import java.lang.Exception
  * @property state The current state of this credential
  * @property created The time this credential was created.
  * @property updated The last time this credential was updated.
+ * @property tenant Tenant information associated with this credential.
  * @property realm Realm information associated with this credential.
  * @property identity Identity information associated with this credential.
  * @property theme Theme information associated with this credential
@@ -33,6 +34,7 @@ data class Credential(
     val state: CredentialState,
     val created: String,
     val updated: String,
+    val tenant: Tenant,
     val realm: Realm,
     val identity: Identity,
     val theme: Theme,
@@ -51,12 +53,16 @@ data class Credential(
                 state = CredentialState.from(coreAuthNCredential.state),
                 created = coreAuthNCredential.created,
                 updated = coreAuthNCredential.updated,
+                tenant = Tenant(
+                    displayName = coreAuthNCredential.tenant.displayName,
+                ),
                 realm = Realm(
                     displayName = coreAuthNCredential.realm.displayName,
                 ),
                 identity = Identity(
                     displayName = coreAuthNCredential.identity.displayName,
                     username = coreAuthNCredential.identity.username,
+                    primaryEmailAddress = coreAuthNCredential.identity.primaryEmailAddress,
                 ),
                 theme = Theme(
                     logoUrlLight = coreAuthNCredential.theme.logoUrlLight,
@@ -125,6 +131,15 @@ enum class CredentialState {
 }
 
 /**
+ * Tenant information associated with a credential.
+ *
+ * @property displayName The display name of the tenant.
+ */
+data class Tenant(
+    val displayName: String,
+)
+
+/**
  * Realm information associated with a credential.
  *
  * @property displayName The display name of the realm.
@@ -138,10 +153,12 @@ data class Realm(
  *
  * @property displayName The display name of the identity.
  * @property username The username of the identity.
+ * @property primaryEmailAddress The primary email address of the identity.
  */
 data class Identity(
     val displayName: String,
     val username: String,
+    val primaryEmailAddress: String?,
 )
 
 /**

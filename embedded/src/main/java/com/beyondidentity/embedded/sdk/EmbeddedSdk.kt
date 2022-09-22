@@ -326,22 +326,22 @@ object EmbeddedSdk {
      * Authenticate a user.
      *
      * @param url URL used to authenticate
-     * @param onSelectCredential Callback used to display a list of filtered Credentials associated with the current authentication flow. To select a Credential, return the selected `CredentialID`.
+     * @param credentialId The ID of the credential with which to authenticate.
      * @param callback [Result] of [AuthenticateResponse] or [Throwable]
      */
     @JvmStatic
     fun authenticate(
         url: String,
-        onSelectCredential: OnSelectCredential,
+        credentialId: String,
         callback: (Result<AuthenticateResponse>) -> Unit,
     ) {
-        onSelectCredentialCallback = onSelectCredential
         if (!isAuthenticateUrl(url)) {
             callback(Result.failure(Throwable("URL provided is invalid")))
         } else {
             executor.execute {
                 BiSdk.biAuthenticate(
                     url = url,
+                    credentialId = credentialId,
                     trustedSource = TrustedSource.EmbeddedSource,
                     flowType = FLOW_TYPE_EMBEDDED,
                 ) { biAuthenticateResult ->
@@ -362,21 +362,21 @@ object EmbeddedSdk {
      * Authenticate a user.
      *
      * @param url URL used to authenticate
-     * @param onSelectCredential Callback used to display a list of filtered Credentials associated with the current authentication flow. To select a Credential, return the selected `CredentialID`.
+     * @param credentialId The ID of the credential with which to authenticate.
      * @return [Flow] [Result] of [AuthenticateResponse] or [Throwable]
      */
     fun authenticate(
         url: String,
-        onSelectCredential: OnSelectCredential,
+        credentialId: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<AuthenticateResponse>> {
-        onSelectCredentialCallback = onSelectCredential
         if (!isAuthenticateUrl(url)) {
             trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
             awaitClose()
         } else {
             BiSdk.biAuthenticate(
                 url = url,
+                credentialId = credentialId,
                 trustedSource = TrustedSource.EmbeddedSource,
                 flowType = FLOW_TYPE_EMBEDDED,
             ) { biAuthenticateResult ->
