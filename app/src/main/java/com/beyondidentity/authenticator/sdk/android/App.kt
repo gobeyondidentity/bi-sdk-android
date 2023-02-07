@@ -19,9 +19,7 @@ class App : Application(), ActivityLifecycleCallbacks {
         EmbeddedSdk.init(
             app = this,
             keyguardPrompt = keyguardPrompt,
-            logger = { log ->
-                Timber.d(log)
-            }
+            logger = { Timber.d(it) },
         )
         registerActivityLifecycleCallbacks(this)
     }

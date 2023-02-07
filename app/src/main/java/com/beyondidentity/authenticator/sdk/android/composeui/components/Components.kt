@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -31,6 +34,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -55,6 +59,9 @@ import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiAppBarColo
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiGray300
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiPrimaryMain
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
+
+fun inputTestTag(testTag: String): String = "$testTag Input"
+fun resultTestTag(testTag: String): String = "$testTag Result"
 
 @Composable
 @Preview(showBackground = true)
@@ -165,6 +172,7 @@ fun InteractionResultView(
     testTag: String,
     onButtonClicked: () -> Unit,
     resultText: String,
+    progressEnabled: Boolean,
 ) {
     Column(modifier = modifier) {
         Text(text = descriptionText)
@@ -180,7 +188,12 @@ fun InteractionResultView(
             Text(text = buttonText)
         }
 
-        ResponseDataView(data = resultText)
+        ProgressIndicator(progressEnabled = progressEnabled)
+
+        ResponseDataView(
+            data = resultText,
+            testTag = resultTestTag(testTag),
+        )
     }
 }
 
@@ -194,6 +207,7 @@ fun PreviewInteractionResultView() {
             testTag = "testTag",
             onButtonClicked = { },
             resultText = "result text",
+            progressEnabled = true,
         )
     }
 }
@@ -202,6 +216,7 @@ fun PreviewInteractionResultView() {
 fun ResponseDataView(
     modifier: Modifier = Modifier,
     data: String,
+    testTag: String,
 ) {
     val scrollState = rememberScrollState()
     if (data.isNotEmpty()) {
@@ -225,7 +240,9 @@ fun ResponseDataView(
                 SelectionContainer {
                     Text(
                         text = data,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(testTag),
                     )
                 }
             }
@@ -240,12 +257,12 @@ fun InteractionResponseInputView(
     description: String,
     inputValue: String,
     inputHint: String,
-    inputTestTag: String,
     onInputChanged: (String) -> Unit,
     buttonText: String,
     testTag: String,
     onSubmit: () -> Unit,
     submitResult: String,
+    progressEnabled: Boolean,
 ) {
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -261,7 +278,7 @@ fun InteractionResponseInputView(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
-                .testTag(inputTestTag),
+                .testTag(inputTestTag(testTag)),
             value = inputValue,
             onValueChange = onInputChanged,
             label = {
@@ -295,9 +312,12 @@ fun InteractionResponseInputView(
             Text(text = buttonText)
         }
 
+        ProgressIndicator(progressEnabled = progressEnabled)
+
         ResponseDataView(
             data = submitResult,
             modifier = Modifier.padding(top = 16.dp),
+            testTag = resultTestTag(testTag),
         )
     }
 }
@@ -310,18 +330,17 @@ fun PreviewInteractionResponseInputView() {
             description = "title of user input",
             inputValue = "user@email.com",
             inputHint = "Email address",
-            inputTestTag = "testTag",
             onInputChanged = { },
             buttonText = "submit text",
             testTag = "testTag",
             onSubmit = { },
             submitResult = "result",
+            progressEnabled = true,
         )
     }
 }
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class)
 fun ResponseInputView(
     modifier: Modifier = Modifier,
     description: String,
@@ -329,6 +348,7 @@ fun ResponseInputView(
     testTag: String,
     onSubmit: () -> Unit,
     submitResult: String,
+    progressEnabled: Boolean,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -347,9 +367,12 @@ fun ResponseInputView(
             Text(text = buttonText)
         }
 
+        ProgressIndicator(progressEnabled = progressEnabled)
+
         ResponseDataView(
             data = submitResult,
             modifier = Modifier.padding(top = 16.dp),
+            testTag = resultTestTag(testTag),
         )
     }
 }
@@ -364,6 +387,36 @@ fun PreviewResponseInputView() {
             testTag = "testTag",
             onSubmit = { },
             submitResult = "result",
+            progressEnabled = true,
+        )
+    }
+}
+
+@Composable
+fun ProgressIndicator(
+    progressEnabled: Boolean,
+) {
+    if (progressEnabled) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(1.dp)
+                    .size(24.dp),
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewProgressIndicator() {
+    BiSdkAndroidTheme {
+        ProgressIndicator(
+            progressEnabled = true,
         )
     }
 }

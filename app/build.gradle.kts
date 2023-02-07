@@ -61,6 +61,10 @@ android {
         }
     }
 
+    testOptions {
+        animationsDisabled = true
+    }
+
     compileOptions {
         sourceCompatibility(AndroidConfig.JAVA_VERSION)
         targetCompatibility(AndroidConfig.JAVA_VERSION)

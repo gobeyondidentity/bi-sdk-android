@@ -12,10 +12,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-### [Embedded](https://developer.beyondidentity.com/docs/v1/sdks/kotlin-sdk/overview)
+### Embedded SDK
 
-The Embedded SDK is a holistic SDK solution offering the entire experience embedded in your product. Users will not need
-to download the Beyond Identity Authenticator.
+Goodbye, passwords! The Beyond Identity SDKs allow you to embed the Passwordless experience into your product. Users will not need to download the Beyond Identity Authenticator. These SDKs supports OIDC and OAuth2.
 
 ## Installation
 
@@ -41,4 +40,21 @@ dependencies {
 ```
 
 ## Usage
-Check out the [documentation](https://developer.beyondidentity.com) for more information.
+
+Check out the [Developer Documentation](https://developer.beyondidentity.com) and the [SDK API Documentation](https://gobeyondidentity.github.io/bi-sdk-android/) for more information.
+
+### Setup
+
+First, before calling the Embedded functions, make sure to initialize the SDK.
+
+```kotlin
+import com.beyondidentity.embedded.sdk.EmbeddedSdk
+
+EmbeddedSdk.init(
+    app: Application,
+    keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
+    logger: (String) -> Unit,
+    biometricAskPrompt: String, /* Optional */
+    allowedDomains: List<String>?, /* Optional */
+)
+```

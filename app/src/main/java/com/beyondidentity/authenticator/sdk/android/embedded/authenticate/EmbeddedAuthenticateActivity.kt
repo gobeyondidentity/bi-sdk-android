@@ -109,17 +109,9 @@ fun EmbeddedAuthenticateScreen(
         onAuthenticateAuth0Web = {
             viewModel.onAuthenticateAuth0Web(activity)
         },
-        onAuthenticateCognito = {
-            viewModel.onAuthenticateCognito(activity)
-        },
         onAuthenticateUrlTextChange = viewModel::onAuthenticateUrlTextChange,
         onAuthenticate = {
-            if (viewModel.state.authenticateUrl.isEmpty()) {
-                Toast.makeText(activity, "Please provide an Authenticate URL", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                viewModel.onAuthenticate(activity, viewModel.state.authenticateUrl)
-            }
+            viewModel.onAuthenticate(activity, viewModel.state.authenticateUrl)
         },
     )
 }
@@ -133,7 +125,6 @@ fun EmbeddedAuthenticateLayout(
     onAuthenticateOktaWeb: () -> Unit,
     onAuthenticateAuth0SDK: () -> Unit,
     onAuthenticateAuth0Web: () -> Unit,
-    onAuthenticateCognito: () -> Unit,
     onAuthenticateUrlTextChange: (String) -> Unit,
     onAuthenticate: () -> Unit,
 ) {
@@ -160,7 +151,6 @@ fun EmbeddedAuthenticateLayout(
             onAuthenticateOktaWeb,
             onAuthenticateAuth0SDK,
             onAuthenticateAuth0Web,
-            onAuthenticateCognito,
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -182,7 +172,6 @@ fun Authenticate1Layout(
     onAuthenticateOktaWeb: () -> Unit,
     onAuthenticateAuth0SDK: () -> Unit,
     onAuthenticateAuth0Web: () -> Unit,
-    onAuthenticateCognito: () -> Unit,
 ) {
     Text(
         text = "Authenticate",
@@ -191,8 +180,8 @@ fun Authenticate1Layout(
     )
 
     Text(
-        text = "Authenticate against a credential bound to this device. " +
-                "If more than one credential is present, you must select a credential during authentication.",
+        text = "Authenticate against a passkey bound to this device. " +
+                "If more than one passkey is present, you must select a passkey during authentication.",
     )
 
     Spacer16()
@@ -208,6 +197,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Beyond Identity",
         onSubmit = onAuthenticateBeyondIdentity,
         submitResult = state.authenticateBeyondIdentityResult,
+        progressEnabled = state.authenticateBeyondIdentityProgress,
     )
 
     if (viewModel.mWebMode == WebMode.WebView) {
@@ -224,6 +214,7 @@ fun Authenticate1Layout(
             testTag = "Authenticate with Okta SDK",
             onSubmit = onAuthenticateOktaSDK,
             submitResult = state.authenticateOktaSDKResult,
+            progressEnabled = state.authenticateOktaSDKProgress,
         )
     }
 
@@ -240,6 +231,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Okta Web",
         onSubmit = onAuthenticateOktaWeb,
         submitResult = state.authenticateOktaWebResult,
+        progressEnabled = state.authenticateOktaWebProgress,
     )
 
     if (viewModel.mWebMode == WebMode.WebView) {
@@ -256,6 +248,7 @@ fun Authenticate1Layout(
             testTag = "Authenticate with Auth0 SDK",
             onSubmit = onAuthenticateAuth0SDK,
             submitResult = state.authenticateAuth0SDKResult,
+            progressEnabled = state.authenticateAuth0SDKProgress,
         )
     }
 
@@ -272,21 +265,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Auth0 Web",
         onSubmit = onAuthenticateAuth0Web,
         submitResult = state.authenticateAuth0WebResult,
-    )
-
-    Spacer16()
-
-    Text(
-        text = "Authenticate with Cognito",
-        style = MaterialTheme.typography.subtitle1,
-    )
-
-    ResponseInputView(
-        description = "Try authenticating with Cognito using Beyond Identity as a secondary IdP.",
-        buttonText = "Authenticate with Cognito",
-        testTag = "Authenticate with Cognito",
-        onSubmit = onAuthenticateCognito,
-        submitResult = state.authenticateCognitoResult,
+        progressEnabled = state.authenticateAuth0WebProgress,
     )
 
     Spacer16()
@@ -305,15 +284,16 @@ fun Authenticate2Layout(
     )
 
     InteractionResponseInputView(
-        description = "Authenticates against a credential bound to the device. If more than one credential is present, you must select a credential during authentication.",
+        description = "Authenticates against a passkey bound to the device. " +
+                "If more than one passkey is present, you must select a passkey during authentication.",
         inputValue = state.authenticateUrl,
         inputHint = "Authenticate URL",
-        inputTestTag = "Authenticate URL Input",
         onInputChanged = onAuthenticateUrlTextChange,
         buttonText = "Authenticate",
         testTag = "Authenticate URL",
         onSubmit = onAuthenticate,
         submitResult = state.authenticateResult,
+        progressEnabled = state.authenticateProgress,
     )
 }
 
@@ -329,7 +309,6 @@ fun Authenticate1Preview() {
             Authenticate1Layout(
                 EmbeddedAuthenticateState(),
                 EmbeddedAuthenticateViewModel(),
-                {},
                 {},
                 {},
                 {},
@@ -372,7 +351,6 @@ fun EmbeddedAuthenticatePreview() {
             {},
             {},
             {},
-            {},
         )
     }
 }
@@ -384,7 +362,6 @@ fun EmbeddedAuthenticatePreviewDark() {
         EmbeddedAuthenticateLayout(
             EmbeddedAuthenticateState(),
             EmbeddedAuthenticateViewModel(),
-            {},
             {},
             {},
             {},

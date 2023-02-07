@@ -10,11 +10,11 @@ import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
 import com.beyondidentity.authenticator.sdk.embedded.R
 import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
-import com.beyondidentity.embedded.sdk.models.BindCredentialResponse
-import com.beyondidentity.embedded.sdk.models.Credential
-import com.beyondidentity.embedded.sdk.models.CredentialID
-import com.beyondidentity.embedded.sdk.models.OnSelectCredential
-import com.beyondidentity.embedded.sdk.models.OnSelectedCredential
+import com.beyondidentity.embedded.sdk.models.BindPasskeyResponse
+import com.beyondidentity.embedded.sdk.models.OnSelectPasskey
+import com.beyondidentity.embedded.sdk.models.OnSelectedPasskey
+import com.beyondidentity.embedded.sdk.models.Passkey
+import com.beyondidentity.embedded.sdk.models.PasskeyId
 import com.beyondidentity.embedded.sdk.utils.appVersionName
 import com.beyondidentity.embedded.sdk.utils.postMain
 import com.beyondidentity.endpoint.android.lib.deviceinfo.DeviceInfo
@@ -53,8 +53,8 @@ object EmbeddedSdk {
     private const val FLOW_TYPE_EMBEDDED = "embedded"
     private const val BI_APP_INSTANCE_ID_PREF_KEY = "beyond-identity-app-instance-id"
 
-    private var onSelectCredentialCallback: OnSelectCredential? = null
-    private val selectCredentialSubject = Channel<String?>()
+    private var onSelectPasskeyCallback: OnSelectPasskey? = null
+    private val selectPasskeySubject = Channel<String?>()
     private val answers = Channel<Boolean>()
 
     private lateinit var app: Application
@@ -125,14 +125,14 @@ object EmbeddedSdk {
             )
     }
 
-    private fun selectCredential(credentialsToSelectFrom: List<Credential>) {
-        val callback = object : OnSelectedCredential {
-            override fun invoke(selectedCredentialId: CredentialID?) {
-                selectCredentialSubject.trySendBlocking(selectedCredentialId)
+    private fun selectPasskey(passkeysToSelectFrom: List<Passkey>) {
+        val callback = object : OnSelectedPasskey {
+            override fun invoke(selectedPasskeyId: PasskeyId?) {
+                selectPasskeySubject.trySendBlocking(selectedPasskeyId)
             }
         }
 
-        onSelectCredentialCallback?.invoke(credentialsToSelectFrom, callback)
+        onSelectPasskeyCallback?.invoke(passkeysToSelectFrom, callback)
     }
 
     /**
@@ -141,9 +141,9 @@ object EmbeddedSdk {
      * @param allowedDomains Optional array of domains that we whitelist against for network operations.
      * This will default to Beyond Identity's allowed domains.
      * @param app [Application]
-     * @param biometricAskPrompt A prompt the user will see when asked for biometrics while extending a credential to another device.
-     * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
-     * @param logger Custom logger to get logs from the SDK
+     * @param biometricAskPrompt A prompt the user will see when asked for biometrics while extending a passkey to another device.
+     * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer.
+     * @param logger Custom logger to get logs from the SDK.
      */
     @Throws(DatabaseSetupException::class)
     @JvmStatic
@@ -176,17 +176,17 @@ object EmbeddedSdk {
             },
             authenticationPrompt = { true },
             selectCredentialPrompt = { null },
-            selectAuthNCredentialPrompt = { credentials ->
+            selectAuthNCredentialPrompt = { passkeys ->
                 runBlocking {
                     launch(Dispatchers.Main) {
-                        selectCredential(
-                            credentials.map {
-                                Log.info(LogCategory.Credential, Credential.from(it).toString())
-                                Credential.from(it)
+                        selectPasskey(
+                            passkeys.map {
+                                Log.info(LogCategory.Passkey, Passkey.from(it).toString())
+                                Passkey.from(it)
                             }
                         )
                     }
-                    selectCredentialSubject.receive()
+                    selectPasskeySubject.receive()
                 }
             },
             // This is the version of the native platform authenticator. Since this SDK has nothing to do
@@ -196,6 +196,7 @@ object EmbeddedSdk {
             localhostServicePrefKey = "",
             accessibilityServicePrefKey = "",
             deviceGatewayUrl = BuildConfig.BUILD_CONFIG_DEVICE_GATEWAY_URL,
+            unattestedEventUrl = BuildConfig.BUILD_CONFIG_UNATTESTED_EVENT_URL,
             channel = BuildConfig.BUILD_CONFIG_CHANNEL,
             biSdkInfo = DeviceInfo.BiSdkInfo(
                 sdkVersion = BuildConfig.BUILD_CONFIG_BI_SDK_VERSION,
@@ -260,18 +261,18 @@ object EmbeddedSdk {
     }
 
     /**
-     * Bind a credential to this device.
+     * Bind a passkey to this device.
      *
-     * @param url URL used to bind a credential to this device
-     * @param callback [Result] of [BindCredentialResponse] or [Throwable]
+     * @param url URL used to bind a passkey to this device
+     * @param callback [Result] of [BindPasskeyResponse] or [Throwable]
      */
     @JvmStatic
-    fun bindCredential(
+    fun bindPasskey(
         url: String,
-        callback: (Result<BindCredentialResponse>) -> Unit,
+        callback: (Result<BindPasskeyResponse>) -> Unit,
     ) {
         executor.execute {
-            if (!isBindCredentialUrl(url)) {
+            if (!isBindPasskeyUrl(url)) {
                 callback(Result.failure(Throwable("URL provided is invalid")))
             } else {
                 BiSdk.bindCredential(
@@ -281,7 +282,7 @@ object EmbeddedSdk {
                 ) { bindCredentialResult ->
                     when (bindCredentialResult) {
                         is CoreSuccess -> postMain {
-                            callback(Result.success(BindCredentialResponse.from(bindCredentialResult.value)))
+                            callback(Result.success(BindPasskeyResponse.from(bindCredentialResult.value)))
                         }
                         is CoreFailure -> postMain {
                             callback(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
@@ -293,16 +294,16 @@ object EmbeddedSdk {
     }
 
     /**
-     * Bind a credential to this device.
+     * Bind a passkey to this device.
      *
-     * @param url URL used to bind a credential to this device
-     * @return [Flow] with [Result] of [BindCredentialResponse] or [Throwable]
+     * @param url URL used to bind a passkey to this device
+     * @return [Flow] with [Result] of [BindPasskeyResponse] or [Throwable]
      */
-    fun bindCredential(
+    fun bindPasskey(
         url: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<BindCredentialResponse>> {
-        if (!isBindCredentialUrl(url)) {
+    ) = callbackFlow<Result<BindPasskeyResponse>> {
+        if (!isBindPasskeyUrl(url)) {
             trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
             awaitClose()
         } else {
@@ -313,7 +314,7 @@ object EmbeddedSdk {
             ) { bindCredentialResult ->
                 when (bindCredentialResult) {
                     is CoreSuccess ->
-                        trySendBlocking(Result.success(BindCredentialResponse.from(bindCredentialResult.value)))
+                        trySendBlocking(Result.success(BindPasskeyResponse.from(bindCredentialResult.value)))
                     is CoreFailure ->
                         trySendBlocking(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
                 }
@@ -326,13 +327,13 @@ object EmbeddedSdk {
      * Authenticate a user.
      *
      * @param url URL used to authenticate
-     * @param credentialId The ID of the credential with which to authenticate.
+     * @param passkeyId The ID of the passkey with which to authenticate.
      * @param callback [Result] of [AuthenticateResponse] or [Throwable]
      */
     @JvmStatic
     fun authenticate(
         url: String,
-        credentialId: String,
+        passkeyId: String,
         callback: (Result<AuthenticateResponse>) -> Unit,
     ) {
         if (!isAuthenticateUrl(url)) {
@@ -341,7 +342,7 @@ object EmbeddedSdk {
             executor.execute {
                 BiSdk.biAuthenticate(
                     url = url,
-                    credentialId = credentialId,
+                    credentialId = passkeyId,
                     trustedSource = TrustedSource.EmbeddedSource,
                     flowType = FLOW_TYPE_EMBEDDED,
                 ) { biAuthenticateResult ->
@@ -362,12 +363,12 @@ object EmbeddedSdk {
      * Authenticate a user.
      *
      * @param url URL used to authenticate
-     * @param credentialId The ID of the credential with which to authenticate.
+     * @param passkeyId The ID of the passkey with which to authenticate.
      * @return [Flow] [Result] of [AuthenticateResponse] or [Throwable]
      */
     fun authenticate(
         url: String,
-        credentialId: String,
+        passkeyId: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<AuthenticateResponse>> {
         if (!isAuthenticateUrl(url)) {
@@ -376,7 +377,7 @@ object EmbeddedSdk {
         } else {
             BiSdk.biAuthenticate(
                 url = url,
-                credentialId = credentialId,
+                credentialId = passkeyId,
                 trustedSource = TrustedSource.EmbeddedSource,
                 flowType = FLOW_TYPE_EMBEDDED,
             ) { biAuthenticateResult ->
@@ -390,19 +391,19 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Get all current credentials for this device.
+     * Get all current passkeys for this device.
      *
-     * @return [List] of [Credential]
+     * @return [List] of [Passkey]
      */
     @JvmStatic
-    fun getCredentials(
-        callback: (Result<List<Credential>>) -> Unit,
+    fun getPasskeys(
+        callback: (Result<List<Passkey>>) -> Unit,
     ) {
         executor.execute {
             BiSdk.getAuthNCredentials { getAuthNCredentialsResult ->
                 when (getAuthNCredentialsResult) {
                     is CoreSuccess -> postMain {
-                        callback(Result.success(getAuthNCredentialsResult.value.map { Credential.from(it) }))
+                        callback(Result.success(getAuthNCredentialsResult.value.map { Passkey.from(it) }))
                     }
                     is CoreFailure -> postMain {
                         callback(Result.failure(Throwable(getAuthNCredentialsResult.value.localizedDescription)))
@@ -413,17 +414,17 @@ object EmbeddedSdk {
     }
 
     /**
-     * Get all current credentials for this device.
+     * Get all current passkeys for this device.
      *
-     * @return [Flow] that delivers [List] of [Credential]
+     * @return [Flow] that delivers [List] of [Passkey]
      */
-    fun getCredentials(
+    fun getPasskeys(
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<List<Credential>>> {
+    ) = callbackFlow<Result<List<Passkey>>> {
         BiSdk.getAuthNCredentials { getAuthNCredentialsResult ->
             when (getAuthNCredentialsResult) {
                 is CoreSuccess ->
-                    trySendBlocking(Result.success(getAuthNCredentialsResult.value.map { Credential.from(it) }))
+                    trySendBlocking(Result.success(getAuthNCredentialsResult.value.map { Passkey.from(it) }))
                 is CoreFailure ->
                     trySendBlocking(Result.failure(Throwable(getAuthNCredentialsResult.value.localizedDescription)))
             }
@@ -432,15 +433,15 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Delete a `Credential` by ID on current device.
+     * Delete a [Passkey] by ID on current device.
      *
-     * Warning: deleting a `Credential` is destructive and will remove everything from the device. If no other device contains the credential then the user will need to complete a recovery in order to log in again on this device.
+     * Warning: deleting a [Passkey] is destructive and will remove everything from the device. If no other device contains the passkey then the user will need to complete a recovery in order to log in again on this device.
      *
-     * @param id credential id, uniquely identifying a [Credential].
+     * @param id the unique identifier of the [Passkey].
      * @param callback [Result] of [Unit]
      */
     @JvmStatic
-    fun deleteCredential(
+    fun deletePasskey(
         id: String,
         callback: (Result<Unit>) -> Unit,
     ) {
@@ -461,14 +462,14 @@ object EmbeddedSdk {
     }
 
     /**
-     * Delete a `Credential` by ID on current device.
+     * Delete a [Passkey] by ID on current device.
      *
-     * Warning: deleting a `Credential` is destructive and will remove everything from the device. If no other device contains the credential then the user will need to complete a recovery in order to log in again on this device.
+     * Warning: deleting a [Passkey] is destructive and will remove everything from the device. If no other device contains the passkey then the user will need to complete a recovery in order to log in again on this device.
      *
-     * @param id id, uniquely identifying a [Credential].
+     * @param id the unique identifier of the [Passkey].
      * @return [Flow] that delivers [Result] of [Unit]
      */
-    fun deleteCredential(
+    fun deletePasskey(
         id: String,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) = callbackFlow<Result<Unit>> {
@@ -509,9 +510,9 @@ object EmbeddedSdk {
     }
 
     /**
-     * Returns whether a Url is a valid Authenticate Url or not.
+     * Returns whether a URL is a valid Authenticate URL or not.
      *
-     * @param url A Url String
+     * @param url A URL String
      * @return true or false
      */
     @JvmStatic
@@ -528,9 +529,9 @@ object EmbeddedSdk {
     }
 
     /**
-     * Returns whether a Url is a valid Authenticate Url or not.
+     * Returns whether a URL is a valid Authenticate URL or not.
      *
-     * @param url A Url String
+     * @param url A URL String
      * @return true or false
      */
     fun isAuthenticateUrl(
@@ -548,13 +549,13 @@ object EmbeddedSdk {
     }.flowOn(dispatcher)
 
     /**
-     * Returns whether a Url is a valid Bind Credential Url or not.
+     * Returns whether a URL is a valid Bind Passkey URL or not.
      *
-     * @param url A Url String
+     * @param url A URL String
      * @return true or false
      */
     @JvmStatic
-    fun isBindCredentialUrl(
+    fun isBindPasskeyUrl(
         url: String,
     ): Boolean {
         val it = BiSdk.getUrlType(
@@ -567,12 +568,12 @@ object EmbeddedSdk {
     }
 
     /**
-     * Returns whether a Url is a valid Bind Credential Url or not.
+     * Returns whether a URL is a valid Bind Passkey URL or not.
      *
-     * @param url A Url String
+     * @param url A URL String
      * @return true or false
      */
-    fun isBindCredentialUrl(
+    fun isBindPasskeyUrl(
         url: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) = callbackFlow {

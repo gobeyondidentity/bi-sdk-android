@@ -33,12 +33,12 @@ import com.beyondidentity.authenticator.sdk.android.composeui.components.Spacer3
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
 import com.beyondidentity.authenticator.sdk.android.embedded.authenticate.EmbeddedAuthenticateActivity
 import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.Authenticate
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindCredentialEvent
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.ManageCredentials
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindPasskeyEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.ManagePasskeys
 import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.UrlValidation
 import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitDocsEvent
 import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.VisitSupportEvent
-import com.beyondidentity.authenticator.sdk.android.embedded.managecredentials.ManageCredentialsActivity
+import com.beyondidentity.authenticator.sdk.android.embedded.managepasskeys.ManagePasskeysActivity
 import com.beyondidentity.authenticator.sdk.android.embedded.urlvalidation.EmbeddedUrlValidationActivity
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -56,7 +56,7 @@ class EmbeddedGetStartedActivity : FragmentActivity() {
                     Scaffold(topBar = {
                         BiAppBar()
                     }) {
-                        EmbeddedGetStartedScreen(this@EmbeddedGetStartedActivity, viewModel)
+                        EmbeddedGetStartedScreen(viewModel)
                     }
                 }
             }
@@ -65,10 +65,10 @@ class EmbeddedGetStartedActivity : FragmentActivity() {
         lifecycleScope.launch {
             viewModel.events.collect { event ->
                 when (event) {
-                    ManageCredentials -> launchActivity(event = event)
+                    ManagePasskeys -> launchActivity(event = event)
                     Authenticate -> launchActivity(event = event)
                     UrlValidation -> launchActivity(event = event)
-                    is BindCredentialEvent -> bindCredentialMessage(event.result)
+                    is BindPasskeyEvent -> bindPasskeyMessage(event.result)
                     is VisitDocsEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
                     is VisitSupportEvent -> startActivity(Intent(Intent.ACTION_VIEW, event.uri))
                 }
@@ -76,13 +76,13 @@ class EmbeddedGetStartedActivity : FragmentActivity() {
         }
     }
 
-    private fun bindCredentialMessage(message: String) {
+    private fun bindPasskeyMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun launchActivity(event: EmbeddedGetStartedEvents) {
         when (event) {
-            ManageCredentials -> startActivity(Intent(this, ManageCredentialsActivity::class.java))
+            ManagePasskeys -> startActivity(Intent(this, ManagePasskeysActivity::class.java))
             Authenticate -> startActivity(Intent(this, EmbeddedAuthenticateActivity::class.java))
             UrlValidation -> startActivity(Intent(this, EmbeddedUrlValidationActivity::class.java))
             else -> Timber.d("noop")
@@ -91,21 +91,20 @@ class EmbeddedGetStartedActivity : FragmentActivity() {
 }
 
 @Composable
-fun EmbeddedGetStartedScreen(activity: FragmentActivity, viewModel: EmbeddedGetStartedViewModel) {
+fun EmbeddedGetStartedScreen(viewModel: EmbeddedGetStartedViewModel) {
     EmbeddedGetStartedLayout(
         state = viewModel.state,
-        onRegisterCredentialUsernameTextChange = viewModel::onCredentialBindingLinkUsernameTextChange,
-        onRegisterCredential = { viewModel.onRegisterCredential(viewModel.state.registerUsername) },
-        onRecoverCredentialUsernameTextChange = viewModel::onRecoverCredentialBindingLinkUsernameTextChange,
-        onRecoverCredential = { viewModel.onRecoverCredential(viewModel.state.recoverUsername) },
-        onBindCredentialUrlTextChange = viewModel::onBindCredentialUrlTextChange,
-        onBindCredential = {
-            if (viewModel.state.bindCredentialUrl.isEmpty()) {
-                Toast.makeText(activity, "Please provide a Bind Credential URL", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                viewModel.onBindCredential(viewModel.state.bindCredentialUrl)
-            }
+        onRegisterPasskeyUsernameTextChange = viewModel::onPasskeyBindingLinkUsernameTextChange,
+        onRegisterPasskey = {
+            viewModel.onRegisterPasskey(viewModel.state.registerUsername)
+        },
+        onRecoverPasskeyUsernameTextChange = viewModel::onRecoverPasskeyBindingLinkUsernameTextChange,
+        onRecoverPasskey = {
+            viewModel.onRecoverPasskey(viewModel.state.recoverUsername)
+        },
+        onBindPasskeyUrlTextChange = viewModel::onBindPasskeyUrlTextChange,
+        onBindPasskey = {
+            viewModel.onBindPasskey(viewModel.state.bindPasskeyUrl)
         },
         onNavigate = viewModel::onGetStartedEvent,
     )
@@ -114,12 +113,12 @@ fun EmbeddedGetStartedScreen(activity: FragmentActivity, viewModel: EmbeddedGetS
 @Composable
 fun EmbeddedGetStartedLayout(
     state: EmbeddedGetStartedState,
-    onRegisterCredentialUsernameTextChange: (String) -> Unit,
-    onRegisterCredential: () -> Unit,
-    onRecoverCredentialUsernameTextChange: (String) -> Unit,
-    onRecoverCredential: () -> Unit,
-    onBindCredentialUrlTextChange: (String) -> Unit,
-    onBindCredential: () -> Unit,
+    onRegisterPasskeyUsernameTextChange: (String) -> Unit,
+    onRegisterPasskey: () -> Unit,
+    onRecoverPasskeyUsernameTextChange: (String) -> Unit,
+    onRecoverPasskey: () -> Unit,
+    onBindPasskeyUrlTextChange: (String) -> Unit,
+    onBindPasskey: () -> Unit,
     onNavigate: (EmbeddedGetStartedEvents) -> Unit,
 ) {
     Column(
@@ -137,20 +136,20 @@ fun EmbeddedGetStartedLayout(
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
 
-        BindCredential1Layout(
+        BindPasskey1Layout(
             state,
-            onRegisterCredentialUsernameTextChange,
-            onRegisterCredential,
-            onRecoverCredentialUsernameTextChange,
-            onRecoverCredential,
+            onRegisterPasskeyUsernameTextChange,
+            onRegisterPasskey,
+            onRecoverPasskeyUsernameTextChange,
+            onRecoverPasskey,
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
 
-        BindCredential2Layout(
+        BindPasskey2Layout(
             state,
-            onBindCredentialUrlTextChange,
-            onBindCredential,
+            onBindPasskeyUrlTextChange,
+            onBindPasskey,
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -162,14 +161,14 @@ fun EmbeddedGetStartedLayout(
         )
 
         Text(
-            text = "Explore the various functions available when a Credential exists on the device.",
+            text = "Explore the various functions available when a passkey exists on the device.",
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
         BiTextWithChevron(
-            text = "Manage Credentials",
-            testTag = "Manage Credentials",
-            onClick = { onNavigate(ManageCredentials) },
+            text = "Manage Passkeys",
+            testTag = "Manage Passkeys",
+            onClick = { onNavigate(ManagePasskeys) },
         )
 
         BiDivider()
@@ -212,18 +211,18 @@ fun EmbeddedGetStartedLayout(
         BiTextWithChevron(
             text = "Visit Support",
             testTag = "Visit Support",
-            onClick = { onNavigate(VisitSupportEvent(Uri.parse("https://beyondidentity.atlassian.net/wiki/spaces/CS/overview"))) },
+            onClick = { onNavigate(VisitSupportEvent(Uri.parse("https://join.slack.com/t/byndid/shared_invite/zt-1anns8n83-NQX4JvW7coi9dksADxgeBQ"))) },
         )
     }
 }
 
 @Composable
-fun BindCredential1Layout(
+fun BindPasskey1Layout(
     state: EmbeddedGetStartedState,
-    onRegisterCredentialUsernameTextChange: (String) -> Unit,
-    onRegisterCredential: () -> Unit,
-    onRecoverCredentialUsernameTextChange: (String) -> Unit,
-    onRecoverCredential: () -> Unit,
+    onRegisterPasskeyUsernameTextChange: (String) -> Unit,
+    onRegisterPasskey: () -> Unit,
+    onRecoverPasskeyUsernameTextChange: (String) -> Unit,
+    onRecoverPasskey: () -> Unit,
 ) {
     Text(
         text = "Get Started",
@@ -232,81 +231,81 @@ fun BindCredential1Layout(
     )
 
     Text(
-        text = "Bind Credential".uppercase(),
+        text = "Bind Passkey".uppercase(),
         style = MaterialTheme.typography.subtitle2,
     )
 
     InteractionResponseInputView(
         description = "To get started with using our embedded SDK sample app, " +
-                "enter any username to bind a credential to this device.",
+                "enter any username to bind a passkey to this device.",
         inputValue = state.registerUsername,
         inputHint = "Username",
-        inputTestTag = "Register Credential Input",
-        onInputChanged = onRegisterCredentialUsernameTextChange,
-        buttonText = "Bind Credential",
-        testTag = "Register Credential",
-        onSubmit = onRegisterCredential,
+        onInputChanged = onRegisterPasskeyUsernameTextChange,
+        buttonText = "Bind Passkey",
+        testTag = "Register Passkey",
+        onSubmit = onRegisterPasskey,
         submitResult = state.registerResult,
+        progressEnabled = state.registerProgress,
     )
 
     Spacer32()
 
     Text(
-        text = "Recover Credential".uppercase(),
+        text = "Recover Passkey".uppercase(),
         style = MaterialTheme.typography.subtitle2,
     )
 
     InteractionResponseInputView(
-        description = "If you have an account with a credential you can’t access anymore, " +
-                "enter your username to recover your account and bind a credential to this device.",
+        description = "If you have an account with a passkey you can’t access anymore, " +
+                "enter your username to recover your account and bind a passkey to this device.",
         inputValue = state.recoverUsername,
         inputHint = "Username",
-        inputTestTag = "Recover Credential Input",
-        onInputChanged = onRecoverCredentialUsernameTextChange,
-        buttonText = "Recover Account",
-        testTag = "Recover Credential",
-        onSubmit = onRecoverCredential,
+        onInputChanged = onRecoverPasskeyUsernameTextChange,
+        buttonText = "Recover Passkey",
+        testTag = "Recover Passkey",
+        onSubmit = onRecoverPasskey,
         submitResult = state.recoverResult,
+        progressEnabled = state.recoverProgress,
     )
 
     Spacer16()
 }
 
 @Composable
-fun BindCredential2Layout(
+fun BindPasskey2Layout(
     state: EmbeddedGetStartedState,
-    onBindCredentialUrlTextChange: (String) -> Unit,
-    onBindCredential: () -> Unit,
+    onBindPasskeyUrlTextChange: (String) -> Unit,
+    onBindPasskey: () -> Unit,
 ) {
     Text(
-        text = "Bind Credential",
+        text = "Bind Passkey",
         style = MaterialTheme.typography.subtitle1,
         modifier = Modifier.padding(top = 32.dp),
     )
 
     InteractionResponseInputView(
-        description = "Paste the Bind Credential URL you received in your email or generated through the API in order to bind a credential.",
-        inputValue = state.bindCredentialUrl,
-        inputHint = "Bind Credential URL",
-        inputTestTag = "Bind Credential URL Input",
-        onInputChanged = onBindCredentialUrlTextChange,
-        buttonText = "Bind Credential",
-        testTag = "Bind Credential URL",
-        onSubmit = onBindCredential,
-        submitResult = state.bindCredentialResult,
+        description = "Paste the Bind Passkey URL you received in your email or generated through the API in order to bind a passkey.",
+        inputValue = state.bindPasskeyUrl,
+        inputHint = "Bind Passkey URL",
+        onInputChanged = onBindPasskeyUrlTextChange,
+        buttonText = "Bind Passkey",
+        testTag = "Bind Passkey URL",
+        onSubmit = onBindPasskey,
+        submitResult = state.bindPasskeyResult,
+        progressEnabled = state.bindPasskeyProgress,
     )
 }
 
 @Composable
 @Preview(showBackground = true)
-fun BindCredential1Preview() {
+fun BindPasskey1Preview() {
     BiSdkAndroidTheme {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(start = 24.dp, end = 24.dp),
         ) {
-            BindCredential1Layout(
+            BindPasskey1Layout(
                 EmbeddedGetStartedState(),
                 {},
                 {},
@@ -319,14 +318,14 @@ fun BindCredential1Preview() {
 
 @Composable
 @Preview(showBackground = true)
-fun BindCredential2Preview() {
+fun BindPasskey2Preview() {
     BiSdkAndroidTheme {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(start = 24.dp, end = 24.dp),
         ) {
-            BindCredential2Layout(
+            BindPasskey2Layout(
                 EmbeddedGetStartedState(),
                 {},
                 {},

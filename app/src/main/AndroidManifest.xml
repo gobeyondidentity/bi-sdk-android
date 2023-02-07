@@ -95,7 +95,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".embedded.managecredentials.ManageCredentialsActivity"
+            android:name=".embedded.managepasskeys.ManagePasskeysActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AuthenticatorSDKAndroid">
@@ -108,7 +108,7 @@
                 <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
                 <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data
-                    android:host="manage_credentials"
+                    android:host="manage_passkeys"
                     android:scheme="${embedded_app_scheme}" />
             </intent-filter>
         </activity>

@@ -25,7 +25,7 @@ class BasicTest {
             useUnmergedTree = false
         ).performClick()
         composeTestRule.onNode(hasText("URL Validation")).performScrollTo()
-        composeTestRule.onNode(hasText("Bind Credential URL")).performTextInput("Boof Pack")
+        composeTestRule.onNode(hasText("Bind Passkey URL")).performTextInput("Boof Pack")
         composeTestRule.onNode(hasText("Boof Pack")).assertExists("Boof pack DNE")
     }
 }

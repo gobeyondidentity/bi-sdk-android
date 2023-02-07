@@ -50,8 +50,8 @@ class EmbeddedUrlValidationActivity : FragmentActivity() {
 fun EmbeddedUrlValidationScreen(viewModel: EmbeddedUrlValidationViewModel) {
     EmbeddedUrlValidationLayout(
         state = viewModel.state,
-        onUrlValidationBindCredentialUrlTextChange = viewModel::onUrlValidationBindCredentialUrlTextChange,
-        onValidateBindCredentialUrl = viewModel::onValidateBindCredentialUrl,
+        onUrlValidationBindPasskeyUrlTextChange = viewModel::onUrlValidationBindPasskeyUrlTextChange,
+        onValidateBindPasskeyUrl = viewModel::onValidateBindPasskeyUrl,
         onUrlValidationAuthenticateUrlTextChange = viewModel::onUrlValidationAuthenticateUrlTextChange,
         onValidateAuthenticateUrl = viewModel::onValidateAuthenticateUrl,
     )
@@ -60,8 +60,8 @@ fun EmbeddedUrlValidationScreen(viewModel: EmbeddedUrlValidationViewModel) {
 @Composable
 fun EmbeddedUrlValidationLayout(
     state: EmbeddedUrlValidationState,
-    onUrlValidationBindCredentialUrlTextChange: (String) -> Unit,
-    onValidateBindCredentialUrl: () -> Unit,
+    onUrlValidationBindPasskeyUrlTextChange: (String) -> Unit,
+    onValidateBindPasskeyUrl: () -> Unit,
     onUrlValidationAuthenticateUrlTextChange: (String) -> Unit,
     onValidateAuthenticateUrl: () -> Unit,
 ) {
@@ -82,8 +82,8 @@ fun EmbeddedUrlValidationLayout(
 
         UrlValidationLayout(
             state,
-            onUrlValidationBindCredentialUrlTextChange,
-            onValidateBindCredentialUrl,
+            onUrlValidationBindPasskeyUrlTextChange,
+            onValidateBindPasskeyUrl,
             onUrlValidationAuthenticateUrlTextChange,
             onValidateAuthenticateUrl,
         )
@@ -93,27 +93,27 @@ fun EmbeddedUrlValidationLayout(
 @Composable
 fun UrlValidationLayout(
     state: EmbeddedUrlValidationState,
-    onUrlValidationBindCredentialUrlTextChange: (String) -> Unit,
-    onValidateBindCredentialUrl: () -> Unit,
+    onUrlValidationBindPasskeyUrlTextChange: (String) -> Unit,
+    onValidateBindPasskeyUrl: () -> Unit,
     onUrlValidationAuthenticateUrlTextChange: (String) -> Unit,
     onValidateAuthenticateUrl: () -> Unit,
 ) {
     Text(
-        text = "Bind Credential URL",
+        text = "Bind Passkey URL",
         style = MaterialTheme.typography.subtitle1,
         modifier = Modifier.padding(top = 32.dp),
     )
 
     InteractionResponseInputView(
-        description = "Paste a Url here to validate if it's a bind credential url.",
-        inputValue = state.urlValidationBindCredentialUrl,
-        inputHint = "Bind Credential URL",
-        inputTestTag = "Validate Bind Credential URL Input",
-        onInputChanged = onUrlValidationBindCredentialUrlTextChange,
+        description = "Paste a Url here to validate if it's a bind passkey url.",
+        inputValue = state.urlValidationBindPasskeyUrl,
+        inputHint = "Bind Passkey URL",
+        onInputChanged = onUrlValidationBindPasskeyUrlTextChange,
         buttonText = "Validate Url",
-        testTag = "Validate Bind Credential URL",
-        onSubmit = onValidateBindCredentialUrl,
-        submitResult = state.validateBindCredentialUrlResult,
+        testTag = "Validate Bind Passkey URL",
+        onSubmit = onValidateBindPasskeyUrl,
+        submitResult = state.validateBindPasskeyUrlResult,
+        progressEnabled = state.validateBindPasskeyUrlProgress,
     )
 
     BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -128,12 +128,12 @@ fun UrlValidationLayout(
         description = "Paste a Url here to validate if it's an authenticate url.",
         inputValue = state.urlValidationAuthenticateUrl,
         inputHint = "Authenticate URL",
-        inputTestTag = "Validate Authenticate URL Input",
         onInputChanged = onUrlValidationAuthenticateUrlTextChange,
         buttonText = "Validate Url",
         testTag = "Validate Authenticate URL",
         onSubmit = onValidateAuthenticateUrl,
         submitResult = state.validateAuthenticateUrlResult,
+        progressEnabled = state.validateAuthenticateUrlProgress,
     )
 }
 

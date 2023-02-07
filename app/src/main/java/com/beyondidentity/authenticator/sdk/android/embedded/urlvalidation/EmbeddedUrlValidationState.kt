@@ -1,8 +1,10 @@
 package com.beyondidentity.authenticator.sdk.android.embedded.urlvalidation
 
 data class EmbeddedUrlValidationState(
-    val urlValidationBindCredentialUrl: String = "",
-    val validateBindCredentialUrlResult: String = "",
+    val urlValidationBindPasskeyUrl: String = "",
+    val validateBindPasskeyUrlResult: String = "",
+    val validateBindPasskeyUrlProgress: Boolean = false,
     val urlValidationAuthenticateUrl: String = "",
     val validateAuthenticateUrlResult: String = "",
+    val validateAuthenticateUrlProgress: Boolean = false,
 )

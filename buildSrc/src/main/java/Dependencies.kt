@@ -37,8 +37,8 @@ object Versions {
     const val MOCKITO = "3.6.0"
 
     // Classpath
-    const val ANDROID_GRADLE_PLUGIN = "7.1.1"
-    const val DOKKA = "1.5.0"
+    const val ANDROID_GRADLE_PLUGIN = "7.3.1"
+    const val DOKKA = "1.7.20"
     const val KTLINT = "10.3.0"
 }
 

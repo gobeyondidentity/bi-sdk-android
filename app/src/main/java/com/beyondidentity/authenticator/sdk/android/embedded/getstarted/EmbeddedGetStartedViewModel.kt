@@ -5,15 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindCredentialEvent
-import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindCredentialErrorCallback
-import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindCredentialFailureCallback
-import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindCredentialSuccessCallback
+import com.beyondidentity.authenticator.sdk.android.apis.AcmeRetrofitBuilder
+import com.beyondidentity.authenticator.sdk.android.apis.CredentialBindingLinkRequest
+import com.beyondidentity.authenticator.sdk.android.apis.RecoverCredentialBindingLinkRequest
+import com.beyondidentity.authenticator.sdk.android.embedded.getstarted.EmbeddedGetStartedEvents.BindPasskeyEvent
+import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindPasskeyErrorCallback
+import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindPasskeyFailureCallback
+import com.beyondidentity.authenticator.sdk.android.embedded.utils.BindPasskeySuccessCallback
 import com.beyondidentity.authenticator.sdk.android.embedded.utils.UpdateStateCallback
-import com.beyondidentity.authenticator.sdk.android.utils.CredentialBindingLinkRequest
-import com.beyondidentity.authenticator.sdk.android.utils.CredentialBindingResponse
-import com.beyondidentity.authenticator.sdk.android.utils.RecoverCredentialBindingLinkRequest
-import com.beyondidentity.authenticator.sdk.android.utils.RetrofitBuilder
+import com.beyondidentity.authenticator.sdk.android.embedded.utils.resetResult
+import com.beyondidentity.authenticator.sdk.android.utils.ResponseUtil
 import com.beyondidentity.authenticator.sdk.android.utils.toIndentString
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -39,148 +40,206 @@ class EmbeddedGetStartedViewModel : ViewModel() {
     private val _events = MutableSharedFlow<EmbeddedGetStartedEvents>()
     val events: SharedFlow<EmbeddedGetStartedEvents> = _events
 
-    fun onCredentialBindingLinkUsernameTextChange(text: String) {
+    fun onPasskeyBindingLinkUsernameTextChange(text: String) {
         state = state.copy(registerUsername = text)
     }
 
-    fun onRecoverCredentialBindingLinkUsernameTextChange(text: String) {
+    fun onRecoverPasskeyBindingLinkUsernameTextChange(text: String) {
         state = state.copy(recoverUsername = text)
     }
 
-    fun onBindCredentialUrlTextChange(text: String) {
-        state = state.copy(bindCredentialUrl = text)
+    fun onBindPasskeyUrlTextChange(text: String) {
+        state = state.copy(bindPasskeyUrl = text)
     }
 
-    fun onRegisterCredential(username: String) {
-        state = state.copy(registerResult = "")
-        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
-            val result = RetrofitBuilder.ACME_API_SERVICE.credentialBindingLink(
-                CredentialBindingLinkRequest(username = username),
-            )
+    fun onRegisterPasskey(username: String) {
+        if (!resetResult(
+                username,
+                "Please enter a username",
+            ) { _, result, progress ->
+                state = state.copy(
+                    registerResult = result,
+                    registerProgress = progress,
+                )
+            }
+        ) {
+            return
+        }
 
-            onCredentialBindingResponse(
-                "onRegisterCredential",
-                result,
-                object : UpdateStateCallback {
-                    override fun invoke(username: String, result: String) {
-                        state = state.copy(
-                            registerUsername = username,
-                            registerResult = result,
-                        )
-                    }
-                },
-            )
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            try {
+                val result = AcmeRetrofitBuilder.ACME_API_SERVICE.credentialBindingLink(
+                    CredentialBindingLinkRequest(username = username),
+                )
+
+                onCredentialBindingLinkResponse(
+                    "onRegisterPasskey",
+                    result,
+                    result.body()?.credentialBindingLink,
+                    object : UpdateStateCallback {
+                        override fun invoke(username: String, result: String, progress: Boolean) {
+                            state = state.copy(
+                                registerUsername = username,
+                                registerResult = result,
+                                registerProgress = progress,
+                            )
+                        }
+                    },
+                )
+            } catch (e: Exception) {
+                state = state.copy(
+                    registerUsername = username,
+                    registerResult = e.localizedMessage.toIndentString(includeSpace = true),
+                    registerProgress = false,
+                )
+            }
         }
     }
 
-    fun onRecoverCredential(username: String) {
-        state = state.copy(recoverResult = "")
-        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
-            val result = RetrofitBuilder.ACME_API_SERVICE.recoverCredentialBindingLink(
-                RecoverCredentialBindingLinkRequest(username = username),
-            )
+    fun onRecoverPasskey(username: String) {
+        if (!resetResult(
+                username,
+                "Please enter a username",
+            ) { _, result, progress ->
+                state = state.copy(
+                    recoverResult = result,
+                    recoverProgress = progress,
+                )
+            }
+        ) {
+            return
+        }
 
-            onCredentialBindingResponse(
-                "onRecoverCredential",
-                result,
-                object : UpdateStateCallback {
-                    override fun invoke(username: String, result: String) {
-                        state = state.copy(
-                            recoverUsername = username,
-                            recoverResult = result,
-                        )
-                    }
-                },
-            )
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            try {
+                val result = AcmeRetrofitBuilder.ACME_API_SERVICE.recoverCredentialBindingLink(
+                    RecoverCredentialBindingLinkRequest(username = username),
+                )
+
+                onCredentialBindingLinkResponse(
+                    "onRecoverPasskey",
+                    result,
+                    result.body()?.credentialBindingLink,
+                    object : UpdateStateCallback {
+                        override fun invoke(username: String, result: String, progress: Boolean) {
+                            state = state.copy(
+                                recoverUsername = username,
+                                recoverResult = result,
+                                recoverProgress = progress,
+                            )
+                        }
+                    },
+                )
+            } catch (e: Exception) {
+                state = state.copy(
+                    recoverUsername = username,
+                    recoverResult = e.localizedMessage.toIndentString(includeSpace = true),
+                    recoverProgress = false,
+                )
+            }
         }
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private fun onCredentialBindingResponse(
+    private fun onCredentialBindingLinkResponse(
         method: String,
-        response: Response<CredentialBindingResponse>,
+        response: Response<*>,
+        credentialBindingLink: String?,
         updateStateCallback: UpdateStateCallback,
     ) {
-        if (response.isSuccessful) {
-            when (response.body()?.credentialBindingLink) {
-                null -> {
-                    updateStateCallback(
-                        "",
-                        response.body().toIndentString(includeSpace = true),
-                    )
+        ResponseUtil.onResponse(
+            method = method,
+            response = response,
+            onSuccessResponse = { success ->
+                when (credentialBindingLink) {
+                    null -> {
+                        updateStateCallback(
+                            "",
+                            success.toIndentString(includeSpace = true),
+                            false,
+                        )
+                    }
+                    else -> {
+                        onBindPasskey(
+                            url = credentialBindingLink,
+                            updateStateCallback = updateStateCallback,
+                        )
+                    }
                 }
-                else -> {
-                    onBindCredential(
-                        url = response.body()?.credentialBindingLink!!,
-                        updateStateCallback = updateStateCallback,
-                    )
-                }
-            }
-        } else {
-            updateStateCallback(
-                "",
-                response.errorBody()?.string().toIndentString(includeSpace = true),
-            )
-        }
-
-        Timber.d(
-            "got result for $method = ${
-                response.body() ?: response.errorBody()?.string()
-            }",
+            },
+            onFailureResponse = { failure ->
+                updateStateCallback(
+                    "",
+                    failure?.string().toIndentString(includeSpace = true),
+                    false,
+                )
+            },
         )
     }
 
-    fun onBindCredential(
+    fun onBindPasskey(
         url: String,
-        onBindCredentialSuccess: BindCredentialSuccessCallback? = null,
-        onBindCredentialFailure: BindCredentialFailureCallback? = null,
-        onBindCredentialError: BindCredentialErrorCallback? = null,
+        onBindPasskeySuccess: BindPasskeySuccessCallback? = null,
+        onBindPasskeyFailure: BindPasskeyFailureCallback? = null,
+        onBindPasskeyError: BindPasskeyErrorCallback? = null,
         updateStateCallback: UpdateStateCallback = object : UpdateStateCallback {
-            override fun invoke(url: String, result: String) {
+            override fun invoke(url: String, result: String, progress: Boolean) {
                 state = state.copy(
-                    bindCredentialUrl = url,
-                    bindCredentialResult = result,
+                    bindPasskeyUrl = url,
+                    bindPasskeyResult = result,
+                    bindPasskeyProgress = progress,
                 )
             }
         },
     ) {
-        EmbeddedSdk.bindCredential(
+        if (!resetResult(
+                string = url,
+                result = "Please provide a Bind Passkey URL",
+                updateStateCallback = updateStateCallback::invoke,
+            )
+        ) {
+            return
+        }
+
+        EmbeddedSdk.bindPasskey(
             url = url,
         )
             .flowOn(Dispatchers.Main + coroutineExceptionHandler)
-            .onEach {
-                it.onSuccess { success ->
+            .onEach { result ->
+                result.onSuccess { success ->
                     updateStateCallback(
                         "",
                         success.toIndentString(),
+                        false,
                     )
-                    Timber.d("Bind Credential success = $success")
-                    onBindCredentialEvent(BindCredentialEvent("Bind Credential success!\nYou can start exploring the Embedded SDK"))
-                    onBindCredentialSuccess?.invoke(success)
+                    Timber.d("Bind Passkey success = $success")
+                    onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey success!\nYou can start exploring the Embedded SDK"))
+                    onBindPasskeySuccess?.invoke(success)
                 }
-                it.onFailure { failure ->
+                result.onFailure { failure ->
                     updateStateCallback(
                         state.registerUsername,
                         failure.toIndentString(),
+                        false,
                     )
-                    Timber.e("Bind Credential failure = $failure")
-                    onBindCredentialEvent(BindCredentialEvent("Bind Credential failed"))
-                    onBindCredentialFailure?.invoke(failure)
+                    Timber.e("Bind Passkey failure = $failure")
+                    onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey failed"))
+                    onBindPasskeyFailure?.invoke(failure)
                 }
             }
             .catch { error ->
                 updateStateCallback(
-                    state.bindCredentialUrl,
+                    state.bindPasskeyUrl,
                     error.toIndentString(),
+                    false,
                 )
-                Timber.e("Bind Credential exception = ${error.message}")
-                onBindCredentialEvent(BindCredentialEvent("Bind Credential failed"))
-                onBindCredentialError?.invoke(error)
+                Timber.e("Bind Passkey exception = ${error.message}")
+                onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey failed"))
+                onBindPasskeyError?.invoke(error)
             }
             .launchIn(viewModelScope)
     }
 
-    private fun onBindCredentialEvent(event: EmbeddedGetStartedEvents) {
+    private fun onBindPasskeyEvent(event: EmbeddedGetStartedEvents) {
         viewModelScope.launch {
             _events.emit(event)
         }

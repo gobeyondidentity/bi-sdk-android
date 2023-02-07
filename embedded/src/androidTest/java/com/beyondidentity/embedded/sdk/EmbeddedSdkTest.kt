@@ -3,8 +3,8 @@ package com.beyondidentity.embedded.sdk
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
-import com.beyondidentity.embedded.sdk.models.BindCredentialResponse
-import com.beyondidentity.embedded.sdk.models.Credential
+import com.beyondidentity.embedded.sdk.models.BindPasskeyResponse
+import com.beyondidentity.embedded.sdk.models.Passkey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
@@ -22,9 +22,9 @@ class EmbeddedSdkTest {
     companion object {
         private const val TEST_AUTHENTICATE_URL =
             "https://auth-us.beyondidentity.com/bi-authenticate?request=0123456789ABCDEF"
-        private const val TEST_BIND_CREDENTIAL_URL =
+        private const val TEST_BIND_PASSKEY_URL =
             "https://auth-us.beyondidentity.com/v1/tenants/0123456789ABCDEF/realms/0123456789ABCDEF/identities/0123456789ABCDEF/credential-binding-jobs/01234567-89AB-CDEF-0123-456789ABCDEF:invokeAuthenticator?token=0123456789ABCDEF"
-        private const val TEST_CREDENTIAL_ID =
+        private const val TEST_PASSKEY_ID =
             "01234567-89AB-CDEF-0123-456789ABCDEF"
     }
 
@@ -35,38 +35,36 @@ class EmbeddedSdkTest {
         EmbeddedSdk.init(
             app = ApplicationProvider.getApplicationContext(),
             keyguardPrompt = null,
-            logger = { log ->
-                Timber.d(log)
-            },
+            logger = { Timber.d(it) },
         )
     }
 
-    //region BindCredential
-    private suspend fun bindCredential(
+    //region BindPasskey
+    private suspend fun bindPasskey(
         url: String,
-    ): Result<BindCredentialResponse> = suspendCoroutine { cont ->
-        EmbeddedSdk.bindCredential(url) { cont.resume(it) }
+    ): Result<BindPasskeyResponse> = suspendCoroutine { continuation ->
+        EmbeddedSdk.bindPasskey(url) { continuation.resume(it) }
     }
 
     /**
-     * Test [EmbeddedSdk.bindCredential] with [TEST_BIND_CREDENTIAL_URL]
-     * Note: This is not a valid bind credential url, so it will fail
+     * Test [EmbeddedSdk.bindPasskey] with [TEST_BIND_PASSKEY_URL]
+     * Note: This is not a valid bind passkey url, so it will fail
      **/
     @Test
-    fun bindCredential_callback_failure() = runTest {
-        Timber.d("~~~ bindCredential_callback_failure ~~~")
+    fun bindPasskey_callback_failure() = runTest {
+        Timber.d("~~~ bindPasskey_callback_failure ~~~")
 
-        val result = bindCredential(TEST_BIND_CREDENTIAL_URL)
+        val result = bindPasskey(TEST_BIND_PASSKEY_URL)
         assertTrue(result.isFailure)
     }
-    //endregion BindCredential
+    //endregion BindPasskey
 
     //region Authenticate
     private suspend fun authenticate(
         url: String,
-        credentialId: String,
-    ): Result<AuthenticateResponse> = suspendCoroutine { cont ->
-        EmbeddedSdk.authenticate(url, credentialId) { cont.resume(it) }
+        passkeyId: String,
+    ): Result<AuthenticateResponse> = suspendCoroutine { continuation ->
+        EmbeddedSdk.authenticate(url, passkeyId) { continuation.resume(it) }
     }
 
     /**
@@ -77,79 +75,81 @@ class EmbeddedSdkTest {
     fun authenticate_callback_failure() = runTest {
         Timber.d("~~~ authenticate_callback_failure ~~~")
 
-        val result = authenticate(TEST_AUTHENTICATE_URL, TEST_CREDENTIAL_ID)
+        val result = authenticate(TEST_AUTHENTICATE_URL, TEST_PASSKEY_ID)
         assertTrue(result.isFailure)
     }
     //endregion Authenticate
 
-    //region GetCredentials
-    private suspend fun getCredentials(): Result<List<Credential>> =
-        suspendCoroutine { cont -> EmbeddedSdk.getCredentials { cont.resume(it) } }
+    //region GetPasskeys
+    private suspend fun getPasskeys(): Result<List<Passkey>> = suspendCoroutine { continuation ->
+        EmbeddedSdk.getPasskeys { continuation.resume(it) }
+    }
 
     /**
-     * Test [EmbeddedSdk.getCredentials]
+     * Test [EmbeddedSdk.getPasskeys]
      **/
     @Test
-    fun getCredentials_callback_success() = runTest {
-        Timber.d("~~~ getCredentials_callback_success ~~~")
+    fun getPasskeys_callback_success() = runTest {
+        Timber.d("~~~ getPasskeys_callback_success ~~~")
 
-        val result = getCredentials()
+        val result = getPasskeys()
         assertTrue(result.isSuccess)
-        result.onSuccess { credentials ->
-            assertTrue(credentials.isEmpty())
+        result.onSuccess { passkeyList ->
+            assertTrue(passkeyList.isEmpty())
         }
     }
-    //endregion GetCredentials
+    //endregion GetPasskeys
 
-    //region DeleteCredential
-    private suspend fun deleteCredential(id: String): Result<Unit> =
-        suspendCoroutine { cont -> EmbeddedSdk.deleteCredential(id) { cont.resume(it) } }
+    //region DeletePasskey
+    private suspend fun deletePasskey(id: String): Result<Unit> = suspendCoroutine { continuation ->
+        EmbeddedSdk.deletePasskey(id) { continuation.resume(it) }
+    }
 
     /**
-     * Test [EmbeddedSdk.deleteCredential] with [TEST_CREDENTIAL_ID]
+     * Test [EmbeddedSdk.deletePasskey] with [TEST_PASSKEY_ID]
      **/
     @Test
-    fun deleteCredential_callback_success() = runTest {
-        Timber.d("~~~ deleteCredential_callback_success ~~~")
+    fun deletePasskey_callback_success() = runTest {
+        Timber.d("~~~ deletePasskey_callback_success ~~~")
 
-        val result = deleteCredential(TEST_CREDENTIAL_ID)
+        val result = deletePasskey(TEST_PASSKEY_ID)
         assertTrue(result.isSuccess)
     }
-    //endregion DeleteCredential
+    //endregion DeletePasskey
 
-    //region IsBindCredentialUrl
+    //region IsBindPasskeyUrl
     /**
-     * Test [EmbeddedSdk.isBindCredentialUrl] with [TEST_BIND_CREDENTIAL_URL]
+     * Test [EmbeddedSdk.isBindPasskeyUrl] with [TEST_BIND_PASSKEY_URL]
      **/
     @Test
-    fun isBindCredentialUrlTest_Success() {
-        Timber.d("~~~ isBindCredentialUrlTest_Success ~~~")
+    fun isBindPasskeyUrlTest_Success() {
+        Timber.d("~~~ isBindPasskeyUrlTest_Success ~~~")
 
-        // Test Bind Credential Url
-        val bindCredentialResult = EmbeddedSdk.isBindCredentialUrl(TEST_BIND_CREDENTIAL_URL)
-        Timber.d("TEST_BIND_CREDENTIAL_URL: $bindCredentialResult")
+        // Test Bind Passkey Url
+        val bindPasskeyResult = EmbeddedSdk.isBindPasskeyUrl(TEST_BIND_PASSKEY_URL)
+        Timber.d("TEST_BIND_PASSKEY_URL: $bindPasskeyResult")
         assertTrue(
-            "Bind Credential Url Test: TEST_BIND_CREDENTIAL_URL: $bindCredentialResult",
-            bindCredentialResult,
+            "Bind Passkey Url Test: TEST_BIND_PASSKEY_URL: $bindPasskeyResult",
+            bindPasskeyResult,
         )
     }
 
     /**
-     * Test [EmbeddedSdk.isBindCredentialUrl] with [TEST_AUTHENTICATE_URL]
+     * Test [EmbeddedSdk.isBindPasskeyUrl] with [TEST_AUTHENTICATE_URL]
      **/
     @Test
-    fun isBindCredentialUrlTest_Failure() {
-        Timber.d("~~~ isBindCredentialUrlTest_Failure ~~~")
+    fun isBindPasskeyUrlTest_Failure() {
+        Timber.d("~~~ isBindPasskeyUrlTest_Failure ~~~")
 
         // Test Authenticate Url
-        val authenticateResult = EmbeddedSdk.isBindCredentialUrl(TEST_AUTHENTICATE_URL)
+        val authenticateResult = EmbeddedSdk.isBindPasskeyUrl(TEST_AUTHENTICATE_URL)
         Timber.d("TEST_AUTHENTICATE_URL: $authenticateResult")
         assertFalse(
-            "Bind Credential Url Test: TEST_AUTHENTICATE_URL: $authenticateResult",
+            "Bind Passkey Url Test: TEST_AUTHENTICATE_URL: $authenticateResult",
             authenticateResult,
         )
     }
-    //endregion IsBindCredentialUrl
+    //endregion IsBindPasskeyUrl
 
     //region IsAuthenticateUrl
     /**
@@ -169,18 +169,18 @@ class EmbeddedSdkTest {
     }
 
     /**
-     * Test [EmbeddedSdk.isAuthenticateUrl] with [TEST_BIND_CREDENTIAL_URL]
+     * Test [EmbeddedSdk.isAuthenticateUrl] with [TEST_BIND_PASSKEY_URL]
      **/
     @Test
     fun isAuthenticateUrlTest_Failure() {
         Timber.d("~~~ isAuthenticateUrlTest_Failure ~~~")
 
-        // Test Bind Credential Url
-        val bindCredentialResult = EmbeddedSdk.isAuthenticateUrl(TEST_BIND_CREDENTIAL_URL)
-        Timber.d("TEST_BIND_CREDENTIAL_URL: $bindCredentialResult")
+        // Test Bind Passkey Url
+        val bindPasskeyResult = EmbeddedSdk.isAuthenticateUrl(TEST_BIND_PASSKEY_URL)
+        Timber.d("TEST_BIND_PASSKEY_URL: $bindPasskeyResult")
         assertFalse(
-            "Authenticate Url Test: TEST_BIND_CREDENTIAL_URL: $bindCredentialResult",
-            bindCredentialResult,
+            "Authenticate Url Test: TEST_BIND_PASSKEY_URL: $bindPasskeyResult",
+            bindPasskeyResult,
         )
     }
     //endregion IsAuthenticateUrl
