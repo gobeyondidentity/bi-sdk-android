@@ -11,6 +11,7 @@ import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.Authentication
 import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.AuthenticationData.PublicClientData
 import com.beyondidentity.embedded.embeddedui.ui.EmbeddedUiConfig.Config
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
+import com.beyondidentity.embedded.sdk.models.Domain
 import timber.log.Timber
 
 class App : Application(), ActivityLifecycleCallbacks {
@@ -34,6 +35,7 @@ class App : Application(), ActivityLifecycleCallbacks {
         EmbeddedSdk.init(
             app = this,
             clientId = BuildConfig.BUILD_CONFIG_BI_DEMO_CONFIDENTIAL_CLIENT_ID,
+            domain = Domain.US,
             keyguardPrompt = keyguardPrompt,
             logger = { log ->
                 Timber.d(log)

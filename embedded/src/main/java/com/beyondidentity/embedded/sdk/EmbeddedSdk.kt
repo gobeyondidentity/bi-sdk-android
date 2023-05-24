@@ -11,6 +11,7 @@ import com.beyondidentity.authenticator.sdk.embedded.R
 import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
 import com.beyondidentity.embedded.sdk.extend.ExtendCredentialListener
 import com.beyondidentity.embedded.sdk.models.Credential
+import com.beyondidentity.embedded.sdk.models.Domain
 import com.beyondidentity.embedded.sdk.models.ExtendResponse
 import com.beyondidentity.embedded.sdk.models.PkceResponse
 import com.beyondidentity.embedded.sdk.models.TokenResponse
@@ -50,11 +51,20 @@ object EmbeddedSdk {
     private const val BI_APP_INSTANCE_ID_PREF_KEY = "beyond-identity-app-instance-id"
     private val answers = Channel<Boolean>()
     private lateinit var app: Application
+    private lateinit var domain: Domain
     private lateinit var biometricAskPrompt: String
     private var logger: ((String) -> Unit)? = null
     private var keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)? = null
 
     private val executor = Executors.newFixedThreadPool(3)
+
+    private fun getAuthURL() = when (domain) {
+        Domain.US -> BuildConfig.BUILD_CONFIG_AUTH_URL
+        Domain.EU -> BuildConfig.BUILD_CONFIG_AUTH_URL.replace(
+            "https://auth.byndid.com",
+            "https://auth-eu.byndid.com"
+        )
+    }
 
     // TODO https://beyondidentity.atlassian.net/browse/ZER-7622 Move biometric/keyguard prompts in Core
     private fun ask() {
@@ -123,6 +133,7 @@ object EmbeddedSdk {
      * @param app [Application]
      * @param biometricAskPrompt A prompt the user will see when asked for biometrics while extending a credential to another device.
      * @param clientId: The public or confidential client ID generated during the OIDC configuration
+     * @param domain: The region where your Beyond Identity account was created (US or EU)
      * @param keyguardPrompt If no biometrics is set, this callback should launch the keyguard service and return the answer
      * @param logger Custom logger to get logs from the SDK
      */
@@ -131,11 +142,13 @@ object EmbeddedSdk {
     fun init(
         app: Application,
         clientId: String,
+        domain: Domain,
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
         logger: (String) -> Unit,
         biometricAskPrompt: String = app.getString(R.string.embedded_export_biometric_prompt_title),
     ) {
         this.app = app
+        this.domain = domain
         this.keyguardPrompt = keyguardPrompt
         this.logger = logger
         this.biometricAskPrompt = biometricAskPrompt
@@ -341,7 +354,7 @@ object EmbeddedSdk {
         executor.execute {
             BiSdk.embeddedConfidentialOidc(
                 clientId = clientId,
-                authUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/authorize",
+                authUrl = "${getAuthURL()}/v2/authorize",
                 redirectUri = redirectUri,
                 scope = scope,
                 pkce = pkceS256CodeChallenge?.let { CodeChallenge(challenge = it, method = S256) },
@@ -379,7 +392,7 @@ object EmbeddedSdk {
     ) = callbackFlow<Result<String>> {
         BiSdk.embeddedConfidentialOidc(
             clientId = clientId,
-            authUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/authorize",
+            authUrl = "${getAuthURL()}/v2/authorize",
             redirectUri = redirectUri,
             scope = scope,
             pkce = pkceS256CodeChallenge?.let { CodeChallenge(challenge = it, method = S256) },
@@ -411,9 +424,9 @@ object EmbeddedSdk {
         executor.execute {
             BiSdk.embeddedPublicOidc(
                 clientId = clientId,
-                authUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/authorize",
+                authUrl = "${getAuthURL()}/v2/authorize",
                 redirectUri = redirectUri,
-                tokenUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/token",
+                tokenUrl = "${getAuthURL()}/v2/token",
             ) { oidcResponse ->
                 when (oidcResponse) {
                     is CoreSuccess ->
@@ -444,9 +457,9 @@ object EmbeddedSdk {
     ) = callbackFlow<Result<TokenResponse>> {
         BiSdk.embeddedPublicOidc(
             clientId = clientId,
-            authUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/authorize",
+            authUrl = "${getAuthURL()}/v2/authorize",
             redirectUri = redirectUri,
-            tokenUrl = "${BuildConfig.BUILD_CONFIG_AUTH_URL}/v2/token",
+            tokenUrl = "${getAuthURL()}/v2/token",
         ) { oidcResponse ->
             when (oidcResponse) {
                 is CoreSuccess -> sendBlocking(Result.success(TokenResponse.from(oidcResponse.value)))
