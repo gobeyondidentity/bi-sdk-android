@@ -28,7 +28,6 @@ data class Auth0TokenResponse(
 interface Auth0ApiService {
     @FormUrlEncoded
     @POST("token")
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun token(
         @Field("grant_type") grantType: String = "authorization_code",
         @Field("client_id") clientId: String = Auth0Config.CLIENT_ID,

@@ -18,6 +18,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -94,6 +95,9 @@ fun EmbeddedAuthenticateScreen(
     EmbeddedAuthenticateLayout(
         state = viewModel.state,
         viewModel = viewModel,
+        onGetAuthenticationContext = {
+            viewModel.onGetAuthenticationContext()
+        },
         onAuthenticateBeyondIdentity = {
             viewModel.onAuthenticateBeyondIdentity(activity)
         },
@@ -113,6 +117,14 @@ fun EmbeddedAuthenticateScreen(
         onAuthenticate = {
             viewModel.onAuthenticate(activity, viewModel.state.authenticateUrl)
         },
+        onAuthenticateEmailOtpTextChange = viewModel::onAuthenticateEmailOtpTextChange,
+        onAuthenticateEmailOtp = {
+            viewModel.onAuthenticateEmailOtp(viewModel.state.authenticateEmailOtpUrl)
+        },
+        onRedeemEmailOtpTextChange = viewModel::onRedeemEmailOtpTextChange,
+        onRedeemEmailOtp = {
+            viewModel.onRedeemEmailOtp(viewModel.state.redeemEmailOtpUrl)
+        },
     )
 }
 
@@ -120,6 +132,7 @@ fun EmbeddedAuthenticateScreen(
 fun EmbeddedAuthenticateLayout(
     state: EmbeddedAuthenticateState,
     viewModel: EmbeddedAuthenticateViewModel,
+    onGetAuthenticationContext: () -> Unit,
     onAuthenticateBeyondIdentity: () -> Unit,
     onAuthenticateOktaSDK: () -> Unit,
     onAuthenticateOktaWeb: () -> Unit,
@@ -127,6 +140,10 @@ fun EmbeddedAuthenticateLayout(
     onAuthenticateAuth0Web: () -> Unit,
     onAuthenticateUrlTextChange: (String) -> Unit,
     onAuthenticate: () -> Unit,
+    onAuthenticateEmailOtpTextChange: (String) -> Unit,
+    onAuthenticateEmailOtp: () -> Unit,
+    onRedeemEmailOtpTextChange: (String) -> Unit,
+    onRedeemEmailOtp: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -136,10 +153,19 @@ fun EmbeddedAuthenticateLayout(
         Text(
             text = "Authenticate",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 8.dp)
+                .testTag("Authenticate Header"),
         )
 
         BiVersionText()
+
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
+
+        AuthenticationContextLayout(
+            state,
+            onGetAuthenticationContext,
+        )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
 
@@ -160,7 +186,39 @@ fun EmbeddedAuthenticateLayout(
             onAuthenticateUrlTextChange,
             onAuthenticate,
         )
+
+        BiDivider(modifier = Modifier.padding(top = 32.dp))
+
+        AuthenticateEmailOtpLayout(
+            state,
+            onAuthenticateEmailOtpTextChange,
+            onAuthenticateEmailOtp,
+            onRedeemEmailOtpTextChange,
+            onRedeemEmailOtp,
+        )
     }
+}
+
+@Composable
+fun AuthenticationContextLayout(
+    state: EmbeddedAuthenticateState,
+    onGetAuthenticationContext: () -> Unit,
+) {
+    Text(
+        text = "Authentication Context",
+        style = MaterialTheme.typography.subtitle1,
+        modifier = Modifier.padding(top = 32.dp),
+    )
+
+    ResponseInputView(
+        description = "Returns the Authentication Context for the current transaction.\n" +
+                "The Authentication Context contains the Authenticator Config, Authentication Method Configuration, request origin, and the authenticating application.",
+        buttonText = "Get Authentication Context",
+        testTag = "Get Authentication Context",
+        onSubmit = onGetAuthenticationContext,
+        submitResult = state.getAuthenticationContextResult,
+        progressEnabled = state.getAuthenticationContextProgress,
+    )
 }
 
 @Composable
@@ -298,7 +356,65 @@ fun Authenticate2Layout(
 }
 
 @Composable
+fun AuthenticateEmailOtpLayout(
+    state: EmbeddedAuthenticateState,
+    onAuthenticateEmailOtpTextChange: (String) -> Unit,
+    onAuthenticateEmailOtp: () -> Unit,
+    onRedeemEmailOtpTextChange: (String) -> Unit,
+    onRedeemEmailOtp: () -> Unit,
+) {
+    Text(
+        text = "Authenticate with Email Otp",
+        style = MaterialTheme.typography.subtitle1,
+        modifier = Modifier.padding(top = 32.dp),
+    )
+
+    InteractionResponseInputView(
+        description = "Try authenticating with Email OTP using Beyond Identity",
+        inputValue = state.authenticateEmailOtpUrl,
+        inputHint = "Email",
+        onInputChanged = onAuthenticateEmailOtpTextChange,
+        buttonText = "Authenticate with Email OTP",
+        testTag = "Authenticate with Email OTP",
+        onSubmit = onAuthenticateEmailOtp,
+        submitResult = state.authenticateEmailOtpResult,
+        progressEnabled = state.authenticateEmailOtpProgress,
+    )
+
+    InteractionResponseInputView(
+        description = "Try redeeming the OTP in your Email using Beyond Identity",
+        inputValue = state.redeemEmailOtpUrl,
+        inputHint = "OTP",
+        onInputChanged = onRedeemEmailOtpTextChange,
+        buttonText = "Redeem OTP",
+        testTag = "Redeem OTP",
+        onSubmit = onRedeemEmailOtp,
+        submitResult = state.redeemEmailOtpResult,
+        progressEnabled = state.redeemEmailOtpProgress,
+    )
+}
+
+@Composable
 @Preview(showBackground = true)
+@Suppress("MoveLambdaOutsideParentheses")
+fun AuthenticationContextPreview() {
+    BiSdkAndroidTheme {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(start = 24.dp, end = 24.dp),
+        ) {
+            AuthenticationContextLayout(
+                EmbeddedAuthenticateState(),
+                {},
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+@Suppress("MoveLambdaOutsideParentheses")
 fun Authenticate1Preview() {
     BiSdkAndroidTheme {
         Column(
@@ -321,6 +437,7 @@ fun Authenticate1Preview() {
 
 @Composable
 @Preview(showBackground = true)
+@Suppress("MoveLambdaOutsideParentheses")
 fun Authenticate2Preview() {
     BiSdkAndroidTheme {
         Column(
@@ -330,6 +447,27 @@ fun Authenticate2Preview() {
         ) {
             Authenticate2Layout(
                 EmbeddedAuthenticateState(),
+                {},
+                {},
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+@Suppress("MoveLambdaOutsideParentheses")
+fun AuthenticateEmailOtpPreview() {
+    BiSdkAndroidTheme {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(start = 24.dp, end = 24.dp),
+        ) {
+            AuthenticateEmailOtpLayout(
+                EmbeddedAuthenticateState(),
+                {},
+                {},
                 {},
                 {},
             )
@@ -351,6 +489,11 @@ fun EmbeddedAuthenticatePreview() {
             {},
             {},
             {},
+            {},
+            {},
+            {},
+            {},
+            {},
         )
     }
 }
@@ -362,6 +505,11 @@ fun EmbeddedAuthenticatePreviewDark() {
         EmbeddedAuthenticateLayout(
             EmbeddedAuthenticateState(),
             EmbeddedAuthenticateViewModel(),
+            {},
+            {},
+            {},
+            {},
+            {},
             {},
             {},
             {},

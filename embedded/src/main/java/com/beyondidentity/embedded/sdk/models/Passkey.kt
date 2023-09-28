@@ -1,7 +1,6 @@
 package com.beyondidentity.embedded.sdk.models
 
 import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
-import java.lang.Exception
 
 /**
  * A Universal Passkey is a public and private key pair. The private key is generated, stored, and never leaves the user’s devices’ hardware root of trust (i.e. Secure Enclave).

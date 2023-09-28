@@ -1,18 +1,20 @@
-@file:Suppress("SuspiciousCollectionReassignment")
-
 import checks.ktlintCheckConfig
 import config.configureAndroidLib
 import config.configureMavenPublish
 import utils.getProp
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-parcelize")
-    id("kotlinx-serialization")
-    id("maven-publish")
-    id("org.jetbrains.dokka")
-    id("org.jlleitschuh.gradle.ktlint")
+    id(libs.plugins.com.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.parcelize.get().pluginId)
+    id(libs.plugins.kotlinx.serialization.get().pluginId)
+    id(libs.plugins.maven.publish.get().pluginId)
+    id(libs.plugins.org.jetbrains.dokka.get().pluginId)
+    id(libs.plugins.org.jlleitschuh.gradle.ktlint.get().pluginId)
+}
+
+android {
+    namespace = "com.beyondidentity.authenticator.sdk.embedded"
 }
 
 configureAndroidLib()
@@ -45,34 +47,34 @@ configureMavenPublish(
 val biSdkVersion = getProp("BUILD_CONFIG_BI_SDK_VERSION")
 
 dependencies {
-    implementation(Libs.ANDROIDX_BIOMETRIC)
-    implementation(Libs.ANDROIDX_BROWSER)
-    implementation(Libs.ANDROIDX_PREFERENCE_KTX)
-    implementation(Libs.KOTLINX_COROUTINES_ANDROID)
-    implementation(Libs.KOTLINX_SERIALIZATION_JSON)
-    implementation(Libs.KOTLIN_REFLECTION)
-    implementation(Libs.KOTLIN_STD_LIB)
-    implementation(Libs.TIMBER)
-    implementation(Libs.ZXING_EMBEDDED)
-    implementation("${Libs.CORE}:$biSdkVersion")
-    implementation("${Libs.DEVICE_INFO}:$biSdkVersion")
-    implementation("${Libs.ENCLAVE}:$biSdkVersion")
-    implementation("${Libs.LOG}:$biSdkVersion")
-    implementation("${Libs.OPTICS}:$biSdkVersion")
-    implementation("${Libs.PRELUDE}:$biSdkVersion")
-    implementation("${Libs.PROTO}:$biSdkVersion")
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.timber)
+    implementation(libs.zxing.android.embedded)
+    implementation("${libs.core.get()}:$biSdkVersion")
+    implementation("${libs.device.info.get()}:$biSdkVersion")
+    implementation("${libs.enclave.get()}:$biSdkVersion")
+    implementation("${libs.log.get()}:$biSdkVersion")
+    implementation("${libs.optics.get()}:$biSdkVersion")
+    implementation("${libs.prelude.get()}:$biSdkVersion")
+    implementation("${libs.proto.get()}:$biSdkVersion")
 
-    testImplementation(TestLibs.ANDROIDX_TEST_CORE)
-    testImplementation(TestLibs.JUNIT)
-    testImplementation(TestLibs.KOTLINX_COROUTINES_TEST)
-    testImplementation(TestLibs.ROBOLECTRIC)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
 
-    androidTestImplementation(TestLibs.ANDROIDX_TEST_CORE)
-    androidTestImplementation(TestLibs.KOTLINX_COROUTINES_TEST)
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_ESPRESSO_CORE)
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_EXT_JUNIT)
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_RULES)
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_RUNNER)
-    androidTestImplementation(AndroidTestLibs.MOCKITO_ANDROID)
-    androidTestImplementation(AndroidTestLibs.MOCKITO_CORE)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.mockito.core)
 }

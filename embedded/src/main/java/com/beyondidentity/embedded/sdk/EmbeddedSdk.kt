@@ -10,11 +10,14 @@ import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
 import com.beyondidentity.authenticator.sdk.embedded.R
 import com.beyondidentity.embedded.sdk.exceptions.DatabaseSetupException
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
+import com.beyondidentity.embedded.sdk.models.AuthenticationContext
 import com.beyondidentity.embedded.sdk.models.BindPasskeyResponse
 import com.beyondidentity.embedded.sdk.models.OnSelectPasskey
 import com.beyondidentity.embedded.sdk.models.OnSelectedPasskey
+import com.beyondidentity.embedded.sdk.models.OtpChallengeResponse
 import com.beyondidentity.embedded.sdk.models.Passkey
 import com.beyondidentity.embedded.sdk.models.PasskeyId
+import com.beyondidentity.embedded.sdk.models.RedeemOtpResponse
 import com.beyondidentity.embedded.sdk.utils.appVersionName
 import com.beyondidentity.embedded.sdk.utils.postMain
 import com.beyondidentity.endpoint.android.lib.deviceinfo.DeviceInfo
@@ -25,10 +28,13 @@ import com.beyondidentity.endpoint.android.lib.log.LogType
 import com.beyondidentity.sdk.android.bicore.BiSdk
 import com.beyondidentity.sdk.android.bicore.models.AuthLibConfiguration
 import com.beyondidentity.sdk.android.bicore.models.AuthLibStoreConfiguration
+import com.beyondidentity.sdk.android.bicore.models.BeginEmailOtp
 import com.beyondidentity.sdk.android.bicore.models.CredentialHandling
+import com.beyondidentity.sdk.android.bicore.models.CredentialId
 import com.beyondidentity.sdk.android.bicore.models.CryptoSource
 import com.beyondidentity.sdk.android.bicore.models.HostClientEnvironment
 import com.beyondidentity.sdk.android.bicore.models.KeyStorageStrategy
+import com.beyondidentity.sdk.android.bicore.models.RedeemOtp
 import com.beyondidentity.sdk.android.bicore.models.TrustedSource
 import com.beyondidentity.sdk.android.bicore.models.UrlType
 import com.beyondidentity.sdk.android.bicore.partials.CoreFailure
@@ -47,7 +53,6 @@ import java.io.File
 import java.util.UUID
 import java.util.concurrent.Executors
 import kotlin.Result.Companion
-import kotlin.jvm.Throws
 
 object EmbeddedSdk {
     private const val FLOW_TYPE_EMBEDDED = "embedded"
@@ -57,16 +62,17 @@ object EmbeddedSdk {
     private val selectPasskeySubject = Channel<String?>()
     private val answers = Channel<Boolean>()
 
+    private var allowedDomains: List<String>? = null
     private lateinit var app: Application
     private lateinit var biometricAskPrompt: String
-    private var logger: ((String) -> Unit)? = null
     private var keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)? = null
-    private var hasInitalizedCore = false
+    private var logger: ((String) -> Unit)? = null
+    private var hasInitializedCore = false
 
     private val executor = Executors.newFixedThreadPool(3)
 
     // TODO https://beyondidentity.atlassian.net/browse/ZER-7622 Move biometric/keyguard prompts in Core
-    private fun ask() {
+    private fun ask(biometricOnly: Boolean = false) {
         val cancellationSignal = CancellationSignal().apply {
             setOnCancelListener { logger?.invoke("biometrics cancelled") }
         }
@@ -158,8 +164,9 @@ object EmbeddedSdk {
         this.keyguardPrompt = keyguardPrompt
         this.logger = logger
         this.biometricAskPrompt = biometricAskPrompt
+        this.allowedDomains = allowedDomains
 
-        if (hasInitalizedCore) {
+        if (hasInitializedCore) {
             return
         }
 
@@ -168,9 +175,9 @@ object EmbeddedSdk {
             isRooted = false,
             deviceSerialNumber = { "embedded-device-number" },
             deviceUid = { null },
-            ask = {
+            ask = { _, biometricOnly ->
                 runBlocking {
-                    launch(Dispatchers.Main) { ask() }
+                    launch(Dispatchers.Main) { ask(biometricOnly) }
                     answers.receive()
                 }
             },
@@ -218,12 +225,13 @@ object EmbeddedSdk {
                 cryptoSource = CryptoSource.Host,
                 credentialHandling = CredentialHandling.Legacy,
                 keyStorageStrategy = KeyStorageStrategy.TeeIfAvailable,
+                gdcUrl = BuildConfig.BUILD_CONFIG_GDC_URL,
             ),
             locale = null,
         )
 
         dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains)
-        this.hasInitalizedCore = true
+        this.hasInitializedCore = true
     }
 
     private fun newDBDirectory(fileName: String): String {
@@ -249,6 +257,7 @@ object EmbeddedSdk {
                     directory = newDBDirectory(""),
                 )
             ),
+            callingAppInfo = null, // for eventing purposes
         ) {
             when (it) {
                 is CoreSuccess -> logger?.invoke("DB migration success")
@@ -342,13 +351,13 @@ object EmbeddedSdk {
             executor.execute {
                 BiSdk.biAuthenticate(
                     url = url,
-                    credentialId = passkeyId,
                     trustedSource = TrustedSource.EmbeddedSource,
                     flowType = FLOW_TYPE_EMBEDDED,
+                    credentialDescriptor = CredentialId(passkeyId),
                 ) { biAuthenticateResult ->
                     when (biAuthenticateResult) {
                         is CoreSuccess -> postMain {
-                            callback(Result.success(AuthenticateResponse.from(biAuthenticateResult.value)))
+                            callback(Result.success(AuthenticateResponse.from(biAuthenticateResult.value)!!))
                         }
                         is CoreFailure -> postMain {
                             callback(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
@@ -377,12 +386,12 @@ object EmbeddedSdk {
         } else {
             BiSdk.biAuthenticate(
                 url = url,
-                credentialId = passkeyId,
                 trustedSource = TrustedSource.EmbeddedSource,
                 flowType = FLOW_TYPE_EMBEDDED,
+                credentialDescriptor = CredentialId(passkeyId),
             ) { biAuthenticateResult ->
                 when (biAuthenticateResult) {
-                    is CoreSuccess -> trySendBlocking(Result.success(AuthenticateResponse.from(biAuthenticateResult.value)))
+                    is CoreSuccess -> trySendBlocking(Result.success(AuthenticateResponse.from(biAuthenticateResult.value)!!))
                     is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
                 }
             }
@@ -435,6 +444,7 @@ object EmbeddedSdk {
     /**
      * Delete a [Passkey] by ID on current device.
      *
+     * Note: It is possible to delete a passkey that does not exist.
      * Warning: deleting a [Passkey] is destructive and will remove everything from the device. If no other device contains the passkey then the user will need to complete a recovery in order to log in again on this device.
      *
      * @param id the unique identifier of the [Passkey].
@@ -583,6 +593,208 @@ object EmbeddedSdk {
         when (it) {
             is CoreSuccess -> trySendBlocking(it.value == UrlType.Bind)
             is CoreFailure -> trySendBlocking(false)
+        }
+        awaitClose()
+    }.flowOn(dispatcher)
+
+    /**
+     * Returns the Authentication Context for the current transaction.
+     *
+     * The Authentication Context contains the Authenticator Config,
+     * Authentication Method Configuration, request origin, and the
+     * authenticating application.
+     *
+     * @param url The authentication URL of the current transaction.
+     * @param callback [AuthenticationContext] or [Throwable]
+     */
+    @JvmStatic
+    fun getAuthenticationContext(
+        url: String,
+        callback: (Result<AuthenticationContext>) -> Unit,
+    ) {
+        if (!isAuthenticateUrl(url)) {
+            callback(Result.failure(Throwable("URL provided is invalid")))
+        } else {
+            executor.execute {
+                BiSdk.getAuthenticationContext(
+                    url = url,
+                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains,
+                ) { biAuthenticationContext ->
+                    when (biAuthenticationContext) {
+                        is CoreSuccess -> postMain {
+                            callback(Result.success(AuthenticationContext.from(biAuthenticationContext.value)))
+                        }
+                        is CoreFailure -> postMain {
+                            callback(Result.failure(Throwable(biAuthenticationContext.value.localizedDescription)))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the Authentication Context for the current transaction.
+     *
+     * The Authentication Context contains the Authenticator Config,
+     * Authentication Method Configuration, request origin, and the
+     * authenticating application.
+     *
+     * @param url The authentication URL of the current transaction.
+     * @return [Flow] [AuthenticationContext] or [Throwable]
+     */
+    fun getAuthenticationContext(
+        url: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    ) = callbackFlow<Result<AuthenticationContext>> {
+        if (!isAuthenticateUrl(url)) {
+            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+            awaitClose()
+        } else {
+            BiSdk.getAuthenticationContext(
+                url = url,
+                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains,
+            ) { biAuthenticationContext ->
+                when (biAuthenticationContext) {
+                    is CoreSuccess -> trySendBlocking(Result.success(AuthenticationContext.from(biAuthenticationContext.value)))
+                    is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticationContext.value.localizedDescription)))
+                }
+            }
+            awaitClose()
+        }
+    }.flowOn(dispatcher)
+
+    /**
+     * Initiates authentication using an OTP, which will be sent to the
+     * provided email address.
+     * @param url The authentication URL of the current transaction.
+     * @param email The email address where the OTP will be sent.
+     * @param callback [Result] of [OtpChallengeResponse] or [Throwable]
+     */
+    @JvmStatic
+    fun authenticateOtp(
+        url: String,
+        email: String,
+        callback: (Result<OtpChallengeResponse>) -> Unit,
+    ) {
+        if (!isAuthenticateUrl(url)) {
+            callback(Result.failure(Throwable("URL provided is invalid")))
+        } else {
+            executor.execute {
+                BiSdk.biAuthenticate(
+                    url = url,
+                    trustedSource = TrustedSource.EmbeddedSource,
+                    flowType = FLOW_TYPE_EMBEDDED,
+                    credentialDescriptor = BeginEmailOtp(email),
+                ) { biAuthenticateResult ->
+                    when (biAuthenticateResult) {
+                        is CoreSuccess -> postMain {
+                            callback(Result.success(OtpChallengeResponse.from(biAuthenticateResult.value)!!))
+                        }
+                        is CoreFailure -> postMain {
+                            callback(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Initiates authentication using an OTP, which will be sent to the
+     * provided email address.
+     * @param url The authentication URL of the current transaction.
+     * @param email The email address where the OTP will be sent.
+     * @return [Flow] [Result] of [OtpChallengeResponse] or [Throwable]
+     */
+    fun authenticateOtp(
+        url: String,
+        email: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    ) = callbackFlow<Result<OtpChallengeResponse>> {
+        if (!isAuthenticateUrl(url)) {
+            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+            awaitClose()
+        } else {
+            BiSdk.biAuthenticate(
+                url = url,
+                trustedSource = TrustedSource.EmbeddedSource,
+                flowType = FLOW_TYPE_EMBEDDED,
+                credentialDescriptor = BeginEmailOtp(email),
+            ) { biAuthenticateResult ->
+                when (biAuthenticateResult) {
+                    is CoreSuccess -> trySendBlocking(Result.success(OtpChallengeResponse.from(biAuthenticateResult.value)!!))
+                    is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+                }
+            }
+            awaitClose()
+        }
+    }.flowOn(dispatcher)
+
+    /**
+     * Redeems an OTP for a grant code.
+     * @param url The authentication URL of the current transaction.
+     * @param otp The OTP to redeem.
+     * @param callback [Result] of [RedeemOtpResponse] that resolves to an [AuthenticateResponse] on success or an [OtpChallengeResponse] on failure to authenticate with the provided OTP code. Use on retry. or [Throwable].
+     */
+    @JvmStatic
+    fun redeemOtp(
+        url: String,
+        otp: String,
+        callback: (Result<RedeemOtpResponse>) -> Unit,
+    ) {
+        executor.execute {
+            BiSdk.biAuthenticate(
+                url = url,
+                trustedSource = TrustedSource.EmbeddedSource,
+                flowType = FLOW_TYPE_EMBEDDED,
+                credentialDescriptor = RedeemOtp(otp),
+            ) { biAuthenticateResult ->
+                when (biAuthenticateResult) {
+                    is CoreSuccess -> postMain {
+                        biAuthenticateResult.value.allow?.let { biAuthenticateResponse ->
+                            callback(Result.success(RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))))
+                        }
+                        biAuthenticateResult.value.`continue`?.let { biContinueResponse ->
+                            callback(Result.success(RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))))
+                        }
+                    }
+                    is CoreFailure -> postMain {
+                        callback(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Redeems an OTP for a grant code.
+     * @param url The authentication URL of the current transaction.
+     * @param otp The OTP to redeem.
+     * @return [Flow] [Result] of [RedeemOtpResponse] that resolves to an [AuthenticateResponse] on success or an [OtpChallengeResponse] on failure to authenticate with the provided OTP code. Use on retry. or [Throwable].
+     */
+    fun redeemOtp(
+        url: String,
+        otp: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    ) = callbackFlow<Result<RedeemOtpResponse>> {
+        BiSdk.biAuthenticate(
+            url = url,
+            trustedSource = TrustedSource.EmbeddedSource,
+            flowType = FLOW_TYPE_EMBEDDED,
+            credentialDescriptor = RedeemOtp(otp),
+        ) { biAuthenticateResult ->
+            when (biAuthenticateResult) {
+                is CoreSuccess -> {
+                    biAuthenticateResult.value.allow?.let { biAuthenticateResponse ->
+                        trySendBlocking(Result.success(RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))))
+                    }
+                    biAuthenticateResult.value.`continue`?.let { biContinueResponse ->
+                        trySendBlocking(Result.success(RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))))
+                    }
+                }
+                is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+            }
         }
         awaitClose()
     }.flowOn(dispatcher)

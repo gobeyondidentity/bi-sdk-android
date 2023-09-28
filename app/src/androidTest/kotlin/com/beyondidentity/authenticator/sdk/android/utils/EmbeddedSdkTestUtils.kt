@@ -9,7 +9,7 @@ class EmbeddedSdkTestUtils {
         fun getIdByUsername(rule: ComposeContentTestRule, username: String): String {
             var id = ""
 
-            rule.waitUntil(10_000L) {
+            rule.waitUntil(rule.DEFAULT_TIMEOUT_MILLIS) {
                 EmbeddedSdk.getPasskeys { passkeyListResult ->
                     passkeyListResult.getOrDefault(emptyList()).forEach { passkey ->
                         if (passkey.identity.username == username) {
@@ -21,6 +21,24 @@ class EmbeddedSdkTestUtils {
             }
 
             return id
+        }
+
+        @JvmStatic
+        fun getDisplayNameByUsername(rule: ComposeContentTestRule, username: String): String {
+            var displayName = ""
+
+            rule.waitUntil(rule.DEFAULT_TIMEOUT_MILLIS) {
+                EmbeddedSdk.getPasskeys { passkeyListResult ->
+                    passkeyListResult.getOrDefault(emptyList()).forEach { passkey ->
+                        if (passkey.identity.username == username) {
+                            displayName = passkey.identity.displayName
+                        }
+                    }
+                }
+                displayName != ""
+            }
+
+            return displayName
         }
     }
 }

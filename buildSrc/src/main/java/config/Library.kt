@@ -19,7 +19,8 @@ private val buildConfigKeys = listOf(
     "BUILD_CONFIG_DEVICE_GATEWAY_URL",
     "BUILD_CONFIG_MIGRATED_URL",
     "BUILD_CONFIG_CHANNEL",
-    "BUILD_CONFIG_UNATTESTED_EVENT_URL"
+    "BUILD_CONFIG_UNATTESTED_EVENT_URL",
+    "BUILD_CONFIG_GDC_URL",
 )
 
 fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtension>().run {

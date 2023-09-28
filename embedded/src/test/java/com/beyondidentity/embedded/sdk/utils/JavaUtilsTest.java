@@ -25,7 +25,7 @@ public class JavaUtilsTest {
         getResultSuccess(123, result -> {
             JavaResult<Integer> jr = JavaUtils.toJavaResult(result);
 
-            assertEquals(jr.getData(), new Integer(123));
+            assertEquals(jr.getData(), Integer.valueOf(123));
             assertEquals(jr.getType(), JavaResult.SUCCESS);
             assertNull(jr.getError());
 

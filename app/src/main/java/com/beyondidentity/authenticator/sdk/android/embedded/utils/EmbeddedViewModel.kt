@@ -2,7 +2,7 @@ package com.beyondidentity.authenticator.sdk.android.embedded.utils
 
 import androidx.lifecycle.ViewModel
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 fun ViewModel.resetResult(
     progress: Boolean = true,
     updateStateCallback: UpdateStateCallback,
@@ -10,7 +10,7 @@ fun ViewModel.resetResult(
     updateStateCallback.invoke("", "", progress)
 }
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 fun ViewModel.resetResult(
     string: String,
     result: String,

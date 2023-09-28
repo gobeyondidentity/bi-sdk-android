@@ -32,7 +32,6 @@ data class OktaV1TokenResponse(
 interface OktaApiService {
     @FormUrlEncoded
     @POST("v1/token")
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun v1Token(
         @Field("client_id") clientId: String = OktaConfig.CLIENT_ID,
         @Field("code") code: String,

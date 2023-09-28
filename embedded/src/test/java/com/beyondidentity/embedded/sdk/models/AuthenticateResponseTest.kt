@@ -1,6 +1,6 @@
 package com.beyondidentity.embedded.sdk.models
 
-import com.beyondidentity.sdk.android.bicore.models.BiAuthenticateResponse
+import com.beyondidentity.sdk.android.bicore.models.BiAuthenticateUrlResponse
 import org.junit.Test
 
 class AuthenticateResponseTest {
@@ -11,7 +11,7 @@ class AuthenticateResponseTest {
         val REDIRECT_URL =
             "http://example.com/?code=0123456789ABCDEF&state=foobar"
 
-        val biAuthenticateResponse = BiAuthenticateResponse(
+        val biAuthenticateResponse = BiAuthenticateUrlResponse(
             message = MESSAGE,
             redirectUrl = REDIRECT_URL,
         )

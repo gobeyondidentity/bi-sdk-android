@@ -16,6 +16,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -73,7 +74,9 @@ fun EmbeddedUrlValidationLayout(
         Text(
             text = "URL Validation",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 8.dp)
+                .testTag("URL Validation Header"),
         )
 
         BiVersionText()

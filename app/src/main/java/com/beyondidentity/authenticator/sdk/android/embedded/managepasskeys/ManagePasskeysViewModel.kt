@@ -1,6 +1,5 @@
 package com.beyondidentity.authenticator.sdk.android.embedded.managepasskeys
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -81,56 +80,34 @@ class ManagePasskeysViewModel : ViewModel() {
             return
         }
 
-        EmbeddedSdk.getPasskeys { passkeyListResult ->
-            passkeyListResult.getOrNull()?.let { passkeyList ->
-                var found = false
-                passkeyList.forEach { passkey ->
-                    Log.d("PasskeyId", passkey.id)
-                    if (passkey.id == state.deletePasskey) {
-                        found = true
-                        EmbeddedSdk.deletePasskey(state.deletePasskey)
-                            .flowOn(Dispatchers.Main + coroutineExceptionHandler)
-                            .onEach { result ->
-                                result.onSuccess {
-                                    Timber.d("Deleted passkeys for id: ${state.deletePasskey}")
-                                    state = state.copy(
-                                        deletePasskeyResult = "Deleted passkeys for id: ${state.deletePasskey}",
-                                        deletePasskeyProgress = false,
-                                        getPasskeyResult = "[]",
-                                        getPasskeyProgress = false,
-                                    )
-                                }
-                                result.onFailure {
-                                    Timber.d("Passkeys deletion failed.")
-                                    state = state.copy(
-                                        deletePasskeyResult = it.toString(),
-                                        deletePasskeyProgress = false,
-                                    )
-                                }
-                            }
-                            .catch { error ->
-                                val message = "Passkeys deletion failed ${error.message}"
-                                Timber.d(message)
-                                state = state.copy(
-                                    deletePasskeyResult = message,
-                                    deletePasskeyProgress = false,
-                                )
-                            }
-                            .launchIn(viewModelScope)
-                    }
-                }
-                if (!found) {
+        EmbeddedSdk.deletePasskey(state.deletePasskey)
+            .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+            .onEach { result ->
+                result.onSuccess {
+                    Timber.d("Deleted passkeys for id: ${state.deletePasskey}")
                     state = state.copy(
-                        deletePasskeyResult = "Cannot find that passkey id on this device",
+                        deletePasskeyResult = "Deleted passkeys for id: ${state.deletePasskey}",
+                        deletePasskeyProgress = false,
+                        getPasskeyResult = "[]",
+                        getPasskeyProgress = false,
+                    )
+                }
+                result.onFailure {
+                    Timber.d("Passkeys deletion failed.")
+                    state = state.copy(
+                        deletePasskeyResult = it.toString(),
                         deletePasskeyProgress = false,
                     )
                 }
-            } ?: run {
+            }
+            .catch { error ->
+                val message = "Passkeys deletion failed ${error.message}"
+                Timber.d(message)
                 state = state.copy(
-                    deletePasskeyResult = "There are no passkeys on this device to delete",
+                    deletePasskeyResult = message,
                     deletePasskeyProgress = false,
                 )
             }
-        }
+            .launchIn(viewModelScope)
     }
 }

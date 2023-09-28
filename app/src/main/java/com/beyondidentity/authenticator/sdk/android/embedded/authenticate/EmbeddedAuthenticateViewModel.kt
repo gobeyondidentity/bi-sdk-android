@@ -465,6 +465,14 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         state = state.copy(authenticateUrl = text)
     }
 
+    fun onAuthenticateEmailOtpTextChange(text: String) {
+        state = state.copy(authenticateEmailOtpUrl = text)
+    }
+
+    fun onRedeemEmailOtpTextChange(text: String) {
+        state = state.copy(redeemEmailOtpUrl = text)
+    }
+
     @Suppress("DEPRECATION")
     fun startActivityForWebMode(
         activity: FragmentActivity,
@@ -557,7 +565,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             result.onSuccess { success ->
                                 updateStateCallback(
                                     "",
-                                    success.toIndentString(),
+                                    success.toIndentString(includeSpace = true),
                                     false,
                                 )
                                 Timber.d("Authenticate success = $success")
@@ -594,6 +602,99 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
     private fun onAuthenticateEvent(event: EmbeddedAuthenticateEvents) {
         viewModelScope.launch {
             _events.emit(event)
+        }
+    }
+
+    fun onGetAuthenticationContext() {
+        state = state.copy(buttonPressed = "Get Authentication context")
+
+        setCodeChallengeAndVerifier()
+
+        val updateStateCallback = object : UpdateStateCallback {
+            override fun invoke(url: String, result: String, progress: Boolean) {
+                state = state.copy(
+                    getAuthenticationContextResult = result,
+                    getAuthenticationContextProgress = progress,
+                )
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            try {
+                ResponseUtil.onResponse(
+                    method = "GetAuthenticationContext",
+                    response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.authorize(
+                        code_challenge = state.codeChallenge,
+                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                    ),
+                    onSuccessResponse = { authorizeResponse ->
+                        when (authorizeResponse?.authenticateUrl) {
+                            null -> {
+                                updateStateCallback(
+                                    "",
+                                    authorizeResponse.toIndentString(includeSpace = true),
+                                    false,
+                                )
+                            }
+                            else -> {
+                                updateStateCallback(
+                                    "",
+                                    "",
+                                    true,
+                                )
+
+                                EmbeddedSdk.getAuthenticationContext(
+                                    url = authorizeResponse.authenticateUrl,
+                                )
+                                    .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+                                    .onEach { result ->
+                                        result.onSuccess { success ->
+                                            Timber.d("Get Authentication Context success = $success")
+
+                                            updateStateCallback(
+                                                "",
+                                                success.toIndentString(includeSpace = true),
+                                                false,
+                                            )
+                                        }
+                                        result.onFailure { failure ->
+                                            Timber.e("Get Authentication Context failure = $failure")
+
+                                            updateStateCallback(
+                                                "",
+                                                failure.toIndentString(),
+                                                false,
+                                            )
+                                        }
+                                    }
+                                    .catch { error ->
+                                        Timber.e("Get Authentication Context exception = ${error.message}")
+
+                                        updateStateCallback(
+                                            "",
+                                            error.toIndentString(),
+                                            false,
+                                        )
+                                    }
+                                    .launchIn(viewModelScope)
+                            }
+                        }
+                    },
+                    onFailureResponse = { authorizeResponse ->
+                        updateStateCallback(
+                            "",
+                            authorizeResponse?.string().toIndentString(includeSpace = true),
+                            false,
+                        )
+                    },
+                )
+            } catch (e: Exception) {
+                updateStateCallback(
+                    "",
+                    e.localizedMessage.toIndentString(includeSpace = true),
+                    false,
+                )
+            }
         }
     }
 
@@ -839,7 +940,6 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         )
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     fun onOktaTokenEndpoint(
         code: String,
         codeVerifier: String,
@@ -908,7 +1008,6 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         )
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     fun onAuth0TokenEndpoint(
         code: String,
         codeVerifier: String,
@@ -944,6 +1043,173 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                     onFailure?.invoke(failure)
                 },
             )
+        }
+    }
+
+    fun onAuthenticateEmailOtp(
+        email: String,
+    ) {
+        state = state.copy(buttonPressed = "Authenticate Email OTP")
+
+        setCodeChallengeAndVerifier()
+
+        val updateStateCallback = object : UpdateStateCallback {
+            override fun invoke(url: String, result: String, progress: Boolean) {
+                state = state.copy(
+                    authenticateEmailOtpResult = result,
+                    authenticateEmailOtpProgress = progress,
+                )
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            try {
+                ResponseUtil.onResponse(
+                    method = "AuthenticateEmailOtp",
+                    response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.authorize(
+                        code_challenge = state.codeChallenge,
+                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                    ),
+                    onSuccessResponse = { authorizeResponse ->
+                        when (authorizeResponse?.authenticateUrl) {
+                            null -> {
+                                updateStateCallback(
+                                    "",
+                                    authorizeResponse.toIndentString(includeSpace = true),
+                                    false,
+                                )
+                            }
+                            else -> {
+                                updateStateCallback(
+                                    "",
+                                    "",
+                                    true,
+                                )
+
+                                state = state.copy(emailOtpUrl = "")
+
+                                EmbeddedSdk.authenticateOtp(
+                                    url = authorizeResponse.authenticateUrl,
+                                    email = email,
+                                )
+                                    .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+                                    .onEach { result ->
+                                        result.onSuccess { success ->
+                                            Timber.d("Authenticate OTP success = $success")
+
+                                            state = state.copy(emailOtpUrl = success.url)
+
+                                            updateStateCallback(
+                                                "",
+                                                success.toIndentString(includeSpace = true),
+                                                false,
+                                            )
+                                        }
+                                        result.onFailure { failure ->
+                                            Timber.e("Authenticate OTP failure = $failure")
+
+                                            state = state.copy(emailOtpUrl = "")
+
+                                            updateStateCallback(
+                                                "",
+                                                failure.toIndentString(),
+                                                false,
+                                            )
+                                        }
+                                    }
+                                    .catch { error ->
+                                        Timber.e("Authenticate OTP exception = ${error.message}")
+
+                                        state = state.copy(emailOtpUrl = "")
+
+                                        updateStateCallback(
+                                            "",
+                                            error.toIndentString(),
+                                            false,
+                                        )
+                                    }
+                                    .launchIn(viewModelScope)
+                            }
+                        }
+                    },
+                    onFailureResponse = { authorizeResponse ->
+                        updateStateCallback(
+                            "",
+                            authorizeResponse?.string().toIndentString(includeSpace = true),
+                            false,
+                        )
+                    },
+                )
+            } catch (e: Exception) {
+                updateStateCallback(
+                    "",
+                    e.localizedMessage.toIndentString(includeSpace = true),
+                    false,
+                )
+            }
+        }
+    }
+
+    fun onRedeemEmailOtp(
+        otp: String,
+    ) {
+        state = state.copy(buttonPressed = "Redeem Email OTP")
+
+        setCodeChallengeAndVerifier()
+
+        val updateStateCallback = object : UpdateStateCallback {
+            override fun invoke(url: String, result: String, progress: Boolean) {
+                state = state.copy(
+                    redeemEmailOtpResult = result,
+                    redeemEmailOtpProgress = progress,
+                )
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
+            try {
+                EmbeddedSdk.redeemOtp(
+                    url = state.emailOtpUrl,
+                    otp = otp,
+                )
+                    .flowOn(Dispatchers.Main + coroutineExceptionHandler)
+                    .onEach { result ->
+                        result.onSuccess { success ->
+                            Timber.d("Redeem OTP success = $success")
+
+                            updateStateCallback(
+                                "",
+                                success.toIndentString(includeSpace = true),
+                                false,
+                            )
+                        }
+                        result.onFailure { failure ->
+                            Timber.e("Redeem OTP failure = $failure")
+
+                            updateStateCallback(
+                                "",
+                                failure.toIndentString(),
+                                false,
+                            )
+                        }
+                    }
+                    .catch { error ->
+                        Timber.e("Redeem OTP exception = ${error.message}")
+
+                        updateStateCallback(
+                            "",
+                            error.toIndentString(),
+                            false,
+                        )
+                    }
+                    .launchIn(viewModelScope)
+            } catch (e: Exception) {
+                updateStateCallback(
+                    "",
+                    e.localizedMessage.toIndentString(includeSpace = true),
+                    false,
+                )
+            }
         }
     }
 

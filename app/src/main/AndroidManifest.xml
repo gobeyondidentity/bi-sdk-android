@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.beyondidentity.authenticator.sdk.android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -70,6 +69,12 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.AuthenticatorSDKAndroid">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -126,12 +131,7 @@
             android:name=".SdkSelectorActivity"
             android:exported="true"
             android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- Embedded SDK -->
+        </activity>
     </application>
 
 </manifest>

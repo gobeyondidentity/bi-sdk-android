@@ -19,6 +19,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -129,7 +130,9 @@ fun EmbeddedGetStartedLayout(
         Text(
             text = "Embedded SDK",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 8.dp)
+                .testTag("Embedded SDK Header"),
         )
 
         BiVersionText()
@@ -203,7 +206,7 @@ fun EmbeddedGetStartedLayout(
         BiTextWithChevron(
             text = "View Developer Docs",
             testTag = "View Developer Docs",
-            onClick = { onNavigate(VisitDocsEvent(Uri.parse("https://developer.beyondidentity.com/docs/v1/sdks/kotlin-sdk/overview"))) },
+            onClick = { onNavigate(VisitDocsEvent(Uri.parse("https://developer.beyondidentity.com"))) },
         )
 
         BiDivider()

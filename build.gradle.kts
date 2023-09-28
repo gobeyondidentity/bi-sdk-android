@@ -11,11 +11,11 @@ buildscript {
     }
 
     dependencies {
-        classpath(Classpaths.ANDROID_GRADLE_PLUGIN)
-        classpath(Classpaths.DOKKA_GRADLE_PLUGIN)
-        classpath(Classpaths.KOTLIN_GRADLE_PLUGIN)
-        classpath(Classpaths.KOTLIN_SERIALIZATION_PLUGIN)
-        classpath(Classpaths.KTLINT_GRADLE_PLUGIN)
+        classpath(libs.android.gradle.plugin)
+        classpath(libs.dokka.gradle.plugin)
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.kotlin.serialization.plugin)
+        classpath(libs.ktlint.gradle.plugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

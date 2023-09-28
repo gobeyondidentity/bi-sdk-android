@@ -1,5 +1,4 @@
 include ':docs'
 include ':embedded'
-//include ':embedded-ui'
 include ':app'
 rootProject.name = "bi-sdk-android"

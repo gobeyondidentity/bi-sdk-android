@@ -66,6 +66,7 @@ fun SdkSelectorLayout() {
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp)
+                .testTag("Beyond Identity Android SDKs Header"),
         )
 
         Text(

@@ -60,6 +60,7 @@ import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiGray300
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiPrimaryMain
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
 
+fun buttonTestTag(testTag: String): String = "$testTag Button"
 fun inputTestTag(testTag: String): String = "$testTag Input"
 fun resultTestTag(testTag: String): String = "$testTag Result"
 
@@ -183,7 +184,7 @@ fun InteractionResultView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(testTag),
+                .testTag(buttonTestTag(testTag)),
         ) {
             Text(text = buttonText)
         }
@@ -307,7 +308,7 @@ fun InteractionResponseInputView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(testTag),
+                .testTag(buttonTestTag(testTag)),
         ) {
             Text(text = buttonText)
         }
@@ -362,7 +363,7 @@ fun ResponseInputView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(testTag),
+                .testTag(buttonTestTag(testTag)),
         ) {
             Text(text = buttonText)
         }

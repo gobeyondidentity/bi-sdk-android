@@ -1,15 +1,14 @@
-@file:Suppress("SuspiciousCollectionReassignment")
-
 import checks.ktlintCheckConfigSampleApp
 import utils.getProp
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("org.jlleitschuh.gradle.ktlint")
+    id(libs.plugins.com.android.application.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.org.jlleitschuh.gradle.ktlint.get().pluginId)
 }
 
 android {
+    namespace = "com.beyondidentity.authenticator.sdk.android"
     compileSdk = AndroidConfig.COMPILE_SDK_VERSION
     buildToolsVersion = AndroidConfig.BUILD_TOOLS_VERSION
 
@@ -71,8 +70,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = Versions.KOTLIN
-        kotlinCompilerExtensionVersion = Versions.ANDROIDX_COMPOSE
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
     kotlinOptions {
@@ -128,47 +126,48 @@ ktlintCheckConfigSampleApp()
 
 dependencies {
     // Android Test Dependencies
-    androidTestImplementation(AndroidTestLibs.ANDROIDX_COMPOSE_UI_TEST_JUNIT4)
-    androidTestImplementation(AndroidTestLibs.JUNIT)
-    debugImplementation(DebugLibs.ANDROIDX_COMPOSE_UI_TEST_MANIFEST)
-    debugImplementation(DebugLibs.ANDROIDX_COMPOSE_UI_TOOLING)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(project(Modules.EMBEDDED))
 //    implementation(project(Modules.EMBEDDED_UI))
-    implementation(Libs.KOTLIN_STD_LIB)
-    implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
-    implementation(Libs.ANDROIDX_APPCOMPAT)
-    implementation(Libs.ANDROIDX_COMPOSE_MATERIAL)
-    implementation(Libs.ANDROIDX_COMPOSE_UI)
-    implementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING_PREVIEW)
-    implementation(Libs.ANDROIDX_CONSTRAINT_LAYOUT)
-    implementation(Libs.ANDROIDX_CORE_KTX)
-    implementation(Libs.ANDROIDX_LIFECYCLE_COMMON)
-    implementation(Libs.ANDROIDX_LIFECYCLE_RUNTIME_KTX)
-    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_COMPOSE)
-    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_KTX)
-    implementation(Libs.ANDROIDX_LIFECYCLE_VIEWMODEL_SAVEDSTATE)
-    implementation(Libs.MATERIAL)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.common)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+    implementation(libs.material)
 
-    implementation(Libs.JWTDECODE)
-    implementation(Libs.TIMBER)
+    implementation(libs.jwtdecode)
+    implementation(libs.timber)
 
     // Auth0
-    implementation(Libs.AUTH0)
+    implementation(libs.auth0)
 
     // Coroutines
-    implementation(Libs.KOTLINX_COROUTINES_ANDROID)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Okta
-    implementation(Libs.OKTA_IDX_JAVA_API)
-    implementation(Libs.OKTA_JWT_VERIFIER)
-    implementation(Libs.OKTA_JWT_VERIFIER_IMPL)
-    implementation(Libs.OKTA_OIDC_ANDROID)
+    implementation(libs.okta.idx.java.api)
+    implementation(libs.okta.jwt.verifier)
+    implementation(libs.okta.jwt.verifier.impl)
+    implementation(libs.okta.oidc.android)
 
     // Square
-    implementation(Libs.GSON)
-    implementation(Libs.OKHTTP)
-    implementation(Libs.OKHTTP_LOGGING_INTERCEPTOR)
-    implementation(Libs.RETROFIT)
-    implementation(Libs.RETROFIT_CONVERTER_GSON)
+    implementation(libs.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 }

@@ -1,6 +1,8 @@
 package com.beyondidentity.authenticator.sdk.android.embedded.authenticate
 
 data class EmbeddedAuthenticateState(
+    val getAuthenticationContextResult: String = "",
+    val getAuthenticationContextProgress: Boolean = false,
     val authenticateBeyondIdentityResult: String = "",
     val authenticateBeyondIdentityProgress: Boolean = false,
     val authenticateOktaSDKResult: String = "",
@@ -14,9 +16,16 @@ data class EmbeddedAuthenticateState(
     val authenticateUrl: String = "",
     val authenticateResult: String = "",
     val authenticateProgress: Boolean = false,
+    val authenticateEmailOtpUrl: String = "",
+    val authenticateEmailOtpResult: String = "",
+    val authenticateEmailOtpProgress: Boolean = false,
+    val redeemEmailOtpUrl: String = "",
+    val redeemEmailOtpResult: String = "",
+    val redeemEmailOtpProgress: Boolean = false,
     val buttonPressed: String = "",
     val codeChallenge: String = "",
     val codeVerifier: String = "",
+    val emailOtpUrl: String = "",
 )
 
 sealed class EmbeddedAuthenticateEvents {

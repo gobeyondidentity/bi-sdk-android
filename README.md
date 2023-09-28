@@ -3,9 +3,7 @@
    <a href="https://developers.beyondidentity.com" target="_blank"><img src="https://user-images.githubusercontent.com/238738/178780350-489309c5-8fae-4121-a20b-562e8025c0ee.png" width="150px" ></a>
    <h3 align="center">Beyond Identity</h3>
    <p align="center">Universal Passkeys for Developers</p>
-   <p align="center">
-   All devices. Any protocol. Zero shared secrets.
-   </p>
+   <p align="center">All devices. Any protocol. Zero shared secrets.</p>
 </p>
 
 # Beyond Identity Android SDK
@@ -14,7 +12,7 @@
 
 ### Embedded SDK
 
-Goodbye, passwords! The Beyond Identity SDKs allow you to embed the Passwordless experience into your product. Users will not need to download the Beyond Identity Authenticator. These SDKs supports OIDC and OAuth2.
+Goodbye, passwords! The Beyond Identity SDKs allow you to embed the Passwordless experience into your product. A set of functions are provided to you through the Embedded namespace. These SDKs supports OIDC and OAuth 2.0.
 
 ## Installation
 
