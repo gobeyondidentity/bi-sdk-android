@@ -79,13 +79,11 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         activity = activity,
                         url = data.toString(),
                         onAuthenticateSuccess = { success ->
-                            success.redirectUrl?.let { redirectUrl ->
-                                startActivityForWebMode(
-                                    activity,
-                                    redirectUrl,
-                                    onButtonPressedRequestCode(),
-                                )
-                            }
+                            startActivityForWebMode(
+                                activity,
+                                success.redirectUrl,
+                                onButtonPressedRequestCode(),
+                            )
                         },
                         updateStateCallback = object : UpdateStateCallback {
                             override fun invoke(url: String, result: String, progress: Boolean) {
@@ -248,14 +246,12 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 activity = activity,
                                 url = uri.toString(),
                                 onAuthenticateSuccess = { success ->
-                                    success.redirectUrl?.let { redirectUrl ->
-                                        if (!redirectUrl.startsWith(BeyondIdentityConfig.REDIRECT_URI)) {
-                                            startActivityForWebMode(
-                                                activity,
-                                                redirectUrl,
-                                                requestCode,
-                                            )
-                                        }
+                                    if (!success.redirectUrl.startsWith(BeyondIdentityConfig.REDIRECT_URI)) {
+                                        startActivityForWebMode(
+                                            activity,
+                                            success.redirectUrl,
+                                            requestCode,
+                                        )
                                     }
                                 },
                                 updateStateCallback = object : UpdateStateCallback {
@@ -734,7 +730,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     activity = activity,
                                     url = authorizeResponse.authenticateUrl,
                                     onAuthenticateSuccess = { success ->
-                                        val redirectUri = success.redirectUrl?.let { Uri.parse(it) }
+                                        val redirectUri = Uri.parse(success.redirectUrl)
 
                                         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
                                             try {

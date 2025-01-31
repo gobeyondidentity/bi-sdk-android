@@ -21,6 +21,11 @@ private val buildConfigKeys = listOf(
     "BUILD_CONFIG_CHANNEL",
     "BUILD_CONFIG_UNATTESTED_EVENT_URL",
     "BUILD_CONFIG_GDC_URL",
+    "BUILD_CONFIG_AUTH_BASE_URL",
+    "BUILD_CONFIG_ALLOWED_DOMAINS",
+    "BUILD_CONFIG_SSH_CONFIG_PATH",
+    "BUILD_CONFIG_SSH_SOCKET_FILE_NAME",
+    "BUILD_CONFIG_KEYMAKER_SOCKET_FILE_NAME",
 )
 
 fun Project.configureAndroidLib() = this.extensions.getByType<AndroidBaseExtension>().run {

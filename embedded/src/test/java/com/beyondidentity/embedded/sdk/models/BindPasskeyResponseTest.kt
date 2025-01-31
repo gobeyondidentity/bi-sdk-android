@@ -15,6 +15,8 @@ class BindPasskeyResponseTest {
     fun checkFromBiAuthenticateResponseSuccess() {
         val ID =
             "01234567-89AB-CDEF-0123-456789ABCDEF"
+        val PASSKEY_ID =
+            "0123456789ABCDEF"
         val LOCAL_CREATED =
             "2022-06-15T12:00:00"
         val LOCAL_UPDATED =
@@ -46,9 +48,9 @@ class BindPasskeyResponseTest {
         val IDENTITY_PRIMARY_EMAIL_ADDRESS =
             "foo.bar@beyondidentity.com"
         val THEME_LOGO_URL_LIGHT =
-            "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
+            "https://static.byndid.com/logos/beyondidentity.png"
         val THEME_LOGO_URL_DARK =
-            "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
+            "https://static.byndid.com/logos/beyondidentity.png"
         val THEME_SUPPORT_URL =
             "https://www.beyondidentity.com/support"
         val POST_BINDING_DIRECT_URI =
@@ -57,6 +59,7 @@ class BindPasskeyResponseTest {
         val biBindCredentialResponse = BiBindCredentialResponse(
             credential = AuthNCredentialResponse(
                 id = ID,
+                passkeyId = PASSKEY_ID,
                 localCreated = LOCAL_CREATED,
                 localUpdated = LOCAL_UPDATED,
                 apiBaseUrl = API_BASE_URL,
@@ -92,6 +95,12 @@ class BindPasskeyResponseTest {
         assert(
             bindPasskeyResponse.passkey.id.equals(
                 biBindCredentialResponse.credential.id,
+                ignoreCase = false,
+            )
+        )
+        assert(
+            bindPasskeyResponse.passkey.passkeyId.equals(
+                biBindCredentialResponse.credential.passkeyId,
                 ignoreCase = false,
             )
         )
@@ -215,6 +224,8 @@ class BindPasskeyResponseTest {
     fun checkFromBiAuthenticateResponseInvalidState() {
         val ID =
             "01234567-89AB-CDEF-0123-456789ABCDEF"
+        val PASSKEY_ID =
+            "0123456789ABCDEF"
         val LOCAL_CREATED =
             "2022-06-15T12:00:00"
         val LOCAL_UPDATED =
@@ -246,9 +257,9 @@ class BindPasskeyResponseTest {
         val IDENTITY_PRIMARY_EMAIL_ADDRESS =
             "foo.bar@beyondidentity.com"
         val THEME_LOGO_URL_LIGHT =
-            "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
+            "https://static.byndid.com/logos/beyondidentity.png"
         val THEME_LOGO_URL_DARK =
-            "https://byndid-public-assets.s3-us-west-2.amazonaws.com/logos/beyondidentity.png"
+            "https://static.byndid.com/logos/beyondidentity.png"
         val THEME_SUPPORT_URL =
             "https://www.beyondidentity.com/support"
         val POST_BINDING_DIRECT_URI =
@@ -257,6 +268,7 @@ class BindPasskeyResponseTest {
         val biBindCredentialResponse = BiBindCredentialResponse(
             credential = AuthNCredentialResponse(
                 id = ID,
+                passkeyId = PASSKEY_ID,
                 localCreated = LOCAL_CREATED,
                 localUpdated = LOCAL_UPDATED,
                 apiBaseUrl = API_BASE_URL,

@@ -64,7 +64,7 @@ class EmbeddedAuthenticateActivity : FragmentActivity() {
         viewModel.handleIntent(this@EmbeddedAuthenticateActivity, intent)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
         viewModel.handleIntent(this@EmbeddedAuthenticateActivity, intent)

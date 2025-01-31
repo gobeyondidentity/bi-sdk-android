@@ -79,7 +79,7 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
     }
 
     override fun onNewIntent(
-        intent: Intent?,
+        intent: Intent,
     ) {
         super.onNewIntent(intent)
         Timber.d("onNewIntent(${intent?.dataString})")

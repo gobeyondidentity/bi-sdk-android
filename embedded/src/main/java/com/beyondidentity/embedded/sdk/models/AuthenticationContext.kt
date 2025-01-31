@@ -28,11 +28,11 @@ data class AuthenticationContext(
         fun from(authenticateResponse: BiAuthenticationContext) =
             AuthenticationContext(
                 authUrl = authenticateResponse.authUrl,
-                application = AuthenticationContext.Application(
+                application = Application(
                     id = authenticateResponse.application.id,
                     displayName = authenticateResponse.application.displayName
                 ),
-                origin = AuthenticationContext.Origin(
+                origin = Origin(
                     sourceIp = authenticateResponse.origin.sourceIp,
                     userAgent = authenticateResponse.origin.userAgent,
                     geolocation = authenticateResponse.origin.geolocation,

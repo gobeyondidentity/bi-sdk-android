@@ -27,6 +27,9 @@
                 <!-- !WARNING! Use verified app links (https://yourdomain) instead of deep links. -->
                 <!-- Deep links with custom schemes like "my-app://home” can be intercepted by other apps -->
                 <data
+                    android:path="/authenticate"
+                    android:scheme="${acme_app_scheme}" />
+                <data
                     android:path="/bi-authenticate"
                     android:scheme="${acme_app_scheme}" />
             </intent-filter>
@@ -130,8 +133,7 @@
         <activity
             android:name=".SdkSelectorActivity"
             android:exported="true"
-            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AuthenticatorSDKAndroid.NoActionBar" />
     </application>
 
 </manifest>

@@ -7,7 +7,8 @@ import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
  * The public key is sent to the Beyond Identity cloud. The private key cannot be tampered with, viewed, or removed from the device in which it is created unless the user explicitly indicates that the trusted device be removed.
  * Passkeys are cryptographically linked to devices and an Identity. A single device can store multiple passkeys for different users and a single Identity can have multiple passkeys.
  *
- * @property id The Globally unique ID of this passkey.
+ * @property id The Globally unique ID of this Credential. The internal ID.
+ * @property passkeyId The external (cloud) ID
  * @property localCreated The time when this passkey was created locally. This could be different from "created" which is the time when this passkey was created on the server.
  * @property localUpdated The last time when this passkey was updated locally. This could be different from "updated" which is the last time when this passkey was updated on the server.
  * @property apiBaseUrl The base url for all binding & auth requests
@@ -22,6 +23,7 @@ import com.beyondidentity.sdk.android.bicore.models.AuthNCredentialResponse
  */
 data class Passkey(
     val id: PasskeyId,
+    val passkeyId: String,
     val localCreated: String,
     val localUpdated: String,
     val apiBaseUrl: String,
@@ -38,6 +40,7 @@ data class Passkey(
         fun from(coreAuthNCredential: AuthNCredentialResponse) =
             Passkey(
                 id = coreAuthNCredential.id,
+                passkeyId = coreAuthNCredential.passkeyId,
                 localCreated = coreAuthNCredential.localCreated,
                 localUpdated = coreAuthNCredential.localUpdated,
                 apiBaseUrl = coreAuthNCredential.apiBaseUrl,

@@ -15,6 +15,10 @@ plugins {
 
 android {
     namespace = "com.beyondidentity.authenticator.sdk.embedded"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 configureAndroidLib()

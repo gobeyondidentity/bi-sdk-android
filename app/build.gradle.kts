@@ -47,6 +47,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 
@@ -58,10 +59,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    testOptions {
-        animationsDisabled = true
     }
 
     compileOptions {
@@ -85,7 +82,7 @@ android {
         abortOnError = false
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/okta/version.properties"
@@ -119,6 +116,10 @@ android {
         getByName("test") {
             java.srcDir("src/test/kotlin")
         }
+    }
+
+    testOptions {
+        animationsDisabled = true
     }
 }
 

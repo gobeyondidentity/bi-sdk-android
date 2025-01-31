@@ -4,6 +4,7 @@ package com.beyondidentity.embedded.sdk
 
 import android.app.Application
 import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.CancellationSignal
 import androidx.preference.PreferenceManager
 import com.beyondidentity.authenticator.sdk.embedded.BuildConfig
@@ -26,6 +27,7 @@ import com.beyondidentity.endpoint.android.lib.log.Log
 import com.beyondidentity.endpoint.android.lib.log.LogCategory
 import com.beyondidentity.endpoint.android.lib.log.LogType
 import com.beyondidentity.sdk.android.bicore.BiSdk
+import com.beyondidentity.sdk.android.bicore.models.Answer
 import com.beyondidentity.sdk.android.bicore.models.AuthLibConfiguration
 import com.beyondidentity.sdk.android.bicore.models.AuthLibStoreConfiguration
 import com.beyondidentity.sdk.android.bicore.models.BeginEmailOtp
@@ -37,6 +39,8 @@ import com.beyondidentity.sdk.android.bicore.models.KeyStorageStrategy
 import com.beyondidentity.sdk.android.bicore.models.RedeemOtp
 import com.beyondidentity.sdk.android.bicore.models.TrustedSource
 import com.beyondidentity.sdk.android.bicore.models.UrlType
+import com.beyondidentity.sdk.android.bicore.models.UsedFactor
+import com.beyondidentity.sdk.android.bicore.models.VerificationUserError
 import com.beyondidentity.sdk.android.bicore.partials.CoreFailure
 import com.beyondidentity.sdk.android.bicore.partials.CoreSuccess
 import kotlinx.coroutines.CoroutineDispatcher
@@ -60,7 +64,7 @@ object EmbeddedSdk {
 
     private var onSelectPasskeyCallback: OnSelectPasskey? = null
     private val selectPasskeySubject = Channel<String?>()
-    private val answers = Channel<Boolean>()
+    private val answers = Channel<Answer>()
 
     private var allowedDomains: List<String>? = null
     private lateinit var app: Application
@@ -84,11 +88,15 @@ object EmbeddedSdk {
                 keyguardPrompt?.invoke { result, exception ->
                     if (exception == null) {
                         logger?.invoke("The exception is null for auth error")
-                        answers.trySendBlocking(result)
+                        answers.trySendBlocking(
+                            Answer(error = VerificationUserError.BiometricNotSupported)
+                        )
                     } else {
                         logger?.invoke("The exception is $exception")
                         // security challenge not present, cancel extend and ask user to add a challenge
-                        answers.trySendBlocking(false)
+                        answers.trySendBlocking(
+                            Answer(error = VerificationUserError.BiometricNotSupported)
+                        )
                     }
                 }
             }
@@ -97,7 +105,31 @@ object EmbeddedSdk {
                 super.onAuthenticationSucceeded(result)
                 // Called when a biometric is recognized.
                 logger?.invoke("authentication is success")
-                answers.trySendBlocking(true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    when (result.authenticationType) {
+                        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC -> {
+                            answers.trySendBlocking(
+                                Answer(usedFactor = UsedFactor(someBiometric = true))
+                            )
+                        }
+
+                        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL -> {
+                            answers.trySendBlocking(
+                                Answer(usedFactor = UsedFactor(someKnowledge = true))
+                            )
+                        }
+
+                        else -> {
+                            answers.trySendBlocking(
+                                Answer(usedFactor = UsedFactor(unknown = true))
+                            )
+                        }
+                    }
+                } else {
+                    answers.trySendBlocking(
+                        Answer(usedFactor = UsedFactor(unknown = true))
+                    )
+                }
             }
 
             override fun onAuthenticationFailed() {
@@ -110,7 +142,9 @@ object EmbeddedSdk {
             override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) {
                 super.onAuthenticationHelp(helpCode, helpString)
                 logger?.invoke("authentication help with core $helpCode and message $helpString")
-                answers.trySendBlocking(false)
+                answers.trySendBlocking(
+                    Answer(error = VerificationUserError.BiometricNotSupported)
+                )
             }
         }
 
@@ -121,7 +155,9 @@ object EmbeddedSdk {
                 executor,
             ) { _, _ ->
                 logger?.invoke("User cancelled biometric check")
-                answers.trySendBlocking(false)
+                answers.trySendBlocking(
+                    Answer(error = VerificationUserError.BiometricNotSupported)
+                )
             }
             .build()
             .authenticate(
@@ -222,15 +258,24 @@ object EmbeddedSdk {
                 }
             },
             clientEnvironment = HostClientEnvironment(
-                cryptoSource = CryptoSource.Host,
-                credentialHandling = CredentialHandling.Legacy,
+                cryptoSource = CryptoSource.Hal,
+                credentialHandling = CredentialHandling.MIS,
                 keyStorageStrategy = KeyStorageStrategy.TeeIfAvailable,
+                secureFleetFlag = false,
                 gdcUrl = BuildConfig.BUILD_CONFIG_GDC_URL,
+                authBaseUrl = BuildConfig.BUILD_CONFIG_AUTH_BASE_URL,
+                urlScheme = "noopsdk",
+                keymakerAllowedDomains = BuildConfig.BUILD_CONFIG_ALLOWED_DOMAINS,
+                unattestedEventUrl = BuildConfig.BUILD_CONFIG_UNATTESTED_EVENT_URL,
+                sshConfigPath = BuildConfig.BUILD_CONFIG_SSH_CONFIG_PATH,
+                sshAgentSocketFileName = BuildConfig.BUILD_CONFIG_SSH_SOCKET_FILE_NAME,
+                keymakerSocketFileName = BuildConfig.BUILD_CONFIG_KEYMAKER_SOCKET_FILE_NAME,
             ),
             locale = null,
+            layeredAuthPrompt = {},
         )
 
-        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains)
+        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains)
         this.hasInitializedCore = true
     }
 
@@ -499,10 +544,16 @@ object EmbeddedSdk {
      * an action or to pass a security challenge, and when we leave the flow this method can be used
      * to provide the answer to the SDK.
      */
-    fun answer(
-        answer: Boolean,
-    ) {
-        answers.trySendBlocking(answer)
+    fun answer(answer: Boolean) {
+        if (answer) {
+            answers.trySendBlocking(
+                Answer(usedFactor = UsedFactor(unknown = true))
+            )
+        } else {
+            answers.trySendBlocking(
+                Answer(error = VerificationUserError.VerificationCanceled)
+            )
+        }
     }
 
     private fun getAppInstanceId(app: Application): String {
@@ -618,7 +669,7 @@ object EmbeddedSdk {
             executor.execute {
                 BiSdk.getAuthenticationContext(
                     url = url,
-                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains,
+                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains,
                 ) { biAuthenticationContext ->
                     when (biAuthenticationContext) {
                         is CoreSuccess -> postMain {
@@ -653,7 +704,7 @@ object EmbeddedSdk {
         } else {
             BiSdk.getAuthenticationContext(
                 url = url,
-                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com") else allowedDomains,
+                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains,
             ) { biAuthenticationContext ->
                 when (biAuthenticationContext) {
                     is CoreSuccess -> trySendBlocking(Result.success(AuthenticationContext.from(biAuthenticationContext.value)))

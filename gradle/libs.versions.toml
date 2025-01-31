@@ -56,12 +56,12 @@ androidx-test-core = { group = "androidx.test", name = "core", version.ref = "an
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso-core" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version.ref = "mockito" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "roboelectric" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 # Classpath libraries
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
@@ -82,29 +82,29 @@ org-jlleitschuh-gradle-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.
 
 [versions]
 # Androidx versions
-androidx-activity = "1.6.1"
-androidx-appcompat = "1.4.1"
+androidx-activity = "1.9.3"
+androidx-appcompat = "1.7.0"
 androidx-biometric = "1.1.0"
 androidx-browser = "1.4.0" # update bi-sdk-react-native/example/android resolution strategy
-androidx-compose = "1.4.0"
-androidx-compose-compiler = "1.4.0"
-androidx-constraintlayout = "2.1.3"
-androidx-core = "1.9.0"
-androidx-lifecycle = "2.5.1"
-androidx-preference = "1.2.0"
+androidx-compose = "1.6.8"
+androidx-compose-compiler = "1.5.15"
+androidx-constraintlayout = "2.1.4"
+androidx-core = "1.13.1"
+androidx-lifecycle = "2.8.7"
+androidx-preference = "1.2.1"
 
 # Kotlin versions
-kotlin = "1.8.0"
-kotlinx-coroutines = "1.6.4"
-kotlinx-serialization = "1.4.1"
+kotlin = "1.9.25"
+kotlinx-coroutines = "1.8.0"
+kotlinx-serialization = "1.6.3"
 
 # Other versions
 auth0 = "2.8.0"
-code-scanner = "2.1.0"
+code-scanner = "2.3.2"
 gson = "2.10.1"
 jwtdecode = "2.0.0"
-material = "1.8.0"
-okhttp = "4.9.0"
+material = "1.12.0"
+okhttp = "4.11.0"
 okta-idx-java-api = "3.0.2"
 okta-jwt-verifier = "0.5.3"
 okta-oidc-android = "1.3.2"
@@ -115,16 +115,17 @@ zxing-android-embedded = "4.3.0"
 # Beyond Identity versions
 
 # Android Test / Debug / Test versions
-androidx-test-espresso-core = "3.5.1"
-androidx-test-ext-junit = "1.1.5"
-androidx-test = "1.5.0"
+androidx-test-espresso-core = "3.6.1"
+androidx-test-ext-junit = "1.2.1"
+androidx-test-runner = "1.6.2"
+androidx-test = "1.6.1"
 junit = "4.13.2"
-mockito = "3.6.0"
-roboelectric = "4.6.1"
+mockito = "5.7.0"
+robolectric = "4.12"
 
 # Classpath versions
-android-gradle-plugin = "7.4.2"
-dokka = "1.7.20"
+android-gradle-plugin = "8.7.3"
+dokka = "1.9.20"
 ktlint = "11.1.0"
 
 # Plugin versions

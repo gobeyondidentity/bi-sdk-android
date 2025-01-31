@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.4.2")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+    implementation("com.android.tools.build:gradle:8.7.3")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25")
     implementation("org.jlleitschuh.gradle:ktlint-gradle:11.1.0")
 }
