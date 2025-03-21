@@ -124,7 +124,7 @@ mockito = "5.7.0"
 robolectric = "4.12"
 
 # Classpath versions
-android-gradle-plugin = "8.7.3"
+android-gradle-plugin = "8.8.0"
 dokka = "1.9.20"
 ktlint = "11.1.0"
 

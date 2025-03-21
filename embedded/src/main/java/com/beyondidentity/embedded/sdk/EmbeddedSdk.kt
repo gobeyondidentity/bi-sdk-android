@@ -275,7 +275,7 @@ object EmbeddedSdk {
             layeredAuthPrompt = {},
         )
 
-        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains)
+        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains)
         this.hasInitializedCore = true
     }
 
@@ -669,7 +669,7 @@ object EmbeddedSdk {
             executor.execute {
                 BiSdk.getAuthenticationContext(
                     url = url,
-                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains,
+                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains,
                 ) { biAuthenticationContext ->
                     when (biAuthenticationContext) {
                         is CoreSuccess -> postMain {
@@ -704,7 +704,7 @@ object EmbeddedSdk {
         } else {
             BiSdk.getAuthenticationContext(
                 url = url,
-                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com") else allowedDomains,
+                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains,
             ) { biAuthenticationContext ->
                 when (biAuthenticationContext) {
                     is CoreSuccess -> trySendBlocking(Result.success(AuthenticationContext.from(biAuthenticationContext.value)))
