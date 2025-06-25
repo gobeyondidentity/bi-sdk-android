@@ -22,10 +22,8 @@ object OktaConfig {
 
     const val WEB_REDIRECT_URI = "acme://okta"
 
-    fun isRedirectUri(uri: Uri): Boolean {
-        return uri.toString().startsWith(REDIRECT_URI) ||
-                uri.toString().startsWith(WEB_REDIRECT_URI)
-    }
+    fun isRedirectUri(uri: Uri): Boolean = uri.toString().startsWith(REDIRECT_URI) ||
+        uri.toString().startsWith(WEB_REDIRECT_URI)
 
     fun getPkceAuthorizeUrl(
         idp: String = IDP_ID,
@@ -36,17 +34,15 @@ object OktaConfig {
         redirect_uri: String = REDIRECT_URI,
         nonce: String = "nonce",
         code_challenge: String = PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier()),
-        client_id: String = CLIENT_ID,
-    ): String {
-        return "https://dev-43409302.okta.com/oauth2/v1/authorize?" +
-                "idp=$idp" + "&" +
-                "scope=$scope" + "&" +
-                "response_type=$response_type" + "&" +
-                "state=$state" + "&" +
-                "code_challenge_method=$code_challenge_method" + "&" +
-                "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
-                "nonce=$nonce" + "&" +
-                "code_challenge=$code_challenge" + "&" +
-                "client_id=$client_id"
-    }
+        client_id: String = CLIENT_ID
+    ): String = "https://dev-43409302.okta.com/oauth2/v1/authorize?" +
+        "idp=$idp" + "&" +
+        "scope=$scope" + "&" +
+        "response_type=$response_type" + "&" +
+        "state=$state" + "&" +
+        "code_challenge_method=$code_challenge_method" + "&" +
+        "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
+        "nonce=$nonce" + "&" +
+        "code_challenge=$code_challenge" + "&" +
+        "client_id=$client_id"
 }

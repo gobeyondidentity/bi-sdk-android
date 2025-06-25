@@ -9,23 +9,18 @@ import com.beyondidentity.sdk.android.bicore.models.UrlDataResponse
  *
  * @property url A URL containing the state of the current authentication transaction. This should be used in the next `redeemOtp` or `authenticateOtp` function.
  */
-data class OtpChallengeResponse(
-    val url: String,
-) {
+data class OtpChallengeResponse(val url: String) {
     companion object {
-        fun from(biContinueResponse: BiContinueResponse) =
-            OtpChallengeResponse(
-                url = biContinueResponse.url,
-            )
+        fun from(biContinueResponse: BiContinueResponse) = OtpChallengeResponse(
+            url = biContinueResponse.url
+        )
 
-        fun from(urlDataResponse: UrlDataResponse) =
-            urlDataResponse.biContinue?.let { biContinueResponse ->
-                from(biContinueResponse)
-            }
+        fun from(urlDataResponse: UrlDataResponse) = urlDataResponse.biContinue?.let { biContinueResponse ->
+            from(biContinueResponse)
+        }
 
-        fun from(urlDataResponse: BiAuthenticateResponse) =
-            urlDataResponse.`continue`?.let { biContinueResponse ->
-                from(biContinueResponse)
-            }
+        fun from(urlDataResponse: BiAuthenticateResponse) = urlDataResponse.`continue`?.let { biContinueResponse ->
+            from(biContinueResponse)
+        }
     }
 }

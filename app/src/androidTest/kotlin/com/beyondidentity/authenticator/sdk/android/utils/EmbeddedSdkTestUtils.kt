@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 
 class EmbeddedSdkTestUtils {
+
     companion object {
         @JvmStatic
         fun getIdByUsername(rule: ComposeContentTestRule, username: String): String {

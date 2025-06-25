@@ -34,40 +34,39 @@ data class Passkey(
     val tenant: Tenant,
     val realm: Realm,
     val identity: Identity,
-    val theme: Theme,
+    val theme: Theme
 ) {
     companion object {
-        fun from(coreAuthNCredential: AuthNCredentialResponse) =
-            Passkey(
-                id = coreAuthNCredential.id,
-                passkeyId = coreAuthNCredential.passkeyId,
-                localCreated = coreAuthNCredential.localCreated,
-                localUpdated = coreAuthNCredential.localUpdated,
-                apiBaseUrl = coreAuthNCredential.apiBaseUrl,
-                keyHandle = coreAuthNCredential.keyHandle,
-                state = State.from(coreAuthNCredential.state),
-                created = coreAuthNCredential.created,
-                updated = coreAuthNCredential.updated,
-                tenant = Tenant(
-                    id = coreAuthNCredential.tenantId,
-                    displayName = coreAuthNCredential.tenant.displayName,
-                ),
-                realm = Realm(
-                    id = coreAuthNCredential.realmId,
-                    displayName = coreAuthNCredential.realm.displayName,
-                ),
-                identity = Identity(
-                    id = coreAuthNCredential.identityId,
-                    displayName = coreAuthNCredential.identity.displayName,
-                    username = coreAuthNCredential.identity.username,
-                    primaryEmailAddress = coreAuthNCredential.identity.primaryEmailAddress,
-                ),
-                theme = Theme(
-                    logoLightUrl = coreAuthNCredential.theme.logoUrlLight,
-                    logoDarkUrl = coreAuthNCredential.theme.logoUrlDark,
-                    supportUrl = coreAuthNCredential.theme.supportUrl,
-                ),
+        fun from(coreAuthNCredential: AuthNCredentialResponse) = Passkey(
+            id = coreAuthNCredential.id,
+            passkeyId = coreAuthNCredential.passkeyId,
+            localCreated = coreAuthNCredential.localCreated,
+            localUpdated = coreAuthNCredential.localUpdated,
+            apiBaseUrl = coreAuthNCredential.apiBaseUrl,
+            keyHandle = coreAuthNCredential.keyHandle,
+            state = State.from(coreAuthNCredential.state),
+            created = coreAuthNCredential.created,
+            updated = coreAuthNCredential.updated,
+            tenant = Tenant(
+                id = coreAuthNCredential.tenantId,
+                displayName = coreAuthNCredential.tenant.displayName
+            ),
+            realm = Realm(
+                id = coreAuthNCredential.realmId,
+                displayName = coreAuthNCredential.realm.displayName
+            ),
+            identity = Identity(
+                id = coreAuthNCredential.identityId,
+                displayName = coreAuthNCredential.identity.displayName,
+                username = coreAuthNCredential.identity.username,
+                primaryEmailAddress = coreAuthNCredential.identity.primaryEmailAddress
+            ),
+            theme = Theme(
+                logoLightUrl = coreAuthNCredential.theme.logoUrlLight,
+                logoDarkUrl = coreAuthNCredential.theme.logoUrlDark,
+                supportUrl = coreAuthNCredential.theme.supportUrl
             )
+        )
     }
 }
 
@@ -104,27 +103,22 @@ enum class State {
      * Passkey is active
      */
     ACTIVE {
-        override fun toString(): String {
-            return "active"
-        }
+        override fun toString(): String = "active"
     },
 
     /**
      * Passkey is revoked
      */
     REVOKED {
-        override fun toString(): String {
-            return "revoked"
-        }
+        override fun toString(): String = "revoked"
     };
 
     companion object {
-        fun from(state: String): State =
-            when (state.lowercase()) {
-                "active" -> ACTIVE
-                "revoked" -> REVOKED
-                else -> throw Exception("Cannot initialize State from invalid String value $state")
-            }
+        fun from(state: String): State = when (state.lowercase()) {
+            "active" -> ACTIVE
+            "revoked" -> REVOKED
+            else -> throw Exception("Cannot initialize State from invalid String value $state")
+        }
     }
 }
 
@@ -135,10 +129,7 @@ enum class State {
  * @property id The unique identifier of the tenant.
  * @property displayName The display name of the tenant.
  */
-data class Tenant(
-    val id: TenantId,
-    val displayName: String,
-)
+data class Tenant(val id: TenantId, val displayName: String)
 
 /**
  * Realm information associated with a [Passkey].
@@ -149,10 +140,7 @@ data class Tenant(
  * @property id The unique identifier of the realm.
  * @property displayName The display name of the realm.
  */
-data class Realm(
-    val id: RealmId,
-    val displayName: String,
-)
+data class Realm(val id: RealmId, val displayName: String)
 
 /**
  * Identity information associated with a [Passkey].
@@ -165,12 +153,7 @@ data class Realm(
  * @property username The username of the identity.
  * @property primaryEmailAddress The primary email address of the identity.
  */
-data class Identity(
-    val id: IdentityId,
-    val displayName: String,
-    val username: String,
-    val primaryEmailAddress: String?,
-)
+data class Identity(val id: IdentityId, val displayName: String, val username: String, val primaryEmailAddress: String?)
 
 /**
  * Theme associated with a [Passkey].
@@ -179,8 +162,4 @@ data class Identity(
  * @property logoDarkUrl URL for resolving the logo image in dark mode.
  * @property supportUrl URL for customer support portal.
  */
-data class Theme(
-    val logoLightUrl: String,
-    val logoDarkUrl: String,
-    val supportUrl: String,
-)
+data class Theme(val logoLightUrl: String, val logoDarkUrl: String, val supportUrl: String)

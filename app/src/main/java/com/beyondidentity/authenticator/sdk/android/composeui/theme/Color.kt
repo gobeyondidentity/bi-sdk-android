@@ -9,9 +9,10 @@ import androidx.compose.ui.graphics.Color
 val BiPrimaryMain = Color(0xFF4673D3)
 val BiSecondary = Color(0xFF2484FF)
 
+// LIGHT
 val BiGray300Light = Color(0xFFEEEEEE)
 
-///// DARK ////////////
+// DARK
 val BiGray200Dark = Color(0xFF1c1c1c)
 val BiGray300Dark = Color(0xFF333333)
 

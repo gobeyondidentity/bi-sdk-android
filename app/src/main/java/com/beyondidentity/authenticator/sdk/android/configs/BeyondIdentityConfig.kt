@@ -5,12 +5,19 @@ import java.net.URLEncoder
 
 object BeyondIdentityConfig {
     // Endpoints
+    @Suppress("ktlint:standard:max-line-length")
     const val ISSUER_ENDPOINT =
         "https://auth-us.beyondidentity.com/v1/tenants/00012da391ea206d/realms/862e4b72cfdce072/applications/a8c0aa60-38e4-42b6-bd52-ef64aba5478b"
+
+    @Suppress("ktlint:standard:max-line-length")
     const val AUTHORIZATION_ENDPOINT =
         "https://auth-us.beyondidentity.com/v1/tenants/00012da391ea206d/realms/862e4b72cfdce072/applications/a8c0aa60-38e4-42b6-bd52-ef64aba5478b/authorize"
+
+    @Suppress("ktlint:standard:max-line-length")
     const val TOKEN_ENDPOINT =
         "https://auth-us.beyondidentity.com/v1/tenants/00012da391ea206d/realms/862e4b72cfdce072/applications/a8c0aa60-38e4-42b6-bd52-ef64aba5478b/token"
+
+    @Suppress("ktlint:standard:max-line-length")
     const val JWKS_ENDPOINT =
         "https://auth-us.beyondidentity.com/v1/tenants/00012da391ea206d/realms/862e4b72cfdce072/applications/a8c0aa60-38e4-42b6-bd52-ef64aba5478b/.well-known/jwks.json"
 
@@ -24,14 +31,12 @@ object BeyondIdentityConfig {
         client_id: String = CLIENT_ID,
         code_challenge_method: String = "S256",
         redirect_uri: String = REDIRECT_URI,
-        code_challenge: String = PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier()),
-    ): String {
-        return AUTHORIZATION_ENDPOINT + "?" +
-                "scope=$scope" + "&" +
-                "response_type=$response_type" + "&" +
-                "code_challenge_method=$code_challenge_method" + "&" +
-                "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
-                "code_challenge=$code_challenge" + "&" +
-                "client_id=$client_id"
-    }
+        code_challenge: String = PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier())
+    ): String = AUTHORIZATION_ENDPOINT + "?" +
+        "scope=$scope" + "&" +
+        "response_type=$response_type" + "&" +
+        "code_challenge_method=$code_challenge_method" + "&" +
+        "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
+        "code_challenge=$code_challenge" + "&" +
+        "client_id=$client_id"
 }

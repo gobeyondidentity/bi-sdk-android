@@ -25,7 +25,7 @@ data class EmbeddedAuthenticateState(
     val buttonPressed: String = "",
     val codeChallenge: String = "",
     val codeVerifier: String = "",
-    val emailOtpUrl: String = "",
+    val emailOtpUrl: String = ""
 )
 
 sealed class EmbeddedAuthenticateEvents {

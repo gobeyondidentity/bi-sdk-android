@@ -1,9 +1,10 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.beyondidentity.authenticator.sdk.android.embedded.getstarted
 
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiAppBar
@@ -107,7 +109,7 @@ fun EmbeddedGetStartedScreen(viewModel: EmbeddedGetStartedViewModel) {
         onBindPasskey = {
             viewModel.onBindPasskey(viewModel.state.bindPasskeyUrl)
         },
-        onNavigate = viewModel::onGetStartedEvent,
+        onNavigate = viewModel::onGetStartedEvent
     )
 }
 
@@ -120,19 +122,19 @@ fun EmbeddedGetStartedLayout(
     onRecoverPasskey: () -> Unit,
     onBindPasskeyUrlTextChange: (String) -> Unit,
     onBindPasskey: () -> Unit,
-    onNavigate: (EmbeddedGetStartedEvents) -> Unit,
+    onNavigate: (EmbeddedGetStartedEvents) -> Unit
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
         Text(
             text = "Embedded SDK",
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp, bottom = 8.dp)
-                .testTag("Embedded SDK Header"),
+                .testTag("Embedded SDK Header")
         )
 
         BiVersionText()
@@ -144,7 +146,7 @@ fun EmbeddedGetStartedLayout(
             onRegisterPasskeyUsernameTextChange,
             onRegisterPasskey,
             onRecoverPasskeyUsernameTextChange,
-            onRecoverPasskey,
+            onRecoverPasskey
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -152,7 +154,7 @@ fun EmbeddedGetStartedLayout(
         BindPasskey2Layout(
             state,
             onBindPasskeyUrlTextChange,
-            onBindPasskey,
+            onBindPasskey
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -160,18 +162,18 @@ fun EmbeddedGetStartedLayout(
         Text(
             text = "SDK Functionality",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         Text(
             text = "Explore the various functions available when a passkey exists on the device.",
-            modifier = Modifier.padding(bottom = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         BiTextWithChevron(
             text = "Manage Passkeys",
             testTag = "Manage Passkeys",
-            onClick = { onNavigate(ManagePasskeys) },
+            onClick = { onNavigate(ManagePasskeys) }
         )
 
         BiDivider()
@@ -179,7 +181,7 @@ fun EmbeddedGetStartedLayout(
         BiTextWithChevron(
             text = "Authenticate",
             testTag = "Authenticate",
-            onClick = { onNavigate(Authenticate) },
+            onClick = { onNavigate(Authenticate) }
         )
 
         BiDivider()
@@ -187,7 +189,7 @@ fun EmbeddedGetStartedLayout(
         BiTextWithChevron(
             text = "URL Validation",
             testTag = "URL Validation",
-            onClick = { onNavigate(UrlValidation) },
+            onClick = { onNavigate(UrlValidation) }
         )
 
         BiDivider()
@@ -195,18 +197,18 @@ fun EmbeddedGetStartedLayout(
         Text(
             text = "Questions or issues?",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         Text(
             text = "Read through our developer docs for more details on our embedded SDK or reach out to support.",
-            modifier = Modifier.padding(bottom = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         BiTextWithChevron(
             text = "View Developer Docs",
             testTag = "View Developer Docs",
-            onClick = { onNavigate(VisitDocsEvent(Uri.parse("https://developer.beyondidentity.com"))) },
+            onClick = { onNavigate(VisitDocsEvent("https://developer.beyondidentity.com".toUri())) }
         )
 
         BiDivider()
@@ -214,7 +216,13 @@ fun EmbeddedGetStartedLayout(
         BiTextWithChevron(
             text = "Visit Support",
             testTag = "Visit Support",
-            onClick = { onNavigate(VisitSupportEvent(Uri.parse("https://join.slack.com/t/byndid/shared_invite/zt-1anns8n83-NQX4JvW7coi9dksADxgeBQ"))) },
+            onClick = {
+                onNavigate(
+                    VisitSupportEvent(
+                        "https://join.slack.com/t/byndid/shared_invite/zt-1anns8n83-NQX4JvW7coi9dksADxgeBQ".toUri()
+                    )
+                )
+            }
         )
     }
 }
@@ -225,22 +233,22 @@ fun BindPasskey1Layout(
     onRegisterPasskeyUsernameTextChange: (String) -> Unit,
     onRegisterPasskey: () -> Unit,
     onRecoverPasskeyUsernameTextChange: (String) -> Unit,
-    onRecoverPasskey: () -> Unit,
+    onRecoverPasskey: () -> Unit
 ) {
     Text(
         text = "Get Started",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+        modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
     )
 
     Text(
         text = "Bind Passkey".uppercase(),
-        style = MaterialTheme.typography.subtitle2,
+        style = MaterialTheme.typography.subtitle2
     )
 
     InteractionResponseInputView(
         description = "To get started with using our embedded SDK sample app, " +
-                "enter any username to bind a passkey to this device.",
+            "enter any username to bind a passkey to this device.",
         inputValue = state.registerUsername,
         inputHint = "Username",
         onInputChanged = onRegisterPasskeyUsernameTextChange,
@@ -248,19 +256,19 @@ fun BindPasskey1Layout(
         testTag = "Register Passkey",
         onSubmit = onRegisterPasskey,
         submitResult = state.registerResult,
-        progressEnabled = state.registerProgress,
+        progressEnabled = state.registerProgress
     )
 
     Spacer32()
 
     Text(
         text = "Recover Passkey".uppercase(),
-        style = MaterialTheme.typography.subtitle2,
+        style = MaterialTheme.typography.subtitle2
     )
 
     InteractionResponseInputView(
         description = "If you have an account with a passkey you can’t access anymore, " +
-                "enter your username to recover your account and bind a passkey to this device.",
+            "enter your username to recover your account and bind a passkey to this device.",
         inputValue = state.recoverUsername,
         inputHint = "Username",
         onInputChanged = onRecoverPasskeyUsernameTextChange,
@@ -268,7 +276,7 @@ fun BindPasskey1Layout(
         testTag = "Recover Passkey",
         onSubmit = onRecoverPasskey,
         submitResult = state.recoverResult,
-        progressEnabled = state.recoverProgress,
+        progressEnabled = state.recoverProgress
     )
 
     Spacer16()
@@ -278,12 +286,12 @@ fun BindPasskey1Layout(
 fun BindPasskey2Layout(
     state: EmbeddedGetStartedState,
     onBindPasskeyUrlTextChange: (String) -> Unit,
-    onBindPasskey: () -> Unit,
+    onBindPasskey: () -> Unit
 ) {
     Text(
         text = "Bind Passkey",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     InteractionResponseInputView(
@@ -295,7 +303,7 @@ fun BindPasskey2Layout(
         testTag = "Bind Passkey URL",
         onSubmit = onBindPasskey,
         submitResult = state.bindPasskeyResult,
-        progressEnabled = state.bindPasskeyProgress,
+        progressEnabled = state.bindPasskeyProgress
     )
 }
 
@@ -306,14 +314,14 @@ fun BindPasskey1Preview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             BindPasskey1Layout(
                 EmbeddedGetStartedState(),
                 {},
                 {},
                 {},
-                {},
+                {}
             )
         }
     }
@@ -326,12 +334,12 @@ fun BindPasskey2Preview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             BindPasskey2Layout(
                 EmbeddedGetStartedState(),
                 {},
-                {},
+                {}
             )
         }
     }
@@ -349,7 +357,7 @@ fun EmbeddedGetStartedPreview() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }
@@ -366,7 +374,7 @@ fun EmbeddedGetStartedPreviewDark() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }

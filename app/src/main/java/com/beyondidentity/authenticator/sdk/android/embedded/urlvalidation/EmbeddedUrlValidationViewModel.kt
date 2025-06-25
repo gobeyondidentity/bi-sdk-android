@@ -32,11 +32,11 @@ class EmbeddedUrlValidationViewModel : ViewModel() {
     fun onValidateBindPasskeyUrl() {
         if (!resetResult(
                 state.urlValidationBindPasskeyUrl,
-                "Please provide a Bind Passkey URL",
+                "Please provide a Bind Passkey URL"
             ) { _, result, progress ->
                 state = state.copy(
                     validateBindPasskeyUrlResult = result,
-                    validateBindPasskeyUrlProgress = progress,
+                    validateBindPasskeyUrlProgress = progress
                 )
             }
         ) {
@@ -49,7 +49,7 @@ class EmbeddedUrlValidationViewModel : ViewModel() {
             state = state.copy(
                 validateBindPasskeyUrlResult = result.toIndentString(),
                 validateBindPasskeyUrlProgress = false,
-                urlValidationBindPasskeyUrl = "",
+                urlValidationBindPasskeyUrl = ""
             )
             Timber.d("got result for validateBindPasskeyUrl = $result")
         }
@@ -58,11 +58,11 @@ class EmbeddedUrlValidationViewModel : ViewModel() {
     fun onValidateAuthenticateUrl() {
         if (!resetResult(
                 state.urlValidationAuthenticateUrl,
-                "Please provide an Authenticate URL",
+                "Please provide an Authenticate URL"
             ) { _, result, progress ->
                 state = state.copy(
                     validateAuthenticateUrlResult = result,
-                    validateAuthenticateUrlProgress = progress,
+                    validateAuthenticateUrlProgress = progress
                 )
             }
         ) {
@@ -75,7 +75,7 @@ class EmbeddedUrlValidationViewModel : ViewModel() {
             state = state.copy(
                 validateAuthenticateUrlResult = result.toIndentString(),
                 validateAuthenticateUrlProgress = false,
-                urlValidationAuthenticateUrl = "",
+                urlValidationAuthenticateUrl = ""
             )
             Timber.d("got result for validateAuthenticateUrl = $result")
         }

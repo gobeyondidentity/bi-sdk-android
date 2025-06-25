@@ -54,7 +54,7 @@ fun EmbeddedUrlValidationScreen(viewModel: EmbeddedUrlValidationViewModel) {
         onUrlValidationBindPasskeyUrlTextChange = viewModel::onUrlValidationBindPasskeyUrlTextChange,
         onValidateBindPasskeyUrl = viewModel::onValidateBindPasskeyUrl,
         onUrlValidationAuthenticateUrlTextChange = viewModel::onUrlValidationAuthenticateUrlTextChange,
-        onValidateAuthenticateUrl = viewModel::onValidateAuthenticateUrl,
+        onValidateAuthenticateUrl = viewModel::onValidateAuthenticateUrl
     )
 }
 
@@ -64,19 +64,19 @@ fun EmbeddedUrlValidationLayout(
     onUrlValidationBindPasskeyUrlTextChange: (String) -> Unit,
     onValidateBindPasskeyUrl: () -> Unit,
     onUrlValidationAuthenticateUrlTextChange: (String) -> Unit,
-    onValidateAuthenticateUrl: () -> Unit,
+    onValidateAuthenticateUrl: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
         Text(
             text = "URL Validation",
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp, bottom = 8.dp)
-                .testTag("URL Validation Header"),
+                .testTag("URL Validation Header")
         )
 
         BiVersionText()
@@ -88,7 +88,7 @@ fun EmbeddedUrlValidationLayout(
             onUrlValidationBindPasskeyUrlTextChange,
             onValidateBindPasskeyUrl,
             onUrlValidationAuthenticateUrlTextChange,
-            onValidateAuthenticateUrl,
+            onValidateAuthenticateUrl
         )
     }
 }
@@ -99,12 +99,12 @@ fun UrlValidationLayout(
     onUrlValidationBindPasskeyUrlTextChange: (String) -> Unit,
     onValidateBindPasskeyUrl: () -> Unit,
     onUrlValidationAuthenticateUrlTextChange: (String) -> Unit,
-    onValidateAuthenticateUrl: () -> Unit,
+    onValidateAuthenticateUrl: () -> Unit
 ) {
     Text(
         text = "Bind Passkey URL",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     InteractionResponseInputView(
@@ -116,7 +116,7 @@ fun UrlValidationLayout(
         testTag = "Validate Bind Passkey URL",
         onSubmit = onValidateBindPasskeyUrl,
         submitResult = state.validateBindPasskeyUrlResult,
-        progressEnabled = state.validateBindPasskeyUrlProgress,
+        progressEnabled = state.validateBindPasskeyUrlProgress
     )
 
     BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -124,7 +124,7 @@ fun UrlValidationLayout(
     Text(
         text = "Authenticate URL",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     InteractionResponseInputView(
@@ -136,7 +136,7 @@ fun UrlValidationLayout(
         testTag = "Validate Authenticate URL",
         onSubmit = onValidateAuthenticateUrl,
         submitResult = state.validateAuthenticateUrlResult,
-        progressEnabled = state.validateAuthenticateUrlProgress,
+        progressEnabled = state.validateAuthenticateUrlProgress
     )
 }
 
@@ -147,14 +147,14 @@ fun UrlValidationPreview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             UrlValidationLayout(
                 EmbeddedUrlValidationState(),
                 {},
                 {},
                 {},
-                {},
+                {}
             )
         }
     }
@@ -169,7 +169,7 @@ fun EmbeddedUrlValidationPreview() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }
@@ -183,7 +183,7 @@ fun EmbeddedUrlValidationPreviewDark() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }

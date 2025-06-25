@@ -6,5 +6,5 @@ data class EmbeddedUrlValidationState(
     val validateBindPasskeyUrlProgress: Boolean = false,
     val urlValidationAuthenticateUrl: String = "",
     val validateAuthenticateUrlResult: String = "",
-    val validateAuthenticateUrlProgress: Boolean = false,
+    val validateAuthenticateUrlProgress: Boolean = false
 )

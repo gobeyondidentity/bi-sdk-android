@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.beyondidentity.authenticator.sdk.android.embedded.authenticate
 
 import android.content.Intent
@@ -78,7 +80,7 @@ class EmbeddedAuthenticateActivity : FragmentActivity() {
             this@EmbeddedAuthenticateActivity,
             requestCode,
             resultCode,
-            data,
+            data
         )
     }
 
@@ -88,10 +90,7 @@ class EmbeddedAuthenticateActivity : FragmentActivity() {
 }
 
 @Composable
-fun EmbeddedAuthenticateScreen(
-    activity: FragmentActivity,
-    viewModel: EmbeddedAuthenticateViewModel,
-) {
+fun EmbeddedAuthenticateScreen(activity: FragmentActivity, viewModel: EmbeddedAuthenticateViewModel) {
     EmbeddedAuthenticateLayout(
         state = viewModel.state,
         viewModel = viewModel,
@@ -124,7 +123,7 @@ fun EmbeddedAuthenticateScreen(
         onRedeemEmailOtpTextChange = viewModel::onRedeemEmailOtpTextChange,
         onRedeemEmailOtp = {
             viewModel.onRedeemEmailOtp(viewModel.state.redeemEmailOtpUrl)
-        },
+        }
     )
 }
 
@@ -143,19 +142,19 @@ fun EmbeddedAuthenticateLayout(
     onAuthenticateEmailOtpTextChange: (String) -> Unit,
     onAuthenticateEmailOtp: () -> Unit,
     onRedeemEmailOtpTextChange: (String) -> Unit,
-    onRedeemEmailOtp: () -> Unit,
+    onRedeemEmailOtp: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
         Text(
             text = "Authenticate",
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp, bottom = 8.dp)
-                .testTag("Authenticate Header"),
+                .testTag("Authenticate Header")
         )
 
         BiVersionText()
@@ -164,7 +163,7 @@ fun EmbeddedAuthenticateLayout(
 
         AuthenticationContextLayout(
             state,
-            onGetAuthenticationContext,
+            onGetAuthenticationContext
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -176,7 +175,7 @@ fun EmbeddedAuthenticateLayout(
             onAuthenticateOktaSDK,
             onAuthenticateOktaWeb,
             onAuthenticateAuth0SDK,
-            onAuthenticateAuth0Web,
+            onAuthenticateAuth0Web
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -184,7 +183,7 @@ fun EmbeddedAuthenticateLayout(
         Authenticate2Layout(
             state,
             onAuthenticateUrlTextChange,
-            onAuthenticate,
+            onAuthenticate
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -194,30 +193,27 @@ fun EmbeddedAuthenticateLayout(
             onAuthenticateEmailOtpTextChange,
             onAuthenticateEmailOtp,
             onRedeemEmailOtpTextChange,
-            onRedeemEmailOtp,
+            onRedeemEmailOtp
         )
     }
 }
 
 @Composable
-fun AuthenticationContextLayout(
-    state: EmbeddedAuthenticateState,
-    onGetAuthenticationContext: () -> Unit,
-) {
+fun AuthenticationContextLayout(state: EmbeddedAuthenticateState, onGetAuthenticationContext: () -> Unit) {
     Text(
         text = "Authentication Context",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     ResponseInputView(
         description = "Returns the Authentication Context for the current transaction.\n" +
-                "The Authentication Context contains the Authenticator Config, Authentication Method Configuration, request origin, and the authenticating application.",
+            "The Authentication Context contains the Authenticator Config, Authentication Method Configuration, request origin, and the authenticating application.",
         buttonText = "Get Authentication Context",
         testTag = "Get Authentication Context",
         onSubmit = onGetAuthenticationContext,
         submitResult = state.getAuthenticationContextResult,
-        progressEnabled = state.getAuthenticationContextProgress,
+        progressEnabled = state.getAuthenticationContextProgress
     )
 }
 
@@ -229,24 +225,24 @@ fun Authenticate1Layout(
     onAuthenticateOktaSDK: () -> Unit,
     onAuthenticateOktaWeb: () -> Unit,
     onAuthenticateAuth0SDK: () -> Unit,
-    onAuthenticateAuth0Web: () -> Unit,
+    onAuthenticateAuth0Web: () -> Unit
 ) {
     Text(
         text = "Authenticate",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+        modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
     )
 
     Text(
         text = "Authenticate against a passkey bound to this device. " +
-                "If more than one passkey is present, you must select a passkey during authentication.",
+            "If more than one passkey is present, you must select a passkey during authentication."
     )
 
     Spacer16()
 
     Text(
         text = "Authenticate with Beyond Identity",
-        style = MaterialTheme.typography.subtitle1,
+        style = MaterialTheme.typography.subtitle1
     )
 
     ResponseInputView(
@@ -255,7 +251,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Beyond Identity",
         onSubmit = onAuthenticateBeyondIdentity,
         submitResult = state.authenticateBeyondIdentityResult,
-        progressEnabled = state.authenticateBeyondIdentityProgress,
+        progressEnabled = state.authenticateBeyondIdentityProgress
     )
 
     if (viewModel.mWebMode == WebMode.WebView) {
@@ -263,7 +259,7 @@ fun Authenticate1Layout(
 
         Text(
             text = "Authenticate with Okta (SDK)",
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.subtitle1
         )
 
         ResponseInputView(
@@ -272,7 +268,7 @@ fun Authenticate1Layout(
             testTag = "Authenticate with Okta SDK",
             onSubmit = onAuthenticateOktaSDK,
             submitResult = state.authenticateOktaSDKResult,
-            progressEnabled = state.authenticateOktaSDKProgress,
+            progressEnabled = state.authenticateOktaSDKProgress
         )
     }
 
@@ -280,7 +276,7 @@ fun Authenticate1Layout(
 
     Text(
         text = "Authenticate with Okta (Web)",
-        style = MaterialTheme.typography.subtitle1,
+        style = MaterialTheme.typography.subtitle1
     )
 
     ResponseInputView(
@@ -289,7 +285,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Okta Web",
         onSubmit = onAuthenticateOktaWeb,
         submitResult = state.authenticateOktaWebResult,
-        progressEnabled = state.authenticateOktaWebProgress,
+        progressEnabled = state.authenticateOktaWebProgress
     )
 
     if (viewModel.mWebMode == WebMode.WebView) {
@@ -297,7 +293,7 @@ fun Authenticate1Layout(
 
         Text(
             text = "Authenticate with Auth0 (SDK)",
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.subtitle1
         )
 
         ResponseInputView(
@@ -306,7 +302,7 @@ fun Authenticate1Layout(
             testTag = "Authenticate with Auth0 SDK",
             onSubmit = onAuthenticateAuth0SDK,
             submitResult = state.authenticateAuth0SDKResult,
-            progressEnabled = state.authenticateAuth0SDKProgress,
+            progressEnabled = state.authenticateAuth0SDKProgress
         )
     }
 
@@ -314,7 +310,7 @@ fun Authenticate1Layout(
 
     Text(
         text = "Authenticate with Auth0 (Web)",
-        style = MaterialTheme.typography.subtitle1,
+        style = MaterialTheme.typography.subtitle1
     )
 
     ResponseInputView(
@@ -323,7 +319,7 @@ fun Authenticate1Layout(
         testTag = "Authenticate with Auth0 Web",
         onSubmit = onAuthenticateAuth0Web,
         submitResult = state.authenticateAuth0WebResult,
-        progressEnabled = state.authenticateAuth0WebProgress,
+        progressEnabled = state.authenticateAuth0WebProgress
     )
 
     Spacer16()
@@ -333,17 +329,17 @@ fun Authenticate1Layout(
 fun Authenticate2Layout(
     state: EmbeddedAuthenticateState,
     onAuthenticateUrlTextChange: (String) -> Unit,
-    onAuthenticate: () -> Unit,
+    onAuthenticate: () -> Unit
 ) {
     Text(
         text = "Authenticate",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     InteractionResponseInputView(
         description = "Authenticates against a passkey bound to the device. " +
-                "If more than one passkey is present, you must select a passkey during authentication.",
+            "If more than one passkey is present, you must select a passkey during authentication.",
         inputValue = state.authenticateUrl,
         inputHint = "Authenticate URL",
         onInputChanged = onAuthenticateUrlTextChange,
@@ -351,7 +347,7 @@ fun Authenticate2Layout(
         testTag = "Authenticate URL",
         onSubmit = onAuthenticate,
         submitResult = state.authenticateResult,
-        progressEnabled = state.authenticateProgress,
+        progressEnabled = state.authenticateProgress
     )
 }
 
@@ -361,12 +357,12 @@ fun AuthenticateEmailOtpLayout(
     onAuthenticateEmailOtpTextChange: (String) -> Unit,
     onAuthenticateEmailOtp: () -> Unit,
     onRedeemEmailOtpTextChange: (String) -> Unit,
-    onRedeemEmailOtp: () -> Unit,
+    onRedeemEmailOtp: () -> Unit
 ) {
     Text(
         text = "Authenticate with Email Otp",
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.padding(top = 32.dp),
+        modifier = Modifier.padding(top = 32.dp)
     )
 
     InteractionResponseInputView(
@@ -378,7 +374,7 @@ fun AuthenticateEmailOtpLayout(
         testTag = "Authenticate with Email OTP",
         onSubmit = onAuthenticateEmailOtp,
         submitResult = state.authenticateEmailOtpResult,
-        progressEnabled = state.authenticateEmailOtpProgress,
+        progressEnabled = state.authenticateEmailOtpProgress
     )
 
     InteractionResponseInputView(
@@ -390,7 +386,7 @@ fun AuthenticateEmailOtpLayout(
         testTag = "Redeem OTP",
         onSubmit = onRedeemEmailOtp,
         submitResult = state.redeemEmailOtpResult,
-        progressEnabled = state.redeemEmailOtpProgress,
+        progressEnabled = state.redeemEmailOtpProgress
     )
 }
 
@@ -402,11 +398,11 @@ fun AuthenticationContextPreview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             AuthenticationContextLayout(
                 EmbeddedAuthenticateState(),
-                {},
+                {}
             )
         }
     }
@@ -420,7 +416,7 @@ fun Authenticate1Preview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             Authenticate1Layout(
                 EmbeddedAuthenticateState(),
@@ -429,7 +425,7 @@ fun Authenticate1Preview() {
                 {},
                 {},
                 {},
-                {},
+                {}
             )
         }
     }
@@ -443,12 +439,12 @@ fun Authenticate2Preview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             Authenticate2Layout(
                 EmbeddedAuthenticateState(),
                 {},
-                {},
+                {}
             )
         }
     }
@@ -462,14 +458,14 @@ fun AuthenticateEmailOtpPreview() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp),
+                .padding(start = 24.dp, end = 24.dp)
         ) {
             AuthenticateEmailOtpLayout(
                 EmbeddedAuthenticateState(),
                 {},
                 {},
                 {},
-                {},
+                {}
             )
         }
     }
@@ -493,7 +489,7 @@ fun EmbeddedAuthenticatePreview() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }
@@ -516,7 +512,7 @@ fun EmbeddedAuthenticatePreviewDark() {
             {},
             {},
             {},
-            {},
+            {}
         )
     }
 }

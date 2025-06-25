@@ -55,7 +55,7 @@ fun ManagePasskeysScreen(viewModel: ManagePasskeysViewModel) {
         viewModel::onDeletePasskeyTextChange,
         viewModel.state.deletePasskeyResult,
         viewModel.state.deletePasskeyProgress,
-        viewModel::onDeletePasskeys,
+        viewModel::onDeletePasskeys
     )
 }
 
@@ -68,19 +68,19 @@ fun ManagePasskeysLayout(
     onDeletePasskeyTextChange: (String) -> Unit,
     deletePasskeyResult: String,
     deletePasskeyProgress: Boolean,
-    onDeletePasskey: () -> Unit,
+    onDeletePasskey: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(start = 24.dp, end = 24.dp),
+            .padding(start = 24.dp, end = 24.dp)
     ) {
         Text(
             text = "Passkey Management",
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp, bottom = 8.dp)
-                .testTag("Passkey Management Header"),
+                .testTag("Passkey Management Header")
         )
 
         BiVersionText()
@@ -88,17 +88,17 @@ fun ManagePasskeysLayout(
         Text(
             text = "View Passkey",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         InteractionResultView(
             descriptionText = "View details of your passkey, such as date created, " +
-                    "identity and other information related to your device.",
+                "identity and other information related to your device.",
             buttonText = "View Passkey",
             testTag = "View Passkey",
             onButtonClicked = onGetPasskey,
             resultText = getPasskeyResult,
-            progressEnabled = getPasskeyProgress,
+            progressEnabled = getPasskeyProgress
         )
 
         BiDivider(modifier = Modifier.padding(top = 32.dp))
@@ -106,7 +106,7 @@ fun ManagePasskeysLayout(
         Text(
             text = "Delete Passkey",
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp)
         )
 
         InteractionResponseInputView(
@@ -118,7 +118,7 @@ fun ManagePasskeysLayout(
             testTag = "Delete Passkey",
             onSubmit = onDeletePasskey,
             submitResult = deletePasskeyResult,
-            progressEnabled = deletePasskeyProgress,
+            progressEnabled = deletePasskeyProgress
         )
     }
 }

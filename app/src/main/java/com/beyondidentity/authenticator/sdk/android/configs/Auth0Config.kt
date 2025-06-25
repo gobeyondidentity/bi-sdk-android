@@ -15,10 +15,8 @@ object Auth0Config {
 
     const val WEB_REDIRECT_URI = "acme://auth0"
 
-    fun isRedirectUri(uri: Uri): Boolean {
-        return uri.toString().startsWith(REDIRECT_URI) ||
-                uri.toString().startsWith(WEB_REDIRECT_URI)
-    }
+    fun isRedirectUri(uri: Uri): Boolean = uri.toString().startsWith(REDIRECT_URI) ||
+        uri.toString().startsWith(WEB_REDIRECT_URI)
 
     fun getPkceAuthorizeUrl(
         connection: String = CONNECTION,
@@ -29,17 +27,15 @@ object Auth0Config {
         redirect_uri: String = REDIRECT_URI,
         nonce: String = "nonce",
         code_challenge: String = PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier()),
-        client_id: String = CLIENT_ID,
-    ): String {
-        return "https://dev-pt10fbkg.us.auth0.com/authorize?" +
-                "connection=$connection" + "&" +
-                "scope=$scope" + "&" +
-                "response_type=$response_type" + "&" +
-                "state=$state" + "&" +
-                "code_challenge_method=$code_challenge_method" + "&" +
-                "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
-                "nonce=$nonce" + "&" +
-                "code_challenge=$code_challenge" + "&" +
-                "client_id=$client_id"
-    }
+        client_id: String = CLIENT_ID
+    ): String = "https://dev-pt10fbkg.us.auth0.com/authorize?" +
+        "connection=$connection" + "&" +
+        "scope=$scope" + "&" +
+        "response_type=$response_type" + "&" +
+        "state=$state" + "&" +
+        "code_challenge_method=$code_challenge_method" + "&" +
+        "redirect_uri=${URLEncoder.encode(redirect_uri, "utf-8")}" + "&" +
+        "nonce=$nonce" + "&" +
+        "code_challenge=$code_challenge" + "&" +
+        "client_id=$client_id"
 }

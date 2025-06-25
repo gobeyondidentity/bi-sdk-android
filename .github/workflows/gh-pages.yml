@@ -30,7 +30,7 @@ jobs:
           cache: gradle
 
       - name: Build Dokka
-        run: ./gradlew dokkaHtml
+        run: ./gradlew dokkaGenerate
 
       - name: Publish Dokka
         uses: JamesIves/github-pages-deploy-action@v4

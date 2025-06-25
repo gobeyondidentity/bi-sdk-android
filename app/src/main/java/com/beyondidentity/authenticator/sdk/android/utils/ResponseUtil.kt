@@ -9,7 +9,7 @@ object ResponseUtil {
         method: String,
         response: Response<T>,
         onSuccessResponse: ((T?) -> Unit)?,
-        onFailureResponse: ((ResponseBody?) -> Unit)?,
+        onFailureResponse: ((ResponseBody?) -> Unit)?
     ) {
         if (response.isSuccessful) {
             onSuccessResponse?.invoke(response.body())
@@ -20,7 +20,7 @@ object ResponseUtil {
         Timber.d(
             "got result for $method = ${
                 response.body() ?: response.errorBody()?.string()
-            }",
+            }"
         )
     }
 }

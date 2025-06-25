@@ -9,7 +9,9 @@ import android.os.Bundle
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import timber.log.Timber
 
-class App : Application(), ActivityLifecycleCallbacks {
+class App :
+    Application(),
+    ActivityLifecycleCallbacks {
     private var currentActivity: Activity? = null
 
     override fun onCreate() {
@@ -19,7 +21,7 @@ class App : Application(), ActivityLifecycleCallbacks {
         EmbeddedSdk.init(
             app = this,
             keyguardPrompt = keyguardPrompt,
-            logger = { Timber.d(it) },
+            logger = { Timber.d(it) }
         )
         registerActivityLifecycleCallbacks(this)
     }

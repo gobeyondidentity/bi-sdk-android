@@ -43,6 +43,10 @@ import com.beyondidentity.sdk.android.bicore.models.UsedFactor
 import com.beyondidentity.sdk.android.bicore.models.VerificationUserError
 import com.beyondidentity.sdk.android.bicore.partials.CoreFailure
 import com.beyondidentity.sdk.android.bicore.partials.CoreSuccess
+import java.io.File
+import java.util.UUID
+import java.util.concurrent.Executors
+import kotlin.Result.Companion
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -53,10 +57,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.util.UUID
-import java.util.concurrent.Executors
-import kotlin.Result.Companion
 
 object EmbeddedSdk {
     private const val FLOW_TYPE_EMBEDDED = "embedded"
@@ -152,7 +152,7 @@ object EmbeddedSdk {
             .setTitle(biometricAskPrompt)
             .setNegativeButton(
                 app.getString(R.string.embedded_export_biometric_prompt_cancel),
-                executor,
+                executor
             ) { _, _ ->
                 logger?.invoke("User cancelled biometric check")
                 answers.trySendBlocking(
@@ -163,7 +163,7 @@ object EmbeddedSdk {
             .authenticate(
                 cancellationSignal,
                 executor,
-                callback,
+                callback
             )
     }
 
@@ -194,7 +194,7 @@ object EmbeddedSdk {
         keyguardPrompt: (((allow: Boolean, exception: Exception?) -> Unit) -> Unit)?,
         logger: (String) -> Unit,
         biometricAskPrompt: String = app.getString(R.string.embedded_export_biometric_prompt_title),
-        allowedDomains: List<String>? = null,
+        allowedDomains: List<String>? = null
     ) {
         this.app = app
         this.keyguardPrompt = keyguardPrompt
@@ -243,7 +243,7 @@ object EmbeddedSdk {
             channel = BuildConfig.BUILD_CONFIG_CHANNEL,
             biSdkInfo = DeviceInfo.BiSdkInfo(
                 sdkVersion = BuildConfig.BUILD_CONFIG_BI_SDK_VERSION,
-                appVersion = app.appVersionName(),
+                appVersion = app.appVersionName()
             ),
             biLogger = object : BiLogger {
                 override fun log(
@@ -270,12 +270,23 @@ object EmbeddedSdk {
                 sshConfigPath = BuildConfig.BUILD_CONFIG_SSH_CONFIG_PATH,
                 sshAgentSocketFileName = BuildConfig.BUILD_CONFIG_SSH_SOCKET_FILE_NAME,
                 keymakerSocketFileName = BuildConfig.BUILD_CONFIG_KEYMAKER_SOCKET_FILE_NAME,
+                desktopLoginUrl = null
             ),
             locale = null,
-            layeredAuthPrompt = {},
+            layeredAuthPrompt = {}
         )
 
-        dbMigrate(allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains)
+        dbMigrate(
+            allowedDomains = if (allowedDomains.isNullOrEmpty()) {
+                listOf(
+                    "beyondidentity.com",
+                    "byndid.com",
+                    "beyondidentity-gov.com"
+                )
+            } else {
+                allowedDomains
+            }
+        )
         this.hasInitializedCore = true
     }
 
@@ -299,10 +310,10 @@ object EmbeddedSdk {
             sqlitePath = newDBFile("auth.sqlite"),
             authlib = AuthLibConfiguration(
                 storeConfig = AuthLibStoreConfiguration(
-                    directory = newDBDirectory(""),
+                    directory = newDBDirectory("")
                 )
             ),
-            callingAppInfo = null, // for eventing purposes
+            callingAppInfo = null // for eventing purposes
         ) {
             when (it) {
                 is CoreSuccess -> logger?.invoke("DB migration success")
@@ -321,10 +332,7 @@ object EmbeddedSdk {
      * @param callback [Result] of [BindPasskeyResponse] or [Throwable]
      */
     @JvmStatic
-    fun bindPasskey(
-        url: String,
-        callback: (Result<BindPasskeyResponse>) -> Unit,
-    ) {
+    fun bindPasskey(url: String, callback: (Result<BindPasskeyResponse>) -> Unit) {
         executor.execute {
             if (!isBindPasskeyUrl(url)) {
                 callback(Result.failure(Throwable("URL provided is invalid")))
@@ -332,7 +340,7 @@ object EmbeddedSdk {
                 BiSdk.bindCredential(
                     url = url,
                     trustedSource = TrustedSource.EmbeddedSource,
-                    flowType = FLOW_TYPE_EMBEDDED,
+                    flowType = FLOW_TYPE_EMBEDDED
                 ) { bindCredentialResult ->
                     when (bindCredentialResult) {
                         is CoreSuccess -> postMain {
@@ -353,29 +361,27 @@ object EmbeddedSdk {
      * @param url URL used to bind a passkey to this device
      * @return [Flow] with [Result] of [BindPasskeyResponse] or [Throwable]
      */
-    fun bindPasskey(
-        url: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<BindPasskeyResponse>> {
-        if (!isBindPasskeyUrl(url)) {
-            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
-            awaitClose()
-        } else {
-            BiSdk.bindCredential(
-                url = url,
-                trustedSource = TrustedSource.EmbeddedSource,
-                flowType = FLOW_TYPE_EMBEDDED,
-            ) { bindCredentialResult ->
-                when (bindCredentialResult) {
-                    is CoreSuccess ->
-                        trySendBlocking(Result.success(BindPasskeyResponse.from(bindCredentialResult.value)))
-                    is CoreFailure ->
-                        trySendBlocking(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
+    fun bindPasskey(url: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) =
+        callbackFlow<Result<BindPasskeyResponse>> {
+            if (!isBindPasskeyUrl(url)) {
+                trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+                awaitClose()
+            } else {
+                BiSdk.bindCredential(
+                    url = url,
+                    trustedSource = TrustedSource.EmbeddedSource,
+                    flowType = FLOW_TYPE_EMBEDDED
+                ) { bindCredentialResult ->
+                    when (bindCredentialResult) {
+                        is CoreSuccess ->
+                            trySendBlocking(Result.success(BindPasskeyResponse.from(bindCredentialResult.value)))
+                        is CoreFailure ->
+                            trySendBlocking(Result.failure(Throwable(bindCredentialResult.value.localizedDescription)))
+                    }
                 }
+                awaitClose()
             }
-            awaitClose()
-        }
-    }.flowOn(dispatcher)
+        }.flowOn(dispatcher)
 
     /**
      * Authenticate a user.
@@ -385,11 +391,7 @@ object EmbeddedSdk {
      * @param callback [Result] of [AuthenticateResponse] or [Throwable]
      */
     @JvmStatic
-    fun authenticate(
-        url: String,
-        passkeyId: String,
-        callback: (Result<AuthenticateResponse>) -> Unit,
-    ) {
+    fun authenticate(url: String, passkeyId: String, callback: (Result<AuthenticateResponse>) -> Unit) {
         if (!isAuthenticateUrl(url)) {
             callback(Result.failure(Throwable("URL provided is invalid")))
         } else {
@@ -398,7 +400,7 @@ object EmbeddedSdk {
                     url = url,
                     trustedSource = TrustedSource.EmbeddedSource,
                     flowType = FLOW_TYPE_EMBEDDED,
-                    credentialDescriptor = CredentialId(passkeyId),
+                    credentialDescriptor = CredentialId(passkeyId)
                 ) { biAuthenticateResult ->
                     when (biAuthenticateResult) {
                         is CoreSuccess -> postMain {
@@ -420,29 +422,30 @@ object EmbeddedSdk {
      * @param passkeyId The ID of the passkey with which to authenticate.
      * @return [Flow] [Result] of [AuthenticateResponse] or [Throwable]
      */
-    fun authenticate(
-        url: String,
-        passkeyId: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<AuthenticateResponse>> {
-        if (!isAuthenticateUrl(url)) {
-            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
-            awaitClose()
-        } else {
-            BiSdk.biAuthenticate(
-                url = url,
-                trustedSource = TrustedSource.EmbeddedSource,
-                flowType = FLOW_TYPE_EMBEDDED,
-                credentialDescriptor = CredentialId(passkeyId),
-            ) { biAuthenticateResult ->
-                when (biAuthenticateResult) {
-                    is CoreSuccess -> trySendBlocking(Result.success(AuthenticateResponse.from(biAuthenticateResult.value)!!))
-                    is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+    fun authenticate(url: String, passkeyId: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) =
+        callbackFlow<Result<AuthenticateResponse>> {
+            if (!isAuthenticateUrl(url)) {
+                trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+                awaitClose()
+            } else {
+                BiSdk.biAuthenticate(
+                    url = url,
+                    trustedSource = TrustedSource.EmbeddedSource,
+                    flowType = FLOW_TYPE_EMBEDDED,
+                    credentialDescriptor = CredentialId(passkeyId)
+                ) { biAuthenticateResult ->
+                    when (biAuthenticateResult) {
+                        is CoreSuccess -> trySendBlocking(
+                            Result.success(AuthenticateResponse.from(biAuthenticateResult.value)!!)
+                        )
+                        is CoreFailure -> trySendBlocking(
+                            Result.failure(Throwable(biAuthenticateResult.value.localizedDescription))
+                        )
+                    }
                 }
+                awaitClose()
             }
-            awaitClose()
-        }
-    }.flowOn(dispatcher)
+        }.flowOn(dispatcher)
 
     /**
      * Get all current passkeys for this device.
@@ -450,9 +453,7 @@ object EmbeddedSdk {
      * @return [List] of [Passkey]
      */
     @JvmStatic
-    fun getPasskeys(
-        callback: (Result<List<Passkey>>) -> Unit,
-    ) {
+    fun getPasskeys(callback: (Result<List<Passkey>>) -> Unit) {
         executor.execute {
             BiSdk.getAuthNCredentials { getAuthNCredentialsResult ->
                 when (getAuthNCredentialsResult) {
@@ -472,9 +473,7 @@ object EmbeddedSdk {
      *
      * @return [Flow] that delivers [List] of [Passkey]
      */
-    fun getPasskeys(
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<List<Passkey>>> {
+    fun getPasskeys(dispatcher: CoroutineDispatcher = Dispatchers.Default) = callbackFlow<Result<List<Passkey>>> {
         BiSdk.getAuthNCredentials { getAuthNCredentialsResult ->
             when (getAuthNCredentialsResult) {
                 is CoreSuccess ->
@@ -496,13 +495,10 @@ object EmbeddedSdk {
      * @param callback [Result] of [Unit]
      */
     @JvmStatic
-    fun deletePasskey(
-        id: String,
-        callback: (Result<Unit>) -> Unit,
-    ) {
+    fun deletePasskey(id: String, callback: (Result<Unit>) -> Unit) {
         executor.execute {
             BiSdk.deleteAuthNCredential(
-                id = id,
+                id = id
             ) { result ->
                 when (result) {
                     is CoreSuccess -> postMain {
@@ -524,12 +520,9 @@ object EmbeddedSdk {
      * @param id the unique identifier of the [Passkey].
      * @return [Flow] that delivers [Result] of [Unit]
      */
-    fun deletePasskey(
-        id: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<Unit>> {
+    fun deletePasskey(id: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) = callbackFlow<Result<Unit>> {
         BiSdk.deleteAuthNCredential(
-            id = id,
+            id = id
         ) { result ->
             when (result) {
                 is CoreSuccess -> trySendBlocking(Result.success(Unit))
@@ -577,11 +570,9 @@ object EmbeddedSdk {
      * @return true or false
      */
     @JvmStatic
-    fun isAuthenticateUrl(
-        url: String,
-    ): Boolean {
+    fun isAuthenticateUrl(url: String): Boolean {
         val it = BiSdk.getUrlType(
-            url = url,
+            url = url
         )
         return when (it) {
             is CoreSuccess -> it.value == UrlType.Authenticate
@@ -595,12 +586,9 @@ object EmbeddedSdk {
      * @param url A URL String
      * @return true or false
      */
-    fun isAuthenticateUrl(
-        url: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) = callbackFlow {
+    fun isAuthenticateUrl(url: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) = callbackFlow {
         val it = BiSdk.getUrlType(
-            url = url,
+            url = url
         )
         when (it) {
             is CoreSuccess -> trySendBlocking(it.value == UrlType.Authenticate)
@@ -616,11 +604,9 @@ object EmbeddedSdk {
      * @return true or false
      */
     @JvmStatic
-    fun isBindPasskeyUrl(
-        url: String,
-    ): Boolean {
+    fun isBindPasskeyUrl(url: String): Boolean {
         val it = BiSdk.getUrlType(
-            url = url,
+            url = url
         )
         return when (it) {
             is CoreSuccess -> it.value == UrlType.Bind
@@ -634,12 +620,9 @@ object EmbeddedSdk {
      * @param url A URL String
      * @return true or false
      */
-    fun isBindPasskeyUrl(
-        url: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) = callbackFlow {
+    fun isBindPasskeyUrl(url: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) = callbackFlow {
         val it = BiSdk.getUrlType(
-            url = url,
+            url = url
         )
         when (it) {
             is CoreSuccess -> trySendBlocking(it.value == UrlType.Bind)
@@ -659,17 +642,22 @@ object EmbeddedSdk {
      * @param callback [AuthenticationContext] or [Throwable]
      */
     @JvmStatic
-    fun getAuthenticationContext(
-        url: String,
-        callback: (Result<AuthenticationContext>) -> Unit,
-    ) {
+    fun getAuthenticationContext(url: String, callback: (Result<AuthenticationContext>) -> Unit) {
         if (!isAuthenticateUrl(url)) {
             callback(Result.failure(Throwable("URL provided is invalid")))
         } else {
             executor.execute {
                 BiSdk.getAuthenticationContext(
                     url = url,
-                    allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains,
+                    allowedDomains = if (allowedDomains.isNullOrEmpty()) {
+                        listOf(
+                            "beyondidentity.com",
+                            "byndid.com",
+                            "beyondidentity-gov.com"
+                        )
+                    } else {
+                        allowedDomains
+                    }
                 ) { biAuthenticationContext ->
                     when (biAuthenticationContext) {
                         is CoreSuccess -> postMain {
@@ -694,26 +682,36 @@ object EmbeddedSdk {
      * @param url The authentication URL of the current transaction.
      * @return [Flow] [AuthenticationContext] or [Throwable]
      */
-    fun getAuthenticationContext(
-        url: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<AuthenticationContext>> {
-        if (!isAuthenticateUrl(url)) {
-            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
-            awaitClose()
-        } else {
-            BiSdk.getAuthenticationContext(
-                url = url,
-                allowedDomains = if (allowedDomains.isNullOrEmpty()) listOf("beyondidentity.com", "byndid.com", "beyondidentity-gov.com") else allowedDomains,
-            ) { biAuthenticationContext ->
-                when (biAuthenticationContext) {
-                    is CoreSuccess -> trySendBlocking(Result.success(AuthenticationContext.from(biAuthenticationContext.value)))
-                    is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticationContext.value.localizedDescription)))
+    fun getAuthenticationContext(url: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) =
+        callbackFlow<Result<AuthenticationContext>> {
+            if (!isAuthenticateUrl(url)) {
+                trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+                awaitClose()
+            } else {
+                BiSdk.getAuthenticationContext(
+                    url = url,
+                    allowedDomains = if (allowedDomains.isNullOrEmpty()) {
+                        listOf(
+                            "beyondidentity.com",
+                            "byndid.com",
+                            "beyondidentity-gov.com"
+                        )
+                    } else {
+                        allowedDomains
+                    }
+                ) { biAuthenticationContext ->
+                    when (biAuthenticationContext) {
+                        is CoreSuccess -> trySendBlocking(
+                            Result.success(AuthenticationContext.from(biAuthenticationContext.value))
+                        )
+                        is CoreFailure -> trySendBlocking(
+                            Result.failure(Throwable(biAuthenticationContext.value.localizedDescription))
+                        )
+                    }
                 }
+                awaitClose()
             }
-            awaitClose()
-        }
-    }.flowOn(dispatcher)
+        }.flowOn(dispatcher)
 
     /**
      * Initiates authentication using an OTP, which will be sent to the
@@ -723,11 +721,7 @@ object EmbeddedSdk {
      * @param callback [Result] of [OtpChallengeResponse] or [Throwable]
      */
     @JvmStatic
-    fun authenticateOtp(
-        url: String,
-        email: String,
-        callback: (Result<OtpChallengeResponse>) -> Unit,
-    ) {
+    fun authenticateOtp(url: String, email: String, callback: (Result<OtpChallengeResponse>) -> Unit) {
         if (!isAuthenticateUrl(url)) {
             callback(Result.failure(Throwable("URL provided is invalid")))
         } else {
@@ -736,7 +730,7 @@ object EmbeddedSdk {
                     url = url,
                     trustedSource = TrustedSource.EmbeddedSource,
                     flowType = FLOW_TYPE_EMBEDDED,
-                    credentialDescriptor = BeginEmailOtp(email),
+                    credentialDescriptor = BeginEmailOtp(email)
                 ) { biAuthenticateResult ->
                     when (biAuthenticateResult) {
                         is CoreSuccess -> postMain {
@@ -758,29 +752,30 @@ object EmbeddedSdk {
      * @param email The email address where the OTP will be sent.
      * @return [Flow] [Result] of [OtpChallengeResponse] or [Throwable]
      */
-    fun authenticateOtp(
-        url: String,
-        email: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<OtpChallengeResponse>> {
-        if (!isAuthenticateUrl(url)) {
-            trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
-            awaitClose()
-        } else {
-            BiSdk.biAuthenticate(
-                url = url,
-                trustedSource = TrustedSource.EmbeddedSource,
-                flowType = FLOW_TYPE_EMBEDDED,
-                credentialDescriptor = BeginEmailOtp(email),
-            ) { biAuthenticateResult ->
-                when (biAuthenticateResult) {
-                    is CoreSuccess -> trySendBlocking(Result.success(OtpChallengeResponse.from(biAuthenticateResult.value)!!))
-                    is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
+    fun authenticateOtp(url: String, email: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) =
+        callbackFlow<Result<OtpChallengeResponse>> {
+            if (!isAuthenticateUrl(url)) {
+                trySendBlocking(Result.failure(Throwable("URL provided is invalid")))
+                awaitClose()
+            } else {
+                BiSdk.biAuthenticate(
+                    url = url,
+                    trustedSource = TrustedSource.EmbeddedSource,
+                    flowType = FLOW_TYPE_EMBEDDED,
+                    credentialDescriptor = BeginEmailOtp(email)
+                ) { biAuthenticateResult ->
+                    when (biAuthenticateResult) {
+                        is CoreSuccess -> trySendBlocking(
+                            Result.success(OtpChallengeResponse.from(biAuthenticateResult.value)!!)
+                        )
+                        is CoreFailure -> trySendBlocking(
+                            Result.failure(Throwable(biAuthenticateResult.value.localizedDescription))
+                        )
+                    }
                 }
+                awaitClose()
             }
-            awaitClose()
-        }
-    }.flowOn(dispatcher)
+        }.flowOn(dispatcher)
 
     /**
      * Redeems an OTP for a grant code.
@@ -789,25 +784,29 @@ object EmbeddedSdk {
      * @param callback [Result] of [RedeemOtpResponse] that resolves to an [AuthenticateResponse] on success or an [OtpChallengeResponse] on failure to authenticate with the provided OTP code. Use on retry. or [Throwable].
      */
     @JvmStatic
-    fun redeemOtp(
-        url: String,
-        otp: String,
-        callback: (Result<RedeemOtpResponse>) -> Unit,
-    ) {
+    fun redeemOtp(url: String, otp: String, callback: (Result<RedeemOtpResponse>) -> Unit) {
         executor.execute {
             BiSdk.biAuthenticate(
                 url = url,
                 trustedSource = TrustedSource.EmbeddedSource,
                 flowType = FLOW_TYPE_EMBEDDED,
-                credentialDescriptor = RedeemOtp(otp),
+                credentialDescriptor = RedeemOtp(otp)
             ) { biAuthenticateResult ->
                 when (biAuthenticateResult) {
                     is CoreSuccess -> postMain {
                         biAuthenticateResult.value.allow?.let { biAuthenticateResponse ->
-                            callback(Result.success(RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))))
+                            callback(
+                                Result.success(
+                                    RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))
+                                )
+                            )
                         }
                         biAuthenticateResult.value.`continue`?.let { biContinueResponse ->
-                            callback(Result.success(RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))))
+                            callback(
+                                Result.success(
+                                    RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))
+                                )
+                            )
                         }
                     }
                     is CoreFailure -> postMain {
@@ -824,29 +823,36 @@ object EmbeddedSdk {
      * @param otp The OTP to redeem.
      * @return [Flow] [Result] of [RedeemOtpResponse] that resolves to an [AuthenticateResponse] on success or an [OtpChallengeResponse] on failure to authenticate with the provided OTP code. Use on retry. or [Throwable].
      */
-    fun redeemOtp(
-        url: String,
-        otp: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    ) = callbackFlow<Result<RedeemOtpResponse>> {
-        BiSdk.biAuthenticate(
-            url = url,
-            trustedSource = TrustedSource.EmbeddedSource,
-            flowType = FLOW_TYPE_EMBEDDED,
-            credentialDescriptor = RedeemOtp(otp),
-        ) { biAuthenticateResult ->
-            when (biAuthenticateResult) {
-                is CoreSuccess -> {
-                    biAuthenticateResult.value.allow?.let { biAuthenticateResponse ->
-                        trySendBlocking(Result.success(RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))))
+    fun redeemOtp(url: String, otp: String, dispatcher: CoroutineDispatcher = Dispatchers.Default) =
+        callbackFlow<Result<RedeemOtpResponse>> {
+            BiSdk.biAuthenticate(
+                url = url,
+                trustedSource = TrustedSource.EmbeddedSource,
+                flowType = FLOW_TYPE_EMBEDDED,
+                credentialDescriptor = RedeemOtp(otp)
+            ) { biAuthenticateResult ->
+                when (biAuthenticateResult) {
+                    is CoreSuccess -> {
+                        biAuthenticateResult.value.allow?.let { biAuthenticateResponse ->
+                            trySendBlocking(
+                                Result.success(
+                                    RedeemOtpResponse.Success(AuthenticateResponse.from(biAuthenticateResponse))
+                                )
+                            )
+                        }
+                        biAuthenticateResult.value.`continue`?.let { biContinueResponse ->
+                            trySendBlocking(
+                                Result.success(
+                                    RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))
+                                )
+                            )
+                        }
                     }
-                    biAuthenticateResult.value.`continue`?.let { biContinueResponse ->
-                        trySendBlocking(Result.success(RedeemOtpResponse.FailedOtp(OtpChallengeResponse.from(biContinueResponse))))
-                    }
+                    is CoreFailure -> trySendBlocking(
+                        Result.failure(Throwable(biAuthenticateResult.value.localizedDescription))
+                    )
                 }
-                is CoreFailure -> trySendBlocking(Result.failure(Throwable(biAuthenticateResult.value.localizedDescription)))
             }
-        }
-        awaitClose()
-    }.flowOn(dispatcher)
+            awaitClose()
+        }.flowOn(dispatcher)
 }

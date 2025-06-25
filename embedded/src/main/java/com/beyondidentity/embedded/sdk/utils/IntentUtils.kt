@@ -1,16 +1,16 @@
 package com.beyondidentity.embedded.sdk.utils
 
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 
 fun supportIntent(url: String) = if (url.contains("@")) {
     Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:$url")
+        data = "mailto:$url".toUri()
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 } else {
     Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse(url)
+        data = url.toUri()
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 }

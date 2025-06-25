@@ -17,7 +17,7 @@ import retrofit2.http.Query
 
 data class AuthorizeResponse(
     @SerializedName("authenticate_url")
-    val authenticateUrl: String?,
+    val authenticateUrl: String?
 )
 
 data class TokenResponse(
@@ -30,30 +30,31 @@ data class TokenResponse(
     @SerializedName("scope")
     val scope: String,
     @SerializedName("id_token")
-    val idToken: String,
+    val idToken: String
 )
 
 interface BeyondIdentityApiService {
     @GET(BeyondIdentityConfig.AUTHORIZATION_ENDPOINT)
     suspend fun authorize(
-        @Query("client_id") client_id: String = BeyondIdentityConfig.CLIENT_ID,
-        @Query("code_challenge") code_challenge: String = PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier()),
-        @Query("code_challenge_method") code_challenge_method: String = "S256",
-        @Query("redirect_uri") redirect_uri: String = BeyondIdentityConfig.REDIRECT_URI,
-        @Query("response_type") response_type: String = "code",
+        @Query("client_id") clientId: String = BeyondIdentityConfig.CLIENT_ID,
+        @Query("code_challenge") codeChallenge: String =
+            PKCEUtil.generateCodeChallenge(PKCEUtil.generateCodeVerifier()),
+        @Query("code_challenge_method") codeChallengeMethod: String = "S256",
+        @Query("redirect_uri") redirectUri: String = BeyondIdentityConfig.REDIRECT_URI,
+        @Query("response_type") responseType: String = "code",
         @Query("scope") scope: String = BeyondIdentityConfig.SCOPE,
-        @Query("state") state: String = "state",
+        @Query("state") state: String = "state"
     ): Response<AuthorizeResponse>
 
     @FormUrlEncoded
     @POST(BeyondIdentityConfig.TOKEN_ENDPOINT)
     suspend fun token(
-        @Field("client_id") client_id: String = BeyondIdentityConfig.CLIENT_ID,
+        @Field("client_id") clientId: String = BeyondIdentityConfig.CLIENT_ID,
         @Field("code") code: String = "code",
-        @Field("code_verifier") code_verifier: String = PKCEUtil.generateCodeVerifier(),
-        @Field("grant_type") grant_type: String = "authorization_code",
-        @Field("redirect_uri") redirect_uri: String = BeyondIdentityConfig.REDIRECT_URI,
-        @Field("state") state: String = "state",
+        @Field("code_verifier") codeVerifier: String = PKCEUtil.generateCodeVerifier(),
+        @Field("grant_type") grantType: String = "authorization_code",
+        @Field("redirect_uri") redirectUri: String = BeyondIdentityConfig.REDIRECT_URI,
+        @Field("state") state: String = "state"
     ): Response<TokenResponse>
 }
 
@@ -64,7 +65,7 @@ object BeyondIdentityRetrofitBuilder {
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
-                .build(),
+                .build()
         )
         .build()
 

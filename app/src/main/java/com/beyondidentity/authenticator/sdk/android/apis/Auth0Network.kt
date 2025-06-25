@@ -22,7 +22,7 @@ data class Auth0TokenResponse(
     @SerializedName("expires_in")
     val expiresIn: Int,
     @SerializedName("token_type")
-    val tokenType: String,
+    val tokenType: String
 )
 
 interface Auth0ApiService {
@@ -33,7 +33,7 @@ interface Auth0ApiService {
         @Field("client_id") clientId: String = Auth0Config.CLIENT_ID,
         @Field("code") code: String,
         @Field("code_verifier") codeVerifier: String,
-        @Field("redirect_uri") redirectUri: String = Auth0Config.REDIRECT_URI,
+        @Field("redirect_uri") redirectUri: String = Auth0Config.REDIRECT_URI
     ): Response<Auth0TokenResponse>
 }
 
@@ -44,7 +44,7 @@ object Auth0RetrofitBuilder {
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
-                .build(),
+                .build()
         )
         .build()
 

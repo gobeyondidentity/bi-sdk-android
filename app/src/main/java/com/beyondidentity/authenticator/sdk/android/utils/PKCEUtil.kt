@@ -15,7 +15,7 @@ object PKCEUtil {
         secureRandom.nextBytes(bytes)
         return Base64.encodeToString(
             bytes,
-            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING,
+            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
         )
     }
 
@@ -28,7 +28,7 @@ object PKCEUtil {
         val digest = messageDigest.digest()
         return Base64.encodeToString(
             digest,
-            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING,
+            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
         )
     }
 }

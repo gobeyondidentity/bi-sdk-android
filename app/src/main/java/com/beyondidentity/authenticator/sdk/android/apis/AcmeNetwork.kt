@@ -18,7 +18,7 @@ data class CredentialBindingLinkRequest(
     @SerializedName("delivery_method")
     val deliveryMethod: String = "return",
     @SerializedName("email")
-    val email: String? = null,
+    val email: String? = null
 )
 
 data class RecoverCredentialBindingLinkRequest(
@@ -27,21 +27,21 @@ data class RecoverCredentialBindingLinkRequest(
     @SerializedName("authenticator_type")
     val authenticatorType: String = "native",
     @SerializedName("delivery_method")
-    val deliveryMethod: String = "return",
+    val deliveryMethod: String = "return"
 )
 
 data class CredentialBindingLinkResponse(
     @SerializedName("credential_binding_job")
     val credentialBindingJob: CredentialBindingJob?,
     @SerializedName("credential_binding_link")
-    val credentialBindingLink: String?,
+    val credentialBindingLink: String?
 )
 
 data class RecoverCredentialBindingLinkResponse(
     @SerializedName("credential_binding_job")
     val credentialBindingJob: CredentialBindingJob?,
     @SerializedName("credential_binding_link")
-    val credentialBindingLink: String?,
+    val credentialBindingLink: String?
 )
 
 data class CredentialBindingJob(
@@ -66,15 +66,19 @@ data class CredentialBindingJob(
     @SerializedName("tenant_id")
     val tenantId: String,
     @SerializedName("update_time")
-    val updateTime: String,
+    val updateTime: String
 )
 
 interface AcmeApiService {
     @POST("credential-binding-link")
-    suspend fun credentialBindingLink(@Body credentialBindingLinkRequest: CredentialBindingLinkRequest): Response<CredentialBindingLinkResponse>
+    suspend fun credentialBindingLink(
+        @Body credentialBindingLinkRequest: CredentialBindingLinkRequest
+    ): Response<CredentialBindingLinkResponse>
 
     @POST("recover-credential-binding-link")
-    suspend fun recoverCredentialBindingLink(@Body recoverCredentialBindingLinkRequest: RecoverCredentialBindingLinkRequest): Response<RecoverCredentialBindingLinkResponse>
+    suspend fun recoverCredentialBindingLink(
+        @Body recoverCredentialBindingLinkRequest: RecoverCredentialBindingLinkRequest
+    ): Response<RecoverCredentialBindingLinkResponse>
 }
 
 object AcmeRetrofitBuilder {
@@ -84,7 +88,7 @@ object AcmeRetrofitBuilder {
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
-                .build(),
+                .build()
         )
         .build()
 

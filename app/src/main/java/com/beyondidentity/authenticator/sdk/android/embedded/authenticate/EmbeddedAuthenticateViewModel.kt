@@ -1,16 +1,19 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.beyondidentity.authenticator.sdk.android.embedded.authenticate
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback as AuthenticationCallback
 import com.auth0.android.request.DefaultClient
 import com.auth0.android.result.Credentials
 import com.beyondidentity.authenticator.sdk.android.apis.Auth0RetrofitBuilder
@@ -58,13 +61,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import com.auth0.android.callback.Callback as AuthenticationCallback
 
 class EmbeddedAuthenticateViewModel : ViewModel() {
     enum class WebMode {
         CustomTab,
         Intent,
-        WebView,
+        WebView
     }
 
     val mWebMode = WebMode.CustomTab
@@ -82,7 +84,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             startActivityForWebMode(
                                 activity,
                                 success.redirectUrl,
-                                onButtonPressedRequestCode(),
+                                onButtonPressedRequestCode()
                             )
                         },
                         updateStateCallback = object : UpdateStateCallback {
@@ -91,39 +93,39 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     onBeyondIdentity = {
                                         state = state.copy(
                                             authenticateBeyondIdentityResult = result,
-                                            authenticateBeyondIdentityProgress = progress,
+                                            authenticateBeyondIdentityProgress = progress
                                         )
                                     },
                                     onAuth0SDK = {
                                         state = state.copy(
                                             authenticateAuth0SDKResult = result,
-                                            authenticateAuth0SDKProgress = progress,
+                                            authenticateAuth0SDKProgress = progress
                                         )
                                     },
                                     onAuth0Web = {
                                         state = state.copy(
                                             authenticateAuth0WebResult = result,
-                                            authenticateAuth0WebProgress = progress,
+                                            authenticateAuth0WebProgress = progress
                                         )
                                     },
                                     onOktaSDK = {
                                         state = state.copy(
                                             authenticateOktaSDKResult = result,
-                                            authenticateOktaSDKProgress = progress,
+                                            authenticateOktaSDKProgress = progress
                                         )
                                     },
                                     onOktaWeb = {
                                         state = state.copy(
                                             authenticateOktaWebResult = result,
-                                            authenticateOktaWebProgress = progress,
+                                            authenticateOktaWebProgress = progress
                                         )
                                     },
                                     onException = {
                                         throw Throwable("Invalid Button Pressed")
-                                    },
+                                    }
                                 )
                             }
-                        },
+                        }
                     )
                 }
                 Auth0Config.isRedirectUri(data) -> {
@@ -131,10 +133,10 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         onAuth0SDK = {
                             val auth0 = Auth0(
                                 Auth0Config.CLIENT_ID,
-                                Auth0Config.DOMAIN,
+                                Auth0Config.DOMAIN
                             )
                             val netClient = DefaultClient(
-                                enableLogging = true,
+                                enableLogging = true
                             )
                             auth0.networkingClient = netClient
 
@@ -142,7 +144,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             authenticationAPIClient.token(
                                 data.getQueryParameter("code") ?: "",
                                 state.codeVerifier,
-                                data.toString(),
+                                data.toString()
                             ).start(
                                 object :
                                     AuthenticationCallback<Credentials, AuthenticationException> {
@@ -151,9 +153,9 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                         Timber.d("onFailure($error)")
                                         state = state.copy(
                                             authenticateAuth0SDKResult = "{\"status\":onFailure,\"error\":{\"code\":${error.getCode()},\"description\":${error.getDescription()},\"statusCode\":${error.statusCode}}}".toIndentString(
-                                                includeSpace = true,
+                                                includeSpace = true
                                             ),
-                                            authenticateAuth0SDKProgress = false,
+                                            authenticateAuth0SDKProgress = false
                                         )
                                     }
 
@@ -162,12 +164,12 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                         Timber.d("onSuccess($result)")
                                         state = state.copy(
                                             authenticateAuth0SDKResult = "{\"status\":onSuccess,\"result\":{\"idToken\":${result.idToken},\"accessToken\":${result.accessToken},\"type\":${result.type},\"refreshToken\":${result.refreshToken},\"expiresAt\":${result.expiresAt},\"scope\":${result.scope}}}".toIndentString(
-                                                includeSpace = true,
+                                                includeSpace = true
                                             ),
-                                            authenticateAuth0SDKProgress = false,
+                                            authenticateAuth0SDKProgress = false
                                         )
                                     }
-                                },
+                                }
                             )
                         },
                         onAuth0Web = {
@@ -179,12 +181,12 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     override fun invoke(url: String, result: String, progress: Boolean) {
                                         state = state.copy(
                                             authenticateAuth0WebResult = result,
-                                            authenticateAuth0WebProgress = progress,
+                                            authenticateAuth0WebProgress = progress
                                         )
                                     }
-                                },
+                                }
                             )
-                        },
+                        }
                     )
                 }
                 OktaConfig.isRedirectUri(data) -> {
@@ -198,10 +200,10 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     override fun invoke(url: String, result: String, progress: Boolean) {
                                         state = state.copy(
                                             authenticateOktaSDKResult = result,
-                                            authenticateOktaSDKProgress = progress,
+                                            authenticateOktaSDKProgress = progress
                                         )
                                     }
-                                },
+                                }
                             )
                         },
                         onOktaWeb = {
@@ -213,12 +215,12 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     override fun invoke(url: String, result: String, progress: Boolean) {
                                         state = state.copy(
                                             authenticateOktaWebResult = result,
-                                            authenticateOktaWebProgress = progress,
+                                            authenticateOktaWebProgress = progress
                                         )
                                     }
-                                },
+                                }
                             )
-                        },
+                        }
                     )
                 }
             }
@@ -226,18 +228,13 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun handleActivityResult(
-        activity: FragmentActivity,
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
+    fun handleActivityResult(activity: FragmentActivity, requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             IntentConstants.AUTH0_SDK_RC,
             IntentConstants.AUTH0_WEB_RC,
             IntentConstants.OKTA_SDK_RC,
             IntentConstants.OKTA_WEB_RC,
-            IntentConstants.BEYOND_IDENTITY_RC,
+            IntentConstants.BEYOND_IDENTITY_RC
             -> {
                 data?.data?.let { uri ->
                     when {
@@ -250,7 +247,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                         startActivityForWebMode(
                                             activity,
                                             success.redirectUrl,
-                                            requestCode,
+                                            requestCode
                                         )
                                     }
                                 },
@@ -260,36 +257,36 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                             IntentConstants.AUTH0_SDK_RC -> {
                                                 state = state.copy(
                                                     authenticateAuth0SDKResult = result,
-                                                    authenticateAuth0SDKProgress = progress,
+                                                    authenticateAuth0SDKProgress = progress
                                                 )
                                             }
                                             IntentConstants.AUTH0_WEB_RC -> {
                                                 state = state.copy(
                                                     authenticateAuth0WebResult = result,
-                                                    authenticateAuth0WebProgress = progress,
+                                                    authenticateAuth0WebProgress = progress
                                                 )
                                             }
                                             IntentConstants.OKTA_SDK_RC -> {
                                                 state = state.copy(
                                                     authenticateOktaSDKResult = result,
-                                                    authenticateOktaSDKProgress = progress,
+                                                    authenticateOktaSDKProgress = progress
                                                 )
                                             }
                                             IntentConstants.OKTA_WEB_RC -> {
                                                 state = state.copy(
                                                     authenticateOktaWebResult = result,
-                                                    authenticateOktaWebProgress = progress,
+                                                    authenticateOktaWebProgress = progress
                                                 )
                                             }
                                             IntentConstants.BEYOND_IDENTITY_RC -> {
                                                 state = state.copy(
                                                     authenticateBeyondIdentityResult = result,
-                                                    authenticateBeyondIdentityProgress = progress,
+                                                    authenticateBeyondIdentityProgress = progress
                                                 )
                                             }
                                         }
                                     }
-                                },
+                                }
                             )
                         }
                         Auth0Config.isRedirectUri(uri) -> {
@@ -297,10 +294,10 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 onAuth0SDK = {
                                     val auth0 = Auth0(
                                         Auth0Config.CLIENT_ID,
-                                        Auth0Config.DOMAIN,
+                                        Auth0Config.DOMAIN
                                     )
                                     val netClient = DefaultClient(
-                                        enableLogging = true,
+                                        enableLogging = true
                                     )
                                     auth0.networkingClient = netClient
 
@@ -308,7 +305,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     authenticationAPIClient.token(
                                         uri.getQueryParameter("code") ?: "",
                                         state.codeVerifier,
-                                        uri.toString(),
+                                        uri.toString()
                                     ).start(
                                         object :
                                             AuthenticationCallback<Credentials, AuthenticationException> {
@@ -319,17 +316,17 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     IntentConstants.AUTH0_SDK_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0SDKResult = "{\"status\":onFailure,\"error\":{\"code\":${error.getCode()},\"description\":${error.getDescription()},\"statusCode\":${error.statusCode}}}".toIndentString(
-                                                                includeSpace = true,
+                                                                includeSpace = true
                                                             ),
-                                                            authenticateAuth0SDKProgress = false,
+                                                            authenticateAuth0SDKProgress = false
                                                         )
                                                     }
                                                     IntentConstants.AUTH0_WEB_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0WebResult = "{\"status\":onFailure,\"error\":{\"code\":${error.getCode()},\"description\":${error.getDescription()},\"statusCode\":${error.statusCode}}}".toIndentString(
-                                                                includeSpace = true,
+                                                                includeSpace = true
                                                             ),
-                                                            authenticateAuth0WebProgress = false,
+                                                            authenticateAuth0WebProgress = false
                                                         )
                                                     }
                                                 }
@@ -342,22 +339,22 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     IntentConstants.AUTH0_SDK_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0SDKResult = "{\"status\":onSuccess,\"result\":{\"idToken\":${result.idToken},\"accessToken\":${result.accessToken},\"type\":${result.type},\"refreshToken\":${result.refreshToken},\"expiresAt\":${result.expiresAt},\"scope\":${result.scope}}}".toIndentString(
-                                                                includeSpace = true,
+                                                                includeSpace = true
                                                             ),
-                                                            authenticateAuth0SDKProgress = false,
+                                                            authenticateAuth0SDKProgress = false
                                                         )
                                                     }
                                                     IntentConstants.AUTH0_WEB_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0WebResult = "{\"status\":onSuccess,\"result\":{\"idToken\":${result.idToken},\"accessToken\":${result.accessToken},\"type\":${result.type},\"refreshToken\":${result.refreshToken},\"expiresAt\":${result.expiresAt},\"scope\":${result.scope}}}".toIndentString(
-                                                                includeSpace = true,
+                                                                includeSpace = true
                                                             ),
-                                                            authenticateAuth0WebProgress = false,
+                                                            authenticateAuth0WebProgress = false
                                                         )
                                                     }
                                                 }
                                             }
-                                        },
+                                        }
                                     )
                                 },
                                 onAuth0Web = {
@@ -371,20 +368,20 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     IntentConstants.AUTH0_SDK_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0SDKResult = result,
-                                                            authenticateAuth0SDKProgress = progress,
+                                                            authenticateAuth0SDKProgress = progress
                                                         )
                                                     }
                                                     IntentConstants.AUTH0_WEB_RC -> {
                                                         state = state.copy(
                                                             authenticateAuth0WebResult = result,
-                                                            authenticateAuth0WebProgress = progress,
+                                                            authenticateAuth0WebProgress = progress
                                                         )
                                                     }
                                                 }
                                             }
-                                        },
+                                        }
                                     )
-                                },
+                                }
                             )
                         }
                         OktaConfig.isRedirectUri(uri) -> {
@@ -400,18 +397,18 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     IntentConstants.OKTA_SDK_RC -> {
                                                         state = state.copy(
                                                             authenticateOktaSDKResult = result,
-                                                            authenticateOktaSDKProgress = progress,
+                                                            authenticateOktaSDKProgress = progress
                                                         )
                                                     }
                                                     IntentConstants.OKTA_WEB_RC -> {
                                                         state = state.copy(
                                                             authenticateOktaWebResult = result,
-                                                            authenticateOktaWebProgress = progress,
+                                                            authenticateOktaWebProgress = progress
                                                         )
                                                     }
                                                 }
                                             }
-                                        },
+                                        }
                                     )
                                 },
                                 onOktaWeb = {
@@ -425,20 +422,20 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     IntentConstants.OKTA_SDK_RC -> {
                                                         state = state.copy(
                                                             authenticateOktaSDKResult = result,
-                                                            authenticateOktaSDKProgress = progress,
+                                                            authenticateOktaSDKProgress = progress
                                                         )
                                                     }
                                                     IntentConstants.OKTA_WEB_RC -> {
                                                         state = state.copy(
                                                             authenticateOktaWebResult = result,
-                                                            authenticateOktaWebProgress = progress,
+                                                            authenticateOktaWebProgress = progress
                                                         )
                                                     }
                                                 }
                                             }
-                                        },
+                                        }
                                     )
-                                },
+                                }
                             )
                         }
                     }
@@ -474,40 +471,40 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         activity: FragmentActivity,
         url: String,
         requestCode: Int,
-        webMode: WebMode = mWebMode,
+        webMode: WebMode = mWebMode
     ) {
         when (webMode) {
             WebMode.CustomTab -> {
                 activity.startActivityForResult(
                     Intent(
                         activity,
-                        EmbeddedCustomTabActivity::class.java,
+                        EmbeddedCustomTabActivity::class.java
                     ).setData(
-                        Uri.parse(url),
+                        url.toUri()
                     ),
-                    requestCode,
+                    requestCode
                 )
             }
             WebMode.Intent -> {
                 activity.startActivityForResult(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(url),
+                        url.toUri()
                     ).setData(
-                        Uri.parse(url),
+                        url.toUri()
                     ),
-                    requestCode,
+                    requestCode
                 )
             }
             WebMode.WebView -> {
                 activity.startActivityForResult(
                     Intent(
                         activity,
-                        EmbeddedWebViewActivity::class.java,
+                        EmbeddedWebViewActivity::class.java
                     ).setData(
-                        Uri.parse(url),
+                        url.toUri()
                     ),
-                    requestCode,
+                    requestCode
                 )
             }
         }
@@ -516,7 +513,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
     private fun onSelectPasskey(
         activity: FragmentActivity,
         passkeys: List<Passkey>,
-        selectedPasskeyCallback: OnSelectedPasskey,
+        selectedPasskeyCallback: OnSelectedPasskey
     ) = when {
         passkeys.isEmpty() -> selectedPasskeyCallback.invoke(null)
         passkeys.size == 1 -> selectedPasskeyCallback.invoke(passkeys[0].id)
@@ -535,7 +532,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 state = state.copy(
                     authenticateUrl = url,
                     authenticateResult = result,
-                    authenticateProgress = progress,
+                    authenticateProgress = progress
                 )
             }
         }
@@ -543,7 +540,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         if (!resetResult(
                 string = url,
                 result = "Please provide an Authenticate URL",
-                updateStateCallback = updateStateCallback::invoke,
+                updateStateCallback = updateStateCallback::invoke
             )
         ) {
             return
@@ -554,7 +551,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 onSelectPasskey(activity, passkeyList) {
                     EmbeddedSdk.authenticate(
                         url = url,
-                        passkeyId = it ?: "",
+                        passkeyId = it ?: ""
                     )
                         .flowOn(Dispatchers.Main + coroutineExceptionHandler)
                         .onEach { result ->
@@ -562,17 +559,19 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 updateStateCallback(
                                     "",
                                     success.toIndentString(includeSpace = true),
-                                    false,
+                                    false
                                 )
                                 Timber.d("Authenticate success = $success")
-                                onAuthenticateEvent(AuthenticateEvent("Authenticate success!\nYou can start exploring the Embedded SDK"))
+                                onAuthenticateEvent(
+                                    AuthenticateEvent("Authenticate success!\nYou can start exploring the Embedded SDK")
+                                )
                                 onAuthenticateSuccess?.invoke(success)
                             }
                             result.onFailure { failure ->
                                 updateStateCallback(
                                     state.authenticateUrl,
                                     failure.toIndentString(),
-                                    false,
+                                    false
                                 )
                                 Timber.e("Authenticate failure = $failure")
                                 onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
@@ -583,7 +582,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             updateStateCallback(
                                 state.authenticateUrl,
                                 error.toIndentString(),
-                                false,
+                                false
                             )
                             Timber.e("Authenticate exception = ${error.message}")
                             onAuthenticateEvent(AuthenticateEvent("Authenticate failed"))
@@ -610,7 +609,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             override fun invoke(url: String, result: String, progress: Boolean) {
                 state = state.copy(
                     getAuthenticationContextResult = result,
-                    getAuthenticationContextProgress = progress,
+                    getAuthenticationContextProgress = progress
                 )
             }
         }
@@ -620,8 +619,8 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 ResponseUtil.onResponse(
                     method = "GetAuthenticationContext",
                     response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.authorize(
-                        code_challenge = state.codeChallenge,
-                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                        codeChallenge = state.codeChallenge,
+                        redirectUri = BeyondIdentityConfig.REDIRECT_URI
                     ),
                     onSuccessResponse = { authorizeResponse ->
                         when (authorizeResponse?.authenticateUrl) {
@@ -629,18 +628,18 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 updateStateCallback(
                                     "",
                                     authorizeResponse.toIndentString(includeSpace = true),
-                                    false,
+                                    false
                                 )
                             }
                             else -> {
                                 updateStateCallback(
                                     "",
                                     "",
-                                    true,
+                                    true
                                 )
 
                                 EmbeddedSdk.getAuthenticationContext(
-                                    url = authorizeResponse.authenticateUrl,
+                                    url = authorizeResponse.authenticateUrl
                                 )
                                     .flowOn(Dispatchers.Main + coroutineExceptionHandler)
                                     .onEach { result ->
@@ -650,7 +649,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                             updateStateCallback(
                                                 "",
                                                 success.toIndentString(includeSpace = true),
-                                                false,
+                                                false
                                             )
                                         }
                                         result.onFailure { failure ->
@@ -659,7 +658,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                             updateStateCallback(
                                                 "",
                                                 failure.toIndentString(),
-                                                false,
+                                                false
                                             )
                                         }
                                     }
@@ -669,7 +668,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                         updateStateCallback(
                                             "",
                                             error.toIndentString(),
-                                            false,
+                                            false
                                         )
                                     }
                                     .launchIn(viewModelScope)
@@ -680,15 +679,15 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         updateStateCallback(
                             "",
                             authorizeResponse?.string().toIndentString(includeSpace = true),
-                            false,
+                            false
                         )
-                    },
+                    }
                 )
             } catch (e: Exception) {
                 updateStateCallback(
                     "",
                     e.localizedMessage.toIndentString(includeSpace = true),
-                    false,
+                    false
                 )
             }
         }
@@ -703,7 +702,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             override fun invoke(url: String, result: String, progress: Boolean) {
                 state = state.copy(
                     authenticateBeyondIdentityResult = result,
-                    authenticateBeyondIdentityProgress = progress,
+                    authenticateBeyondIdentityProgress = progress
                 )
             }
         }
@@ -713,8 +712,8 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 ResponseUtil.onResponse(
                     method = "BeyondIdentityAuthorize",
                     response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.authorize(
-                        code_challenge = state.codeChallenge,
-                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                        codeChallenge = state.codeChallenge,
+                        redirectUri = BeyondIdentityConfig.REDIRECT_URI
                     ),
                     onSuccessResponse = { authorizeResponse ->
                         when (authorizeResponse?.authenticateUrl) {
@@ -722,7 +721,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 updateStateCallback(
                                     "",
                                     authorizeResponse.toIndentString(includeSpace = true),
-                                    false,
+                                    false
                                 )
                             }
                             else -> {
@@ -730,7 +729,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                     activity = activity,
                                     url = authorizeResponse.authenticateUrl,
                                     onAuthenticateSuccess = { success ->
-                                        val redirectUri = Uri.parse(success.redirectUrl)
+                                        val redirectUri = success.redirectUrl.toUri()
 
                                         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
                                             try {
@@ -738,34 +737,34 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                                     method = "BeyondIdentityToken",
                                                     response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.token(
                                                         code = redirectUri?.getQueryParameter("code") ?: "",
-                                                        code_verifier = state.codeVerifier,
-                                                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                                                        codeVerifier = state.codeVerifier,
+                                                        redirectUri = BeyondIdentityConfig.REDIRECT_URI
                                                     ),
                                                     onSuccessResponse = { tokenResponse ->
                                                         updateStateCallback(
                                                             "",
                                                             tokenResponse.toIndentString(includeSpace = true),
-                                                            false,
+                                                            false
                                                         )
                                                     },
                                                     onFailureResponse = { tokenResponse ->
                                                         updateStateCallback(
                                                             "",
                                                             tokenResponse?.string().toIndentString(includeSpace = true),
-                                                            false,
+                                                            false
                                                         )
-                                                    },
+                                                    }
                                                 )
                                             } catch (e: Exception) {
                                                 updateStateCallback(
                                                     "",
                                                     e.localizedMessage.toIndentString(includeSpace = true),
-                                                    false,
+                                                    false
                                                 )
                                             }
                                         }
                                     },
-                                    updateStateCallback = updateStateCallback,
+                                    updateStateCallback = updateStateCallback
                                 )
                             }
                         }
@@ -774,15 +773,15 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         updateStateCallback(
                             "",
                             authorizeResponse?.string().toIndentString(includeSpace = true),
-                            false,
+                            false
                         )
-                    },
+                    }
                 )
             } catch (e: Exception) {
                 updateStateCallback(
                     "",
                     e.localizedMessage.toIndentString(includeSpace = true),
-                    false,
+                    false
                 )
             }
         }
@@ -814,100 +813,103 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
 
         val sessionClient = webAuthClient?.sessionClient
 
-        webAuthClient?.registerCallback(object :
-            ResultCallback<AuthorizationStatus?, AuthorizationException?> {
-            override fun onSuccess(status: AuthorizationStatus) {
-                Timber.d("onSuccess($status)")
-                when (status) {
-                    AuthorizationStatus.AUTHORIZED -> {
-                        // Authorized authorization status. User is authorized. Received access, refresh, and ID tokens.
-                        sessionClient?.tokens?.let { tokens ->
+        webAuthClient?.registerCallback(
+            object :
+                ResultCallback<AuthorizationStatus?, AuthorizationException?> {
+                override fun onSuccess(status: AuthorizationStatus) {
+                    Timber.d("onSuccess($status)")
+                    when (status) {
+                        AuthorizationStatus.AUTHORIZED -> {
+                            // Authorized authorization status. User is authorized. Received access, refresh, and ID tokens.
+                            sessionClient?.tokens?.let { tokens ->
+                                state = state.copy(
+                                    authenticateOktaSDKResult = "{\"status\":$status,\"tokens\":{\"idToken\":${tokens.idToken},\"accessToken\":${tokens.accessToken},\"refreshToken\":${tokens.refreshToken},\"expiresIn\":${tokens.expiresIn},\"scope\":${tokens.scope},\"isAccessTokenExpired\":${tokens.isAccessTokenExpired}}}".toIndentString(
+                                        includeSpace = true
+                                    ),
+                                    authenticateOktaSDKProgress = false
+                                )
+                            }
+                        }
+                        AuthorizationStatus.SIGNED_OUT -> {
+                            // Signed out authorization status. Browser session is cleared.
                             state = state.copy(
-                                authenticateOktaSDKResult = "{\"status\":$status,\"tokens\":{\"idToken\":${tokens.idToken},\"accessToken\":${tokens.accessToken},\"refreshToken\":${tokens.refreshToken},\"expiresIn\":${tokens.expiresIn},\"scope\":${tokens.scope},\"isAccessTokenExpired\":${tokens.isAccessTokenExpired}}}".toIndentString(
-                                    includeSpace = true,
+                                authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
+                                    includeSpace = true
                                 ),
-                                authenticateOktaSDKProgress = false,
+                                authenticateOktaSDKProgress = false
+                            )
+                        }
+                        AuthorizationStatus.CANCELED -> {
+                            // Operation was canceled.
+                            state = state.copy(
+                                authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
+                                    includeSpace = true
+                                ),
+                                authenticateOktaSDKProgress = false
+                            )
+                        }
+                        AuthorizationStatus.ERROR -> {
+                            // Operation resulted in an exception.
+                            state = state.copy(
+                                authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
+                                    includeSpace = true
+                                ),
+                                authenticateOktaSDKProgress = false
+                            )
+                        }
+                        AuthorizationStatus.EMAIL_VERIFICATION_AUTHENTICATED -> {
+                            // Email verified and user is authenticated with a valid browser session but the user is not
+                            // authorized so it won't have any valid tokens. To complete the code exchange, client's
+                            // should call {@link com.okta.oidc.clients.web.WebAuthClient#signIn(Activity, AuthenticationPayload)}
+                            // again. Since the user already have a valid browser session(AUTHENTICATED),
+                            // they are not required to enter any credentials.
+                            state = state.copy(
+                                authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
+                                    includeSpace = true
+                                ),
+                                authenticateOktaSDKProgress = false
+                            )
+                        }
+                        AuthorizationStatus.EMAIL_VERIFICATION_UNAUTHENTICATED -> {
+                            // Email verified but user is not authenticated. To complete the code exchange, client's
+                            // should call
+                            // {@link com.okta.oidc.clients.web.WebAuthClient#signIn(Activity, AuthenticationPayload)}
+                            // again. Since the user is not authenticated they are required to enter credentials.
+                            // It is good practice to set the login hint in the payload so users don't have to enter it
+                            // again. This is done automatically if using
+                            // {@link com.okta.oidc.clients.web.WebAuthClient}
+                            state = state.copy(
+                                authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
+                                    includeSpace = true
+                                ),
+                                authenticateOktaSDKProgress = false
                             )
                         }
                     }
-                    AuthorizationStatus.SIGNED_OUT -> {
-                        // Signed out authorization status. Browser session is cleared.
-                        state = state.copy(
-                            authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
-                                includeSpace = true,
-                            ),
-                            authenticateOktaSDKProgress = false,
-                        )
-                    }
-                    AuthorizationStatus.CANCELED -> {
-                        // Operation was canceled.
-                        state = state.copy(
-                            authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
-                                includeSpace = true,
-                            ),
-                            authenticateOktaSDKProgress = false,
-                        )
-                    }
-                    AuthorizationStatus.ERROR -> {
-                        // Operation resulted in an exception.
-                        state = state.copy(
-                            authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
-                                includeSpace = true,
-                            ),
-                            authenticateOktaSDKProgress = false,
-                        )
-                    }
-                    AuthorizationStatus.EMAIL_VERIFICATION_AUTHENTICATED -> {
-                        // Email verified and user is authenticated with a valid browser session but the user is not
-                        // authorized so it won't have any valid tokens. To complete the code exchange, client's
-                        // should call {@link com.okta.oidc.clients.web.WebAuthClient#signIn(Activity, AuthenticationPayload)}
-                        // again. Since the user already have a valid browser session(AUTHENTICATED),
-                        // they are not required to enter any credentials.
-                        state = state.copy(
-                            authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
-                                includeSpace = true,
-                            ),
-                            authenticateOktaSDKProgress = false,
-                        )
-                    }
-                    AuthorizationStatus.EMAIL_VERIFICATION_UNAUTHENTICATED -> {
-                        // Email verified but user is not authenticated. To complete the code exchange, client's
-                        // should call
-                        // {@link com.okta.oidc.clients.web.WebAuthClient#signIn(Activity, AuthenticationPayload)}
-                        // again. Since the user is not authenticated they are required to enter credentials.
-                        // It is good practice to set the login hint in the payload so users don't have to enter it
-                        // again. This is done automatically if using
-                        // {@link com.okta.oidc.clients.web.WebAuthClient}
-                        state = state.copy(
-                            authenticateOktaSDKResult = "{\"status\":$status}".toIndentString(
-                                includeSpace = true,
-                            ),
-                            authenticateOktaSDKProgress = false,
-                        )
-                    }
                 }
-            }
 
-            override fun onCancel() {
-                Timber.d("onCancel()")
-                state = state.copy(
-                    authenticateOktaSDKResult = "{\"status\":onCancel}".toIndentString(
-                        includeSpace = true,
-                    ),
-                    authenticateOktaSDKProgress = false,
-                )
-            }
+                override fun onCancel() {
+                    Timber.d("onCancel()")
+                    state = state.copy(
+                        authenticateOktaSDKResult = "{\"status\":onCancel}".toIndentString(
+                            includeSpace = true
+                        ),
+                        authenticateOktaSDKProgress = false
+                    )
+                }
 
-            override fun onError(msg: String?, exception: AuthorizationException?) {
-                Timber.d("onError($msg, $exception)")
-                state = state.copy(
-                    authenticateOktaSDKResult = "{\"status\":onError,\"msg\":$msg,\"exception\":$exception}".toIndentString(
-                        includeSpace = true,
-                    ),
-                    authenticateOktaSDKProgress = false,
-                )
-            }
-        }, activity)
+                override fun onError(msg: String?, exception: AuthorizationException?) {
+                    Timber.d("onError($msg, $exception)")
+                    state = state.copy(
+                        authenticateOktaSDKResult = "{\"status\":onError,\"msg\":$msg,\"exception\":$exception}".toIndentString(
+                            includeSpace = true
+                        ),
+                        authenticateOktaSDKProgress = false
+                    )
+                }
+            },
+            activity
+        )
 
         setCodeChallengeAndVerifier()
 
@@ -930,9 +932,9 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             activity,
             OktaConfig.getPkceAuthorizeUrl(
                 code_challenge = state.codeChallenge,
-                redirect_uri = OktaConfig.WEB_REDIRECT_URI,
+                redirect_uri = OktaConfig.WEB_REDIRECT_URI
             ),
-            IntentConstants.OKTA_WEB_RC,
+            IntentConstants.OKTA_WEB_RC
         )
     }
 
@@ -942,7 +944,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         redirectUri: String,
         onSuccess: OktaTokenSuccessCallback? = null,
         onFailure: OktaTokenFailureCallback? = null,
-        updateStateCallback: UpdateStateCallback,
+        updateStateCallback: UpdateStateCallback
     ) {
         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
             ResponseUtil.onResponse(
@@ -950,26 +952,28 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 response = OktaRetrofitBuilder.OKTA_API_SERVICE.v1Token(
                     code = code,
                     codeVerifier = codeVerifier,
-                    redirectUri = redirectUri,
+                    redirectUri = redirectUri
                 ),
                 onSuccessResponse = { success ->
                     updateStateCallback(
                         "",
                         success.toIndentString(includeSpace = true),
-                        false,
+                        false
                     )
-                    onAuthenticateEvent(AuthenticateEvent("Okta Authenticate success!\nYou can start exploring the Embedded SDK"))
+                    onAuthenticateEvent(
+                        AuthenticateEvent("Okta Authenticate success!\nYou can start exploring the Embedded SDK")
+                    )
                     onSuccess?.invoke(success)
                 },
                 onFailureResponse = { failure ->
                     updateStateCallback(
                         "",
                         failure?.string().toIndentString(includeSpace = true),
-                        false,
+                        false
                     )
                     onAuthenticateEvent(AuthenticateEvent("Okta Authenticate failure!"))
                     onFailure?.invoke(failure)
-                },
+                }
             )
         }
     }
@@ -983,9 +987,9 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             activity,
             Auth0Config.getPkceAuthorizeUrl(
                 code_challenge = state.codeChallenge,
-                redirect_uri = Auth0Config.WEB_REDIRECT_URI,
+                redirect_uri = Auth0Config.WEB_REDIRECT_URI
             ),
-            IntentConstants.AUTH0_SDK_RC,
+            IntentConstants.AUTH0_SDK_RC
         )
     }
 
@@ -998,9 +1002,9 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             activity,
             Auth0Config.getPkceAuthorizeUrl(
                 code_challenge = state.codeChallenge,
-                redirect_uri = Auth0Config.WEB_REDIRECT_URI,
+                redirect_uri = Auth0Config.WEB_REDIRECT_URI
             ),
-            IntentConstants.AUTH0_WEB_RC,
+            IntentConstants.AUTH0_WEB_RC
         )
     }
 
@@ -1010,7 +1014,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         redirectUri: String,
         onSuccess: Auth0TokenSuccessCallback? = null,
         onFailure: Auth0TokenFailureCallback? = null,
-        updateStateCallback: UpdateStateCallback,
+        updateStateCallback: UpdateStateCallback
     ) {
         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
             ResponseUtil.onResponse(
@@ -1018,33 +1022,33 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 response = Auth0RetrofitBuilder.AUTH0_API_SERVICE.token(
                     code = code,
                     codeVerifier = codeVerifier,
-                    redirectUri = redirectUri,
+                    redirectUri = redirectUri
                 ),
                 onSuccessResponse = { success ->
                     updateStateCallback(
                         "",
                         success.toIndentString(includeSpace = true),
-                        false,
+                        false
                     )
-                    onAuthenticateEvent(AuthenticateEvent("Auth0 Authenticate success!\nYou can start exploring the Embedded SDK"))
+                    onAuthenticateEvent(
+                        AuthenticateEvent("Auth0 Authenticate success!\nYou can start exploring the Embedded SDK")
+                    )
                     onSuccess?.invoke(success)
                 },
                 onFailureResponse = { failure ->
                     updateStateCallback(
                         "",
                         failure?.string().toIndentString(includeSpace = true),
-                        false,
+                        false
                     )
                     onAuthenticateEvent(AuthenticateEvent("Auth0 Authenticate failure!"))
                     onFailure?.invoke(failure)
-                },
+                }
             )
         }
     }
 
-    fun onAuthenticateEmailOtp(
-        email: String,
-    ) {
+    fun onAuthenticateEmailOtp(email: String) {
         state = state.copy(buttonPressed = "Authenticate Email OTP")
 
         setCodeChallengeAndVerifier()
@@ -1053,7 +1057,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             override fun invoke(url: String, result: String, progress: Boolean) {
                 state = state.copy(
                     authenticateEmailOtpResult = result,
-                    authenticateEmailOtpProgress = progress,
+                    authenticateEmailOtpProgress = progress
                 )
             }
         }
@@ -1063,8 +1067,8 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 ResponseUtil.onResponse(
                     method = "AuthenticateEmailOtp",
                     response = BeyondIdentityRetrofitBuilder.BEYOND_IDENTITY_API_SERVICE.authorize(
-                        code_challenge = state.codeChallenge,
-                        redirect_uri = BeyondIdentityConfig.REDIRECT_URI,
+                        codeChallenge = state.codeChallenge,
+                        redirectUri = BeyondIdentityConfig.REDIRECT_URI
                     ),
                     onSuccessResponse = { authorizeResponse ->
                         when (authorizeResponse?.authenticateUrl) {
@@ -1072,21 +1076,21 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                 updateStateCallback(
                                     "",
                                     authorizeResponse.toIndentString(includeSpace = true),
-                                    false,
+                                    false
                                 )
                             }
                             else -> {
                                 updateStateCallback(
                                     "",
                                     "",
-                                    true,
+                                    true
                                 )
 
                                 state = state.copy(emailOtpUrl = "")
 
                                 EmbeddedSdk.authenticateOtp(
                                     url = authorizeResponse.authenticateUrl,
-                                    email = email,
+                                    email = email
                                 )
                                     .flowOn(Dispatchers.Main + coroutineExceptionHandler)
                                     .onEach { result ->
@@ -1098,7 +1102,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                             updateStateCallback(
                                                 "",
                                                 success.toIndentString(includeSpace = true),
-                                                false,
+                                                false
                                             )
                                         }
                                         result.onFailure { failure ->
@@ -1109,7 +1113,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                             updateStateCallback(
                                                 "",
                                                 failure.toIndentString(),
-                                                false,
+                                                false
                                             )
                                         }
                                     }
@@ -1121,7 +1125,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                                         updateStateCallback(
                                             "",
                                             error.toIndentString(),
-                                            false,
+                                            false
                                         )
                                     }
                                     .launchIn(viewModelScope)
@@ -1132,23 +1136,21 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         updateStateCallback(
                             "",
                             authorizeResponse?.string().toIndentString(includeSpace = true),
-                            false,
+                            false
                         )
-                    },
+                    }
                 )
             } catch (e: Exception) {
                 updateStateCallback(
                     "",
                     e.localizedMessage.toIndentString(includeSpace = true),
-                    false,
+                    false
                 )
             }
         }
     }
 
-    fun onRedeemEmailOtp(
-        otp: String,
-    ) {
+    fun onRedeemEmailOtp(otp: String) {
         state = state.copy(buttonPressed = "Redeem Email OTP")
 
         setCodeChallengeAndVerifier()
@@ -1157,7 +1159,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             override fun invoke(url: String, result: String, progress: Boolean) {
                 state = state.copy(
                     redeemEmailOtpResult = result,
-                    redeemEmailOtpProgress = progress,
+                    redeemEmailOtpProgress = progress
                 )
             }
         }
@@ -1166,7 +1168,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
             try {
                 EmbeddedSdk.redeemOtp(
                     url = state.emailOtpUrl,
-                    otp = otp,
+                    otp = otp
                 )
                     .flowOn(Dispatchers.Main + coroutineExceptionHandler)
                     .onEach { result ->
@@ -1176,7 +1178,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             updateStateCallback(
                                 "",
                                 success.toIndentString(includeSpace = true),
-                                false,
+                                false
                             )
                         }
                         result.onFailure { failure ->
@@ -1185,7 +1187,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                             updateStateCallback(
                                 "",
                                 failure.toIndentString(),
-                                false,
+                                false
                             )
                         }
                     }
@@ -1195,7 +1197,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                         updateStateCallback(
                             "",
                             error.toIndentString(),
-                            false,
+                            false
                         )
                     }
                     .launchIn(viewModelScope)
@@ -1203,7 +1205,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
                 updateStateCallback(
                     "",
                     e.localizedMessage.toIndentString(includeSpace = true),
-                    false,
+                    false
                 )
             }
         }
@@ -1215,7 +1217,7 @@ class EmbeddedAuthenticateViewModel : ViewModel() {
         onAuth0Web: Callback? = null,
         onOktaSDK: Callback? = null,
         onOktaWeb: Callback? = null,
-        onException: Callback? = null,
+        onException: Callback? = null
     ) {
         when {
             state.buttonPressed.contains("Beyond Identity", ignoreCase = true) -> {

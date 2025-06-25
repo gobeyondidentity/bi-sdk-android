@@ -11,16 +11,11 @@ import com.beyondidentity.authenticator.sdk.android.R
 import com.beyondidentity.embedded.sdk.models.OnSelectedPasskey
 import com.beyondidentity.embedded.sdk.models.Passkey
 
-class SelectPasskeyDialogFragment(
-    val passkeys: List<Passkey>,
-    val onPasskeySelectedCallback: OnSelectedPasskey,
-) : DialogFragment() {
+class SelectPasskeyDialogFragment(val passkeys: List<Passkey>, val onPasskeySelectedCallback: OnSelectedPasskey) :
+    DialogFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View = inflater.inflate(R.layout.select_account_dialog_fragment, container, true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+        inflater.inflate(R.layout.select_account_dialog_fragment, container, true)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +35,7 @@ class SelectPasskeyDialogFragment(
     private fun createAccountItem(
         accountText: String,
         passkeyListView: ViewGroup,
-        onClickListener: View.OnClickListener,
+        onClickListener: View.OnClickListener
     ) {
         val view = LayoutInflater.from(context).inflate(R.layout.select_passkey_item, passkeyListView, false)
         view.findViewById<AppCompatTextView>(R.id.itemTitle).text = accountText
@@ -58,9 +53,7 @@ class SelectPasskeyDialogFragment(
          * @return A new instance of fragment [SelectPasskeyDialogFragment].
          */
         @JvmStatic
-        fun newInstance(
-            passkeys: List<Passkey>,
-            onPasskeySelectedCallback: OnSelectedPasskey,
-        ) = SelectPasskeyDialogFragment(passkeys, onPasskeySelectedCallback)
+        fun newInstance(passkeys: List<Passkey>, onPasskeySelectedCallback: OnSelectedPasskey) =
+            SelectPasskeyDialogFragment(passkeys, onPasskeySelectedCallback)
     }
 }

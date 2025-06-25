@@ -9,7 +9,7 @@ import org.gradle.api.JavaVersion
  * @param JAVA_VERSION Language level of the java source code.
  **/
 object AndroidConfig {
-    const val BUILD_TOOLS_VERSION = "34.0.0"
+    const val BUILD_TOOLS_VERSION = "35.0.0"
     const val COMPILE_SDK_VERSION = 34
     const val MIN_SDK_VERSION = 26
     const val TARGET_SDK_VERSION = 34

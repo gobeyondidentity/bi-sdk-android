@@ -5,5 +5,5 @@ data class ManagePasskeyState(
     val getPasskeyProgress: Boolean = false,
     val deletePasskey: String = "",
     val deletePasskeyResult: String = "",
-    val deletePasskeyProgress: Boolean = false,
+    val deletePasskeyProgress: Boolean = false
 )

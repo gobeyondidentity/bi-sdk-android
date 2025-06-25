@@ -26,7 +26,7 @@ data class OktaV1TokenResponse(
     @SerializedName("id_token")
     val idToken: String,
     @SerializedName("device_secret")
-    val deviceSecret: String,
+    val deviceSecret: String
 )
 
 interface OktaApiService {
@@ -37,7 +37,7 @@ interface OktaApiService {
         @Field("code") code: String,
         @Field("code_verifier") codeVerifier: String,
         @Field("grant_type") grantType: String = "authorization_code",
-        @Field("redirect_uri") redirectUri: String = OktaConfig.REDIRECT_URI,
+        @Field("redirect_uri") redirectUri: String = OktaConfig.REDIRECT_URI
     ): Response<OktaV1TokenResponse>
 }
 
@@ -48,7 +48,7 @@ object OktaRetrofitBuilder {
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply { level = BODY })
-                .build(),
+                .build()
         )
         .build()
 

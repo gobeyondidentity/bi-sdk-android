@@ -28,7 +28,7 @@ class ManagePasskeysViewModel : ViewModel() {
         resetResult { _, result, progress ->
             state = state.copy(
                 getPasskeyResult = result,
-                getPasskeyProgress = progress,
+                getPasskeyProgress = progress
             )
         }
 
@@ -40,14 +40,14 @@ class ManagePasskeysViewModel : ViewModel() {
                     Timber.d("Got passkeys = $message")
                     state = state.copy(
                         getPasskeyResult = message,
-                        getPasskeyProgress = false,
+                        getPasskeyProgress = false
                     )
                 }
                 result.onFailure {
                     Timber.d("Getting passkeys failed.")
                     state = state.copy(
                         getPasskeyResult = it.toString(),
-                        getPasskeyProgress = false,
+                        getPasskeyProgress = false
                     )
                 }
             }
@@ -56,7 +56,7 @@ class ManagePasskeysViewModel : ViewModel() {
                 Timber.d(message)
                 state = state.copy(
                     getPasskeyResult = message,
-                    getPasskeyProgress = false,
+                    getPasskeyProgress = false
                 )
             }
             .launchIn(viewModelScope)
@@ -69,11 +69,11 @@ class ManagePasskeysViewModel : ViewModel() {
     fun onDeletePasskeys() {
         if (!resetResult(
                 state.deletePasskey,
-                "Please enter a passkey id to delete",
+                "Please enter a passkey id to delete"
             ) { _, result, progress ->
                 state = state.copy(
                     deletePasskeyResult = result,
-                    deletePasskeyProgress = progress,
+                    deletePasskeyProgress = progress
                 )
             }
         ) {
@@ -89,14 +89,14 @@ class ManagePasskeysViewModel : ViewModel() {
                         deletePasskeyResult = "Deleted passkeys for id: ${state.deletePasskey}",
                         deletePasskeyProgress = false,
                         getPasskeyResult = "[]",
-                        getPasskeyProgress = false,
+                        getPasskeyProgress = false
                     )
                 }
                 result.onFailure {
                     Timber.d("Passkeys deletion failed.")
                     state = state.copy(
                         deletePasskeyResult = it.toString(),
-                        deletePasskeyProgress = false,
+                        deletePasskeyProgress = false
                     )
                 }
             }
@@ -105,7 +105,7 @@ class ManagePasskeysViewModel : ViewModel() {
                 Timber.d(message)
                 state = state.copy(
                     deletePasskeyResult = message,
-                    deletePasskeyProgress = false,
+                    deletePasskeyProgress = false
                 )
             }
             .launchIn(viewModelScope)

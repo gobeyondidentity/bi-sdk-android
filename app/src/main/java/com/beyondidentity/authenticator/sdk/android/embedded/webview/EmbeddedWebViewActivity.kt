@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.beyondidentity.authenticator.sdk.android.composeui.components.BiAppBar
 import com.beyondidentity.authenticator.sdk.android.composeui.theme.BiSdkAndroidTheme
@@ -69,7 +70,7 @@ class EmbeddedWebViewActivity : ComponentActivity() {
                 when (event) {
                     is WebViewSuccess -> {
                         val intent = Intent()
-                        intent.data = Uri.parse(viewModel.state.result)
+                        intent.data = viewModel.state.result.toUri()
                         setResult(RESULT_OK, intent)
                         finish()
                     }
@@ -86,17 +87,13 @@ fun EmbeddedWebViewScreen(viewModel: EmbeddedWebViewViewModel) {
         onOverrideUrlLoading = {
             viewModel.onResultTextChange(it.toString())
             viewModel.onOverrideUrlLoading()
-        },
+        }
     )
 }
 
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun EmbeddedWebViewLayout(
-    preview: Boolean = false,
-    state: EmbeddedWebViewState,
-    onOverrideUrlLoading: (Uri) -> Unit,
-) {
+@SuppressLint("SetJavaScriptEnabled")
+fun EmbeddedWebViewLayout(preview: Boolean = false, state: EmbeddedWebViewState, onOverrideUrlLoading: (Uri) -> Unit) {
     val scroll = rememberScrollState(0)
 
     Column {
@@ -105,7 +102,7 @@ fun EmbeddedWebViewLayout(
                 modifier = Modifier
                     .horizontalScroll(scroll)
                     .padding(4.dp),
-                text = state.url,
+                text = state.url
             )
         }
 
@@ -115,7 +112,7 @@ fun EmbeddedWebViewLayout(
                     WebView(it).apply {
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
                         )
 
                         if (!preview) {
@@ -125,7 +122,7 @@ fun EmbeddedWebViewLayout(
                             webViewClient = object : WebViewClient() {
                                 override fun shouldOverrideUrlLoading(
                                     view: WebView?,
-                                    request: WebResourceRequest?,
+                                    request: WebResourceRequest?
                                 ): Boolean {
                                     Timber.d("shouldOverrideUrlLoading($view, $request) | URL = ${request?.url})")
                                     request?.url?.let { url ->
@@ -154,14 +151,14 @@ fun EmbeddedWebViewLayout(
                                 webViewRenderProcessClient = object : WebViewRenderProcessClient() {
                                     override fun onRenderProcessResponsive(
                                         view: WebView,
-                                        renderer: WebViewRenderProcess?,
+                                        renderer: WebViewRenderProcess?
                                     ) {
                                         Timber.d("onRenderProcessResponsive($view, $renderer)")
                                     }
 
                                     override fun onRenderProcessUnresponsive(
                                         view: WebView,
-                                        renderer: WebViewRenderProcess?,
+                                        renderer: WebViewRenderProcess?
                                     ) {
                                         Timber.d("onRenderProcessUnresponsive($view, $renderer)")
                                     }
@@ -180,7 +177,7 @@ fun EmbeddedWebViewLayout(
                         Timber.d("loadUrl(${state.url}) | URL = ${state.url})")
                         it.loadUrl(state.url)
                     }
-                },
+                }
             )
         }
     }
@@ -192,7 +189,7 @@ fun EmbeddedWebViewPreviewLight() {
     BiSdkAndroidTheme {
         EmbeddedWebViewLayout(
             preview = false,
-            state = EmbeddedWebViewState(url = "https://www.beyondidentity.com/"),
+            state = EmbeddedWebViewState(url = "https://www.beyondidentity.com/")
         ) {}
     }
 }
@@ -203,7 +200,7 @@ fun EmbeddedWebViewPreviewDark() {
     BiSdkAndroidTheme {
         EmbeddedWebViewLayout(
             preview = true,
-            state = EmbeddedWebViewState(url = "https://www.beyondidentity.com/"),
+            state = EmbeddedWebViewState(url = "https://www.beyondidentity.com/")
         ) {}
     }
 }

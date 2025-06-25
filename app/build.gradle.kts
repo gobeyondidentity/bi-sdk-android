@@ -4,6 +4,7 @@ import utils.getProp
 plugins {
     id(libs.plugins.com.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     id(libs.plugins.org.jlleitschuh.gradle.ktlint.get().pluginId)
 }
 
@@ -73,7 +74,7 @@ android {
     kotlinOptions {
         jvmTarget = AndroidConfig.JAVA_VERSION.toString()
         freeCompilerArgs += listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xopt-in=kotlin.RequiresOptIn"
         )
     }
 
@@ -134,7 +135,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(project(Modules.EMBEDDED))
-//    implementation(project(Modules.EMBEDDED_UI))
+
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -149,12 +150,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
     implementation(libs.material)
-
-    implementation(libs.jwtdecode)
     implementation(libs.timber)
 
     // Auth0
     implementation(libs.auth0)
+    implementation(libs.auth0.jwtdecode)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)

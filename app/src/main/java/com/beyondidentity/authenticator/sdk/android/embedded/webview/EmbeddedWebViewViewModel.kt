@@ -27,7 +27,7 @@ class EmbeddedWebViewViewModel : ViewModel() {
     fun onOverrideUrlLoading() {
         viewModelScope.launch {
             _events.emit(
-                EmbeddedWebViewEvents.WebViewSuccess(state.url, state.result),
+                EmbeddedWebViewEvents.WebViewSuccess(state.url, state.result)
             )
         }
     }

@@ -1,6 +1,7 @@
 import checks.ktlintCheckConfig
 import config.configureAndroidLib
 import config.configureMavenPublish
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import utils.getProp
 
 plugins {
@@ -19,24 +20,45 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    // Publishing is already handled by MavenPublish.kt
+//    publishing {
+//        singleVariant("release") {
+//            withSourcesJar()
+//            withJavadocJar()
+//        }
+//    }
 }
 
 configureAndroidLib()
 
 // TODO: Move into a function like `configureMavenPublish`
-tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
-    dokkaSourceSets {
-        named("main") {
-            moduleName.set("Embedded SDK")
-        }
-    }
+dokka {
+    moduleName.set("Embedded SDK")
+//    dokkaPublications.html {
+//        suppressInheritedMembers.set(true)
+//        failOnWarning.set(true)
+//    }
+//    dokkaSourceSets.main {
+//        includes.from("README.md")
+//        sourceLink {
+//            localDirectory.set(file("src/main/kotlin"))
+//            remoteUrl("https://example.com/src")
+//            remoteLineSuffix.set("#L")
+//        }
+//    }
+//    pluginsConfiguration.html {
+//        customStyleSheets.from("styles.css")
+//        customAssets.from("logo.png")
+//        footerMessage.set("(c) Your Company")
+//    }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = AndroidConfig.JAVA_VERSION.toString()
         freeCompilerArgs += listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xopt-in=kotlin.RequiresOptIn"
         )
     }
 }

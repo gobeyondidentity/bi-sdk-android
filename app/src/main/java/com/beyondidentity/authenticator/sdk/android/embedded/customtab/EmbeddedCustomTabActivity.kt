@@ -18,17 +18,12 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
     lateinit var customTabsSession: CustomTabsSession
     var builder = CustomTabsIntent.Builder()
 
-    override fun onCreate(
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate(${intent?.dataString})")
 
         val customTabsCallback = object : CustomTabsCallback() {
-            override fun onNavigationEvent(
-                navigationEvent: Int,
-                extras: Bundle?,
-            ) {
+            override fun onNavigationEvent(navigationEvent: Int, extras: Bundle?) {
                 super.onNavigationEvent(navigationEvent, extras)
                 Timber.d("onNavigationEvent($navigationEvent, $extras)")
 
@@ -45,10 +40,7 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
         }
 
         customTabsServiceConnection = object : CustomTabsServiceConnection() {
-            override fun onCustomTabsServiceConnected(
-                name: ComponentName,
-                client: CustomTabsClient,
-            ) {
+            override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
                 Timber.d("onCustomTabsServiceConnected($name, $client)")
 
                 customTabsClient = client
@@ -57,9 +49,7 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
                 builder.setSession(customTabsSession)
             }
 
-            override fun onServiceDisconnected(
-                name: ComponentName?,
-            ) {
+            override fun onServiceDisconnected(name: ComponentName?) {
                 Timber.d("onServiceDisconnected($name)")
             }
         }
@@ -67,7 +57,7 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
         CustomTabsClient.bindCustomTabsService(
             this@EmbeddedCustomTabActivity,
             "com.android.chrome",
-            customTabsServiceConnection,
+            customTabsServiceConnection
         )
 
         // CustomTabsIntent
@@ -78,9 +68,7 @@ class EmbeddedCustomTabActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(
-        intent: Intent,
-    ) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.d("onNewIntent(${intent?.dataString})")
     }

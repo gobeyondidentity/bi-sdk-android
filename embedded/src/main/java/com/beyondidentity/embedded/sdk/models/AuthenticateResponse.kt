@@ -14,24 +14,21 @@ import com.beyondidentity.sdk.android.bicore.models.UrlDataResponse
 data class AuthenticateResponse(
     val redirectUrl: String,
     val message: String? = null,
-    var passkeyBindingToken: String? = null,
+    var passkeyBindingToken: String? = null
 ) {
     companion object {
-        fun from(authenticateResponse: BiAuthenticateUrlResponse) =
-            AuthenticateResponse(
-                redirectUrl = authenticateResponse.redirectUrl,
-                message = authenticateResponse.message,
-                passkeyBindingToken = authenticateResponse.passkeyBindingToken,
-            )
+        fun from(authenticateResponse: BiAuthenticateUrlResponse) = AuthenticateResponse(
+            redirectUrl = authenticateResponse.redirectUrl,
+            message = authenticateResponse.message,
+            passkeyBindingToken = authenticateResponse.passkeyBindingToken
+        )
 
-        fun from(urlDataResponse: UrlDataResponse) =
-            urlDataResponse.biAuthenticate?.let { biAuthenticateResponse ->
-                from(biAuthenticateResponse)
-            }
+        fun from(urlDataResponse: UrlDataResponse) = urlDataResponse.biAuthenticate?.let { biAuthenticateResponse ->
+            from(biAuthenticateResponse)
+        }
 
-        fun from(urlDataResponse: BiAuthenticateResponse) =
-            urlDataResponse.allow?.let { biAuthenticateResponse ->
-                from(biAuthenticateResponse)
-            }
+        fun from(urlDataResponse: BiAuthenticateResponse) = urlDataResponse.allow?.let { biAuthenticateResponse ->
+            from(biAuthenticateResponse)
+        }
     }
 }

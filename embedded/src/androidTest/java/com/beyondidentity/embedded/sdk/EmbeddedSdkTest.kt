@@ -5,7 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.beyondidentity.embedded.sdk.models.AuthenticateResponse
 import com.beyondidentity.embedded.sdk.models.BindPasskeyResponse
 import com.beyondidentity.embedded.sdk.models.Passkey
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -13,15 +14,16 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class EmbeddedSdkTest {
+
     companion object {
+        @Suppress("ktlint:standard:max-line-length")
         private const val TEST_AUTHENTICATE_URL =
             "https://auth-us.beyondidentity.com/bi-authenticate?request=0123456789ABCDEF"
+
+        @Suppress("ktlint:standard:max-line-length")
         private const val TEST_BIND_PASSKEY_URL =
             "https://auth-us.beyondidentity.com/v1/tenants/0123456789ABCDEF/realms/0123456789ABCDEF/identities/0123456789ABCDEF/credential-binding-jobs/01234567-89AB-CDEF-0123-456789ABCDEF:invokeAuthenticator?token=0123456789ABCDEF"
         private const val TEST_PASSKEY_ID =
@@ -35,14 +37,12 @@ class EmbeddedSdkTest {
         EmbeddedSdk.init(
             app = ApplicationProvider.getApplicationContext(),
             keyguardPrompt = null,
-            logger = { Timber.d(it) },
+            logger = { Timber.d(it) }
         )
     }
 
     //region BindPasskey
-    private suspend fun bindPasskey(
-        url: String,
-    ): Result<BindPasskeyResponse> = suspendCoroutine { continuation ->
+    private suspend fun bindPasskey(url: String): Result<BindPasskeyResponse> = suspendCoroutine { continuation ->
         EmbeddedSdk.bindPasskey(url) { continuation.resume(it) }
     }
 
@@ -60,12 +60,10 @@ class EmbeddedSdkTest {
     //endregion BindPasskey
 
     //region Authenticate
-    private suspend fun authenticate(
-        url: String,
-        passkeyId: String,
-    ): Result<AuthenticateResponse> = suspendCoroutine { continuation ->
-        EmbeddedSdk.authenticate(url, passkeyId) { continuation.resume(it) }
-    }
+    private suspend fun authenticate(url: String, passkeyId: String): Result<AuthenticateResponse> =
+        suspendCoroutine { continuation ->
+            EmbeddedSdk.authenticate(url, passkeyId) { continuation.resume(it) }
+        }
 
     /**
      * Test [EmbeddedSdk.authenticate] with [TEST_AUTHENTICATE_URL]
@@ -130,7 +128,7 @@ class EmbeddedSdkTest {
         Timber.d("TEST_BIND_PASSKEY_URL: $bindPasskeyResult")
         assertTrue(
             "Bind Passkey Url Test: TEST_BIND_PASSKEY_URL: $bindPasskeyResult",
-            bindPasskeyResult,
+            bindPasskeyResult
         )
     }
 
@@ -146,7 +144,7 @@ class EmbeddedSdkTest {
         Timber.d("TEST_AUTHENTICATE_URL: $authenticateResult")
         assertFalse(
             "Bind Passkey Url Test: TEST_AUTHENTICATE_URL: $authenticateResult",
-            authenticateResult,
+            authenticateResult
         )
     }
     //endregion IsBindPasskeyUrl
@@ -164,7 +162,7 @@ class EmbeddedSdkTest {
         Timber.d("TEST_AUTHENTICATE_URL: $authenticateResult")
         assertTrue(
             "Authenticate Url Test: TEST_AUTHENTICATE_URL: $authenticateResult",
-            authenticateResult,
+            authenticateResult
         )
     }
 
@@ -180,7 +178,7 @@ class EmbeddedSdkTest {
         Timber.d("TEST_BIND_PASSKEY_URL: $bindPasskeyResult")
         assertFalse(
             "Authenticate Url Test: TEST_BIND_PASSKEY_URL: $bindPasskeyResult",
-            bindPasskeyResult,
+            bindPasskeyResult
         )
     }
     //endregion IsAuthenticateUrl

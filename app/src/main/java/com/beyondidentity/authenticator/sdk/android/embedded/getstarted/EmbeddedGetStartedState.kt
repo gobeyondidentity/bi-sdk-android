@@ -11,7 +11,7 @@ data class EmbeddedGetStartedState(
     val recoverProgress: Boolean = false,
     val bindPasskeyUrl: String = "",
     val bindPasskeyResult: String = "",
-    val bindPasskeyProgress: Boolean = false,
+    val bindPasskeyProgress: Boolean = false
 )
 
 sealed class EmbeddedGetStartedEvents {

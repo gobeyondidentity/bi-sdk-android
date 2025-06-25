@@ -9,17 +9,17 @@ import androidx.compose.runtime.Composable
 private val DarkColorPalette = darkColors(
     primary = BiPrimaryMain,
     primaryVariant = BiPrimaryMain,
-    secondary = BiPrimaryMain,
-    // surface = BiGray200Dark,
-    // background = BiGray200Dark,
+    secondary = BiPrimaryMain
+    /* Other default colors to override
+    background = BiGray200Dark,
+    surface = BiGray200Dark,
+     */
 )
 
 private val LightColorPalette = lightColors(
     primary = BiPrimaryMain,
     primaryVariant = BiPrimaryMain,
-    secondary = BiPrimaryMain,
-    // background = Color.White,
-    // surface = Color.White,
+    secondary = BiPrimaryMain
     /* Other default colors to override
     background = Color.White,
     surface = Color.White,
@@ -27,14 +27,11 @@ private val LightColorPalette = lightColors(
     onSecondary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black,
-    */
+     */
 )
 
 @Composable
-fun BiSdkAndroidTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
+fun BiSdkAndroidTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

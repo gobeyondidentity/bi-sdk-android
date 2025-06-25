@@ -22,7 +22,7 @@ val ComposeContentTestRule.DEFAULT_TIMEOUT_MILLIS: Long
 fun ComposeContentTestRule.waitUntilNodeCount(
     matcher: SemanticsMatcher,
     count: Int,
-    timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS,
+    timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS
 ) {
     Timber.d("waitUntilNodeCount($count, $timeoutMillis)")
     try {
@@ -32,23 +32,20 @@ fun ComposeContentTestRule.waitUntilNodeCount(
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "waitUntilNodeCount",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
 
 @OptIn(ExperimentalTestApi::class)
-fun ComposeContentTestRule.waitUntilExists(
-    matcher: SemanticsMatcher,
-    timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS,
-) {
+fun ComposeContentTestRule.waitUntilExists(matcher: SemanticsMatcher, timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS) {
     Timber.d("waitUntilExists($timeoutMillis)")
     try {
         return this.waitUntilNodeCount(matcher, 1, timeoutMillis)
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "waitUntilExists",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -56,7 +53,7 @@ fun ComposeContentTestRule.waitUntilExists(
 @OptIn(ExperimentalTestApi::class)
 fun ComposeContentTestRule.waitUntilDoesNotExist(
     matcher: SemanticsMatcher,
-    timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS,
+    timeoutMillis: Long = DEFAULT_TIMEOUT_MILLIS
 ) {
     Timber.d("waitUntilDoesNotExist($timeoutMillis)")
     try {
@@ -64,29 +61,26 @@ fun ComposeContentTestRule.waitUntilDoesNotExist(
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "waitUntilDoesNotExist",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
 
-fun ComposeContentTestRule.waitUntilNodeWithTagExists(
-    testTag: String,
-    useUnmergedTree: Boolean = false,
-) {
+fun ComposeContentTestRule.waitUntilNodeWithTagExists(testTag: String, useUnmergedTree: Boolean = false) {
     Timber.d("waitUntilNodeWithTagExists($testTag, $useUnmergedTree)")
     try {
         this.waitUntilExists(
             matcher = hasTestTag(testTag),
-            timeoutMillis = DEFAULT_TIMEOUT_MILLIS,
+            timeoutMillis = DEFAULT_TIMEOUT_MILLIS
         )
         this.onNodeWithTag(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).performScrollTo()
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "waitUntilNodeWithTagExists",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -95,24 +89,24 @@ fun ComposeContentTestRule.waitUntilNodeWithTextExists(
     text: String,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
-    useUnmergedTree: Boolean = false,
+    useUnmergedTree: Boolean = false
 ) {
     Timber.d("waitUntilNodeWithTextExists($text, $substring, $ignoreCase, $useUnmergedTree)")
     try {
         this.waitUntilExists(
             matcher = hasText(text),
-            timeoutMillis = DEFAULT_TIMEOUT_MILLIS,
+            timeoutMillis = DEFAULT_TIMEOUT_MILLIS
         )
         this.onNodeWithText(
             text = text,
             substring = substring,
             ignoreCase = ignoreCase,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).performScrollTo()
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "waitUntilNodeWithTextExists",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -120,22 +114,22 @@ fun ComposeContentTestRule.waitUntilNodeWithTextExists(
 fun ComposeContentTestRule.assertNodeWithTagContainsText(
     testTag: String,
     value: String,
-    useUnmergedTree: Boolean = false,
+    useUnmergedTree: Boolean = false
 ) {
     Timber.d("assertNodeWithTagContainsText($testTag, $value, $useUnmergedTree)")
     try {
         this.waitUntilNodeWithTagExists(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         )
         this.onNodeWithTag(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).assertTextContains(value)
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "assertNodeWithTagContainsText",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -143,22 +137,22 @@ fun ComposeContentTestRule.assertNodeWithTagContainsText(
 fun ComposeContentTestRule.assertNodeWithTagEqualsText(
     testTag: String,
     value: String,
-    useUnmergedTree: Boolean = false,
+    useUnmergedTree: Boolean = false
 ) {
     Timber.d("assertNodeWithTagEqualsText($testTag, $value, $useUnmergedTree)")
     try {
         this.waitUntilNodeWithTagExists(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         )
         this.onNodeWithTag(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).assertTextEquals(value)
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "assertNodeWithTagEqualsText",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -168,24 +162,24 @@ fun ComposeContentTestRule.assertNodeWithTextDoesNotExist(
     text: String,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
-    useUnmergedTree: Boolean = false,
+    useUnmergedTree: Boolean = false
 ) {
     Timber.d("assertNodeWithTextDoesNotExist($testTag, $text, $substring, $ignoreCase, $useUnmergedTree)")
     try {
         this.waitUntilNodeWithTagExists(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         )
         this.onNodeWithText(
             text = text,
             substring = substring,
             ignoreCase = ignoreCase,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).assertDoesNotExist()
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "assertNodeWithTextDoesNotExist",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -195,24 +189,24 @@ fun ComposeContentTestRule.assertNodeWithTextExists(
     text: String,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
-    useUnmergedTree: Boolean = false,
+    useUnmergedTree: Boolean = false
 ) {
     Timber.d("assertNodeWithTextExists($testTag, $text, $substring, $ignoreCase, $useUnmergedTree)")
     try {
         this.waitUntilNodeWithTagExists(
             testTag = testTag,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         )
         this.onNodeWithText(
             text = text,
             substring = substring,
             ignoreCase = ignoreCase,
-            useUnmergedTree = useUnmergedTree,
+            useUnmergedTree = useUnmergedTree
         ).assertExists()
     } catch (throwable: Throwable) {
         throw catchThrowable(
             tag = "assertNodeWithTextExists",
-            throwable = throwable,
+            throwable = throwable
         )
     }
 }
@@ -221,13 +215,13 @@ private fun ComposeContentTestRule.catchThrowable(
     useUnmergedTree: Boolean = false,
     tag: String,
     maxDepth: Int = Int.MAX_VALUE,
-    throwable: Throwable,
+    throwable: Throwable
 ): Throwable {
     this.onRoot(
-        useUnmergedTree = useUnmergedTree,
+        useUnmergedTree = useUnmergedTree
     ).printToLog(
         tag = tag,
-        maxDepth = maxDepth,
+        maxDepth = maxDepth
     )
     return throwable
 }

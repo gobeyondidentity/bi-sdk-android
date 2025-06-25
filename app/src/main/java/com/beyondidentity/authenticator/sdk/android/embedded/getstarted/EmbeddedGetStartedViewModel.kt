@@ -55,11 +55,11 @@ class EmbeddedGetStartedViewModel : ViewModel() {
     fun onRegisterPasskey(username: String) {
         if (!resetResult(
                 username,
-                "Please enter a username",
+                "Please enter a username"
             ) { _, result, progress ->
                 state = state.copy(
                     registerResult = result,
-                    registerProgress = progress,
+                    registerProgress = progress
                 )
             }
         ) {
@@ -69,7 +69,7 @@ class EmbeddedGetStartedViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
             try {
                 val result = AcmeRetrofitBuilder.ACME_API_SERVICE.credentialBindingLink(
-                    CredentialBindingLinkRequest(username = username),
+                    CredentialBindingLinkRequest(username = username)
                 )
 
                 onCredentialBindingLinkResponse(
@@ -81,16 +81,16 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                             state = state.copy(
                                 registerUsername = username,
                                 registerResult = result,
-                                registerProgress = progress,
+                                registerProgress = progress
                             )
                         }
-                    },
+                    }
                 )
             } catch (e: Exception) {
                 state = state.copy(
                     registerUsername = username,
                     registerResult = e.localizedMessage.toIndentString(includeSpace = true),
-                    registerProgress = false,
+                    registerProgress = false
                 )
             }
         }
@@ -99,11 +99,11 @@ class EmbeddedGetStartedViewModel : ViewModel() {
     fun onRecoverPasskey(username: String) {
         if (!resetResult(
                 username,
-                "Please enter a username",
+                "Please enter a username"
             ) { _, result, progress ->
                 state = state.copy(
                     recoverResult = result,
-                    recoverProgress = progress,
+                    recoverProgress = progress
                 )
             }
         ) {
@@ -113,7 +113,7 @@ class EmbeddedGetStartedViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
             try {
                 val result = AcmeRetrofitBuilder.ACME_API_SERVICE.recoverCredentialBindingLink(
-                    RecoverCredentialBindingLinkRequest(username = username),
+                    RecoverCredentialBindingLinkRequest(username = username)
                 )
 
                 onCredentialBindingLinkResponse(
@@ -125,16 +125,16 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                             state = state.copy(
                                 recoverUsername = username,
                                 recoverResult = result,
-                                recoverProgress = progress,
+                                recoverProgress = progress
                             )
                         }
-                    },
+                    }
                 )
             } catch (e: Exception) {
                 state = state.copy(
                     recoverUsername = username,
                     recoverResult = e.localizedMessage.toIndentString(includeSpace = true),
-                    recoverProgress = false,
+                    recoverProgress = false
                 )
             }
         }
@@ -144,7 +144,7 @@ class EmbeddedGetStartedViewModel : ViewModel() {
         method: String,
         response: Response<*>,
         credentialBindingLink: String?,
-        updateStateCallback: UpdateStateCallback,
+        updateStateCallback: UpdateStateCallback
     ) {
         ResponseUtil.onResponse(
             method = method,
@@ -155,13 +155,13 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                         updateStateCallback(
                             "",
                             success.toIndentString(includeSpace = true),
-                            false,
+                            false
                         )
                     }
                     else -> {
                         onBindPasskey(
                             url = credentialBindingLink,
-                            updateStateCallback = updateStateCallback,
+                            updateStateCallback = updateStateCallback
                         )
                     }
                 }
@@ -170,9 +170,9 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                 updateStateCallback(
                     "",
                     failure?.string().toIndentString(includeSpace = true),
-                    false,
+                    false
                 )
-            },
+            }
         )
     }
 
@@ -186,22 +186,22 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                 state = state.copy(
                     bindPasskeyUrl = url,
                     bindPasskeyResult = result,
-                    bindPasskeyProgress = progress,
+                    bindPasskeyProgress = progress
                 )
             }
-        },
+        }
     ) {
         if (!resetResult(
                 string = url,
                 result = "Please provide a Bind Passkey URL",
-                updateStateCallback = updateStateCallback::invoke,
+                updateStateCallback = updateStateCallback::invoke
             )
         ) {
             return
         }
 
         EmbeddedSdk.bindPasskey(
-            url = url,
+            url = url
         )
             .flowOn(Dispatchers.Main + coroutineExceptionHandler)
             .onEach { result ->
@@ -209,17 +209,19 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                     updateStateCallback(
                         "",
                         success.toIndentString(),
-                        false,
+                        false
                     )
                     Timber.d("Bind Passkey success = $success")
-                    onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey success!\nYou can start exploring the Embedded SDK"))
+                    onBindPasskeyEvent(
+                        BindPasskeyEvent("Bind Passkey success!\nYou can start exploring the Embedded SDK")
+                    )
                     onBindPasskeySuccess?.invoke(success)
                 }
                 result.onFailure { failure ->
                     updateStateCallback(
                         state.registerUsername,
                         failure.toIndentString(),
-                        false,
+                        false
                     )
                     Timber.e("Bind Passkey failure = $failure")
                     onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey failed"))
@@ -230,7 +232,7 @@ class EmbeddedGetStartedViewModel : ViewModel() {
                 updateStateCallback(
                     state.bindPasskeyUrl,
                     error.toIndentString(),
-                    false,
+                    false
                 )
                 Timber.e("Bind Passkey exception = ${error.message}")
                 onBindPasskeyEvent(BindPasskeyEvent("Bind Passkey failed"))

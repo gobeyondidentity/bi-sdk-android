@@ -12,7 +12,7 @@ import com.beyondidentity.authenticator.sdk.android.R
 val OverpassFontFamily = FontFamily(
     Font(R.font.overpass),
     Font(R.font.overpass_extra_bold, FontWeight.Bold),
-    Font(R.font.overpass_mono, style = FontStyle.Italic),
+    Font(R.font.overpass_mono, style = FontStyle.Italic)
 )
 
 // Set of Material typography styles to start with
@@ -37,7 +37,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         letterSpacing = 0.2.sp
-    ),
+    )
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,
@@ -49,5 +49,5 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     )
-    */
+     */
 )

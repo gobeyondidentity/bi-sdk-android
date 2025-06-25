@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.beyondidentity.authenticator.sdk.android
 
 import android.content.Intent
@@ -66,13 +68,13 @@ fun SdkSelectorLayout() {
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 24.dp)
-                .testTag("Beyond Identity Android SDKs Header"),
+                .testTag("Beyond Identity Android SDKs Header")
         )
 
         Text(
             text = "Beyond Identity provides the strongest authentication on the planet, " +
-                    "eliminating passwords completely for customers at registration, login, " +
-                    "and recovery, as well as from your database.",
+                "eliminating passwords completely for customers at registration, login, " +
+                "and recovery, as well as from your database.",
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
 
@@ -86,8 +88,8 @@ fun SdkSelectorLayout() {
 
         Text(
             text = "The Embedded SDK is a holistic SDK solution offering the entire experience " +
-                    "embedded in your product. Users will not need to download the Beyond Identity Authenticator. " +
-                    "A set of functions are provided to you through the EmbeddedSdk singleton. This SDK supports OIDC and OAuth2."
+                "embedded in your product. Users will not need to download the Beyond Identity Authenticator. " +
+                "A set of functions are provided to you through the EmbeddedSdk singleton. This SDK supports OIDC and OAuth2."
         )
 
         Button(

@@ -68,13 +68,13 @@ fun resultTestTag(testTag: String): String = "$testTag Result"
 @Preview(showBackground = true)
 fun BiAppBar() {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.BiAppBarColor,
+        backgroundColor = MaterialTheme.colors.BiAppBarColor
     ) {
         Icon(
             painter = painterResource(id = drawable.ic_toolbar_bi_icon),
             contentDescription = null,
             tint = BiPrimaryMain,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -86,7 +86,7 @@ fun BiButton(title: String, testTag: String, onButtonClicked: () -> Unit) {
         modifier = Modifier.testTag(testTag),
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(1.dp, Color.Gray),
-        contentPadding = PaddingValues(start = 16.dp, top = 13.dp, bottom = 13.dp, end = 16.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 13.dp, bottom = 13.dp, end = 16.dp)
     ) {
         Row {
             Text(text = title, color = Color.Black, fontWeight = FontWeight.Light, fontSize = 14.sp)
@@ -96,7 +96,7 @@ fun BiButton(title: String, testTag: String, onButtonClicked: () -> Unit) {
             Image(
                 painter = painterResource(id = drawable.outline_chevron_right_24),
                 colorFilter = ColorFilter.tint(Color.Black),
-                contentDescription = "",
+                contentDescription = ""
             )
         }
     }
@@ -109,7 +109,7 @@ fun PreviewBiButton() {
         BiButton(
             title = "title of user input",
             testTag = "TestTag",
-            onButtonClicked = { },
+            onButtonClicked = { }
         )
     }
 }
@@ -121,10 +121,11 @@ fun BiTextWithChevron(text: String, testTag: String, onClick: () -> Unit) {
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = { onClick() })
+                onClick = { onClick() }
+            )
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 16.dp)
-            .testTag(testTag),
+            .testTag(testTag)
     ) {
         Text(text = text)
 
@@ -133,7 +134,7 @@ fun BiTextWithChevron(text: String, testTag: String, onClick: () -> Unit) {
         Image(
             painter = painterResource(id = drawable.outline_chevron_right_24),
             colorFilter = ColorFilter.tint(Color.Black),
-            contentDescription = "",
+            contentDescription = ""
         )
     }
 }
@@ -145,7 +146,7 @@ fun PreviewBiTextWithChevron() {
         BiTextWithChevron(
             text = "Text",
             testTag = "TestTag",
-            onClick = { },
+            onClick = { }
         )
     }
 }
@@ -154,9 +155,11 @@ fun PreviewBiTextWithChevron() {
 @Preview(showBackground = true)
 fun BiVersionText(modifier: Modifier = Modifier) {
     Text(
-        text = "SDK Version: ${BuildConfig.BUILD_CONFIG_BI_SDK_VERSION}\nEnvironment: ${stringResource(id = R.string.dev_env)}",
+        text = "SDK Version: ${BuildConfig.BUILD_CONFIG_BI_SDK_VERSION}\nEnvironment: ${stringResource(
+            id = R.string.dev_env
+        )}",
         modifier = modifier,
-        color = Color.Gray,
+        color = Color.Gray
     )
 }
 
@@ -173,7 +176,7 @@ fun InteractionResultView(
     testTag: String,
     onButtonClicked: () -> Unit,
     resultText: String,
-    progressEnabled: Boolean,
+    progressEnabled: Boolean
 ) {
     Column(modifier = modifier) {
         Text(text = descriptionText)
@@ -184,7 +187,7 @@ fun InteractionResultView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(buttonTestTag(testTag)),
+                .testTag(buttonTestTag(testTag))
         ) {
             Text(text = buttonText)
         }
@@ -193,7 +196,7 @@ fun InteractionResultView(
 
         ResponseDataView(
             data = resultText,
-            testTag = resultTestTag(testTag),
+            testTag = resultTestTag(testTag)
         )
     }
 }
@@ -208,34 +211,30 @@ fun PreviewInteractionResultView() {
             testTag = "testTag",
             onButtonClicked = { },
             resultText = "result text",
-            progressEnabled = true,
+            progressEnabled = true
         )
     }
 }
 
 @Composable
-fun ResponseDataView(
-    modifier: Modifier = Modifier,
-    data: String,
-    testTag: String,
-) {
+fun ResponseDataView(modifier: Modifier = Modifier, data: String, testTag: String) {
     val scrollState = rememberScrollState()
     if (data.isNotEmpty()) {
         Box(
             modifier = Modifier
                 .background(color = MaterialTheme.colors.BiGray300)
                 .fillMaxWidth()
-                .then(modifier),
+                .then(modifier)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(scrollState)
-                    .padding(8.dp),
+                    .padding(8.dp)
             ) {
                 Text(
                     text = "Response Data",
-                    style = MaterialTheme.typography.subtitle2,
+                    style = MaterialTheme.typography.subtitle2
                 )
 
                 SelectionContainer {
@@ -243,7 +242,7 @@ fun ResponseDataView(
                         text = data,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .testTag(testTag),
+                            .testTag(testTag)
                     )
                 }
             }
@@ -263,7 +262,7 @@ fun InteractionResponseInputView(
     testTag: String,
     onSubmit: () -> Unit,
     submitResult: String,
-    progressEnabled: Boolean,
+    progressEnabled: Boolean
 ) {
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -272,7 +271,7 @@ fun InteractionResponseInputView(
     Column(modifier = modifier) {
         Text(
             text = description,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
 
         OutlinedTextField(
@@ -285,18 +284,18 @@ fun InteractionResponseInputView(
             label = {
                 Text(
                     text = inputHint,
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.body1
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email,
+                keyboardType = KeyboardType.Email
             ),
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
                 onSubmit()
                 keyboardController?.hide()
-            }),
+            })
         )
 
         Button(
@@ -308,7 +307,7 @@ fun InteractionResponseInputView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(buttonTestTag(testTag)),
+                .testTag(buttonTestTag(testTag))
         ) {
             Text(text = buttonText)
         }
@@ -318,7 +317,7 @@ fun InteractionResponseInputView(
         ResponseDataView(
             data = submitResult,
             modifier = Modifier.padding(top = 16.dp),
-            testTag = resultTestTag(testTag),
+            testTag = resultTestTag(testTag)
         )
     }
 }
@@ -336,7 +335,7 @@ fun PreviewInteractionResponseInputView() {
             testTag = "testTag",
             onSubmit = { },
             submitResult = "result",
-            progressEnabled = true,
+            progressEnabled = true
         )
     }
 }
@@ -349,12 +348,12 @@ fun ResponseInputView(
     testTag: String,
     onSubmit: () -> Unit,
     submitResult: String,
-    progressEnabled: Boolean,
+    progressEnabled: Boolean
 ) {
     Column(modifier = modifier) {
         Text(
             text = description,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
 
         Button(
@@ -363,7 +362,7 @@ fun ResponseInputView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .testTag(buttonTestTag(testTag)),
+                .testTag(buttonTestTag(testTag))
         ) {
             Text(text = buttonText)
         }
@@ -373,7 +372,7 @@ fun ResponseInputView(
         ResponseDataView(
             data = submitResult,
             modifier = Modifier.padding(top = 16.dp),
-            testTag = resultTestTag(testTag),
+            testTag = resultTestTag(testTag)
         )
     }
 }
@@ -388,25 +387,23 @@ fun PreviewResponseInputView() {
             testTag = "testTag",
             onSubmit = { },
             submitResult = "result",
-            progressEnabled = true,
+            progressEnabled = true
         )
     }
 }
 
 @Composable
-fun ProgressIndicator(
-    progressEnabled: Boolean,
-) {
+fun ProgressIndicator(progressEnabled: Boolean) {
     if (progressEnabled) {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .padding(1.dp)
-                    .size(24.dp),
+                    .size(24.dp)
             )
         }
     }
@@ -417,7 +414,7 @@ fun ProgressIndicator(
 fun PreviewProgressIndicator() {
     BiSdkAndroidTheme {
         ProgressIndicator(
-            progressEnabled = true,
+            progressEnabled = true
         )
     }
 }
@@ -429,7 +426,7 @@ fun Spacer16() {
         Spacer(
             Modifier
                 .height(16.dp)
-                .width(16.dp),
+                .width(16.dp)
         )
     }
 }
@@ -441,7 +438,7 @@ fun Spacer32() {
         Spacer(
             Modifier
                 .height(32.dp)
-                .width(32.dp),
+                .width(32.dp)
         )
     }
 }
