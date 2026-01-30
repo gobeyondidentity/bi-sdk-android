@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 /**
  * @param BUILD_TOOLS_VERSION Specifies the version of the SDK Build Tools to use when building your project.
@@ -10,9 +11,10 @@ import org.gradle.api.JavaVersion
  **/
 object AndroidConfig {
     const val BUILD_TOOLS_VERSION = "35.0.0"
-    const val COMPILE_SDK_VERSION = 34
+    const val COMPILE_SDK_VERSION = 35
     const val MIN_SDK_VERSION = 26
-    const val TARGET_SDK_VERSION = 34
-    const val NDK_VERSION = "26.1.10909125"
+    const val TARGET_SDK_VERSION = 35
+    const val NDK_VERSION = "28.2.13676358"
     val JAVA_VERSION = JavaVersion.VERSION_17
+    val JVM_TARGET = JvmTarget.JVM_17
 }

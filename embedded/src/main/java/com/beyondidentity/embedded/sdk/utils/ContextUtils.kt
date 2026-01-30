@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 
+const val UNKNOWN_APP_VERSION_NAME = "unknown"
+
 @Suppress("DEPRECATION")
 fun Context.appVersionName(): String = try {
     // todo instrument tests are grabbing the test package and it's failing
@@ -14,9 +16,9 @@ fun Context.appVersionName(): String = try {
     } else {
         packageManager.getPackageInfo(packageName, 0)
     }
-    packageInfo.versionName
+    packageInfo.versionName ?: UNKNOWN_APP_VERSION_NAME
 } catch (t: NameNotFoundException) {
-    "unknown"
+    UNKNOWN_APP_VERSION_NAME
 } catch (t: NullPointerException) {
-    "unknown"
+    UNKNOWN_APP_VERSION_NAME
 }

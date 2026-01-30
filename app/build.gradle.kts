@@ -71,11 +71,11 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
-    kotlinOptions {
-        jvmTarget = AndroidConfig.JAVA_VERSION.toString()
-        freeCompilerArgs += listOf(
-            "-Xopt-in=kotlin.RequiresOptIn"
-        )
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(AndroidConfig.JVM_TARGET)
+            optIn.add("kotlin.RequiresOptIn")
+        }
     }
 
     lint {

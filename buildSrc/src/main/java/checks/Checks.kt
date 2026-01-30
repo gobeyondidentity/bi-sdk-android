@@ -6,7 +6,7 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 
 fun Project.ktlintCheckConfig() {
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version.set("1.6.0")
+        version.set("1.7.1")
         verbose.set(true)
         android.set(false)
         outputToConsole.set(true)
@@ -20,7 +20,7 @@ fun Project.ktlintCheckConfig() {
 
 fun Project.ktlintCheckConfigSampleApp() {
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version.set("1.6.0")
+        version.set("1.7.1")
         verbose.set(true)
         android.set(false)
         outputToConsole.set(true)

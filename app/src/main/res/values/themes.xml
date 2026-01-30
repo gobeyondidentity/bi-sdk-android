@@ -12,6 +12,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+
+        <!-- API 35 -->
+        <item name="android:fitsSystemWindows">false</item>
     </style>
 
     <style name="Theme.AuthenticatorSDKAndroid.NoActionBar">

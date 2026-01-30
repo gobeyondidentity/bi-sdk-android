@@ -1,7 +1,6 @@
 import checks.ktlintCheckConfig
 import config.configureAndroidLib
 import config.configureMavenPublish
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import utils.getProp
 
 plugins {
@@ -19,6 +18,18 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = AndroidConfig.JAVA_VERSION
+        targetCompatibility = AndroidConfig.JAVA_VERSION
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(AndroidConfig.JVM_TARGET)
+            optIn.add("kotlin.RequiresOptIn")
+        }
     }
 
     // Publishing is already handled by MavenPublish.kt
@@ -52,15 +63,6 @@ dokka {
 //        customAssets.from("logo.png")
 //        footerMessage.set("(c) Your Company")
 //    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = AndroidConfig.JAVA_VERSION.toString()
-        freeCompilerArgs += listOf(
-            "-Xopt-in=kotlin.RequiresOptIn"
-        )
-    }
 }
 
 ktlintCheckConfig()

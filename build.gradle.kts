@@ -33,10 +33,13 @@ allprojects {
         mavenLocal()
         maven("https://jitpack.io")
         maven("https://plugins.gradle.org/m2/")
-        maven(getProp("BUILD_CONFIG_CLOUDSMITH_REPO_URL"))
+        val cloudsmithUrl = getProp("BUILD_CONFIG_CLOUDSMITH_REPO_URL")
+        if (cloudsmithUrl != "") {
+            maven(cloudsmithUrl)
+        }
     }
 }
 
-task<Delete>("clean") {
-    delete(rootProject.buildDir)
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
 }

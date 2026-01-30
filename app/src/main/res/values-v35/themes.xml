@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AuthenticatorSDKAndroid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- API 35 -->
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+</resources>

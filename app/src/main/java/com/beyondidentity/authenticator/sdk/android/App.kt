@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.app.KeyguardManager
-import android.content.Context
 import android.os.Bundle
 import com.beyondidentity.embedded.sdk.EmbeddedSdk
 import timber.log.Timber
@@ -28,7 +27,7 @@ class App :
 
     @Suppress("DEPRECATION")
     private val keyguardPrompt: ((Boolean, Exception) -> Unit) -> Unit = { answer ->
-        (applicationContext?.getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager)
+        (applicationContext?.getSystemService(KEYGUARD_SERVICE) as? KeyguardManager)
             ?.createConfirmDeviceCredentialIntent("Check", "Enter your pin or password")
             ?.let { intent ->
                 currentActivity?.startActivityForResult(intent, EMBEDDED_KEYGUARD_REQUEST)
